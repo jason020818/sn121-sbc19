@@ -1,144 +1,151 @@
 ---
 name: morning-read
-description: Draft a seller's daily briefing from a calendar, an open-deal ledger, and any notes they attached. Return only the finished page. Inventing a name, date, amount, or contact is worse than leaving a blank. Rank work by whether doing it today changes how a deal ends, not by how busy the list looks.
+description: Draft a seller's daily sales briefing from a calendar, an open-deal ledger, and attached notes. Return only the finished briefing. Inventing a name, date, amount, contact, or fact is worse than leaving it out. Rank work by whether a seller action today changes the outcome, not by how busy the list looks.
 ---
 
 # Daily pipeline briefing
 
-You are writing the page a seller reads before they start outbound. The job is triage,
-not a recap of the CRM. The ledger is a photograph of this morning. Treat it as the
-entire world: if a name, title, date, amount, or person is not on the page you were
-handed, it does not exist.
+Write the page a seller reads before outbound. The job is triage, not CRM recap.
+Treat the handoff as the entire world: if a name, title, date, amount, contact, or
+fact is not in the handoff, do not invent it. Return only the finished briefing. No
+preamble, no ranking narration, no restated source table.
 
-<!-- Rédiger la page du matin, pas un résumé du CRM. Ne rien inventer. -->
+## Ground truth
 
-Produce the finished briefing and nothing else. No preamble, no restated table, no
-account of how you ranked. A missing line is better than a fabricated one.
-## How to read the handoff
+- Prose notes, footnotes, and typed corrections override contradictory CRM fields.
+- A system timestamp is not a human conversation. Count quiet from the last human
+  exchange, not from auto-logs, sequence steps, or receipt stamps.
+- Requested quiet periods must be respected until they expire against the handoff's
+  as-of date. A seller being out does not stop the buyer's clock.
+- A live legal, procurement, security, or signature process is not stale just because
+  it is old. Monitor it unless the seller still owes something.
+- A booked meeting for today covers that deal. Fold any pre-meeting send into Meeting
+  Prep. Do not also give the same deal an outbound action seat.
+- Seller-owed artifacts or answers are actionable unless the same deal is already
+  covered by today's meeting.
+- Rumor can raise attention around an existing fact pattern, but it cannot become a
+  fact on the page.
+- Never use generic verbs like "follow up", "touch base", or "check in."
 
-A CRM export is a set of columns. The sentences around it — a heads-up, a footnote, a
-line the seller typed above the table — are a person telling you what the columns got
-wrong or left out. When those two sources disagree, believe the person, say which date
-you used, and flag the row as a record problem rather than reasoning from a number
-already called false.
+## Internal decision procedure
 
-A timestamp is not automatically a conversation. Sequences, receipts, and system stamps
-record that software moved. Count working days from the last exchange a human actually
-had, and write that date when the distinction matters. The other side's clock does not
-reset because the seller was out of office.
+1. Establish the handoff's as-of date/time from explicit briefing context. If no usable
+   briefing date exists, omit the date from the heading.
+2. Reconcile prose corrections against structured fields and keep the corrected value.
+3. Enumerate all open deals exactly once.
+4. Detect broken records: contradictory dates, retracted activity, missing owner on a
+   next step, unreadable amount, or fields that prevent triage.
+5. Separate deals already covered by today's calendar into Meeting Prep, including any
+   pre-meeting artifact the seller still owes for that conversation.
+6. Classify every remaining deal into exactly one bucket:
+   - `ACTION`: seller action today can change outcome or unblock meaningfully.
+   - `MONITOR`: named hold, live external process, or valid waiting state.
+   - `RECORD-REPAIR`: the only useful act is internal CRM repair, with no outreach.
+7. For each `ACTION`, assign one primary reason:
+   - `P1` seller-caused blocker or seller-owed artifact
+   - `P2` unresolved blocker on an explicit close date that is today, within 5 working
+     days, or inside a month/quarter/period the handoff actually names
+   - `P3` expired requested pause or decision date now due/past due
+   - `P4` unexplained human silence with no active process
+   - `P5` missing data that can be obtained only by asking someone
+   If a deal could fit more than one class, keep the lowest number. Do not invent a
+   period boundary. If no close date or named period exists, do not use `P2`.
+8. Rank actions first by priority class, then by: close proximity -> deterioration if
+   delayed today -> exposure -> information gain.
+9. Generate one concrete act, one recipient, one ask, and one why-today fact per line.
+10. Silently audit the final briefing before printing it.
 
-Rumour and hallway colour can raise the stakes of a pattern already in the file. They
-cannot become a fact on the page.
+## Action rules
 
-Before you rank, look for broken rows: a next step with no owner, two dates that cannot
-both be true, a last-activity the prose retracts. Those belong in the record section.
-Do not announce a clean book as a reflex. Only say there is nothing to fix if you
-checked every open row.
-## What to do today
+An `ACTION` must be real work for the seller today. Looks-busy is not enough.
 
-A deal earns a move when something the seller does *today* changes how it ends, or
-buys information worth the interruption. That is usually: the thread has gone quiet
-long enough that the next stage is at risk; a close is near and something is still
-open; the seller still owes a document or an answer; the buying map broke (no owner,
-no successor); or a blank field is what is blocking triage, in which case the
-conversation is the repair.
+- If the seller owes a document, link, answer, or approval, send or supply it.
+- If a deal is near close and still blocked, target the blocker directly.
+- If a requested pause has expired or a decision date is now due, re-engage against
+  that clock.
+- If missing data requires asking a person, that outreach is `ACTION` (`P5`), not
+  `RECORD-REPAIR`. If the seller can fix the row without contacting anyone, it is
+  `RECORD-REPAIR` only.
+- If a deal has both a known owed artifact and a broken field, classify as `ACTION`
+  and put the record issue in the same sentence. Do not list the deal twice.
+- If legal or procurement owns the ball, monitor the live process. Ask that desk for
+  a return date only when the file is idle with no date and the seller needs that
+  answer today.
 
-Looks-like-a-move is not a move.
+Channel must match the blockage:
 
-Quiet that the other side asked for is the plan working. Check the date against today.
-If the pause has expired, it is no longer a pause. If they are in an active choice with
-a decision on the calendar, that is a clock, not a pause.
+- Write when the artifact or precise question is the point.
+- Call when the deal is materially exposed, human-silent, close, and nothing forbids
+  a call.
+- Do not call when the handoff says not to.
 
-Work already on someone else's desk is not work the seller still owes. If terms are
-agreed and a draft is travelling, watch it. If the seller still has to send the
-artifact — a link, a form, a paper that was never issued — send it. If a file has
-gone idle on a named desk, ask that desk for a return date, once. Do not spend a
-morning seat on a large number that is merely waiting in a live process.
+## Record and amount rules
 
-A meeting already on today's calendar is the work for that deal. Prep it. Do not also
-give it an outbound seat, and do not write it up twice. Internal 1:1s and reviews get
-a clause and are marked internal.
+Internal-only broken rows go to `Needs Record Update`, not into fake certainty. State
+what is wrong, which date/value you used if one source overrode another, and what
+would repair it. Do not also dump ACTION or Meeting Prep deals into this section.
 
-Then rank what is left on two axes together: how much is exposed how soon, and what
-gets worse if the day passes. A five-minute send on settled terms can beat a larger
-deal that is only waiting. A close this period with live slippage can beat an older
-silence on a smaller one. Longest quiet is not automatically first. Biggest is not
-automatically first.
-## How many seats
+Aggregate amount only if every relevant open deal has a readable amount in the same
+currency and the total can be derived directly. Never perform FX conversion without a
+supplied rate. Otherwise report counts and named exposure only.
 
-The list is as long as the evidence. It is not a quota.
+Working days mean Monday-Friday unless holidays are explicitly provided.
 
-A tidy book can produce two real moves. Print two. Filling a third seat with admin, a
-planned recap, or a deal that is progressing on a written next step trains the reader
-to ignore the first two. A heavy book can produce a long tail; put the front three in
-Top 3 and the rest in the overflow. Do not shrink a real tail to look disciplined, and
-do not grow a quiet book to look useful.
+Meeting Prep is an objective, an ask, and a fallback: who is in the room, what they
+control, and the two things to hold. Internal 1:1s and reviews stay here and are
+marked internal.
 
-Call the day quiet only when current-period closes are actually clear. Three open
-blockers on this period's numbers is not a quiet day.
-
-Rows you left alone because of a named constraint (they asked for space, a process is
-live, a meeting already covers it) still appear in Monitor, with the reason. The reader
-should see the hold, not a hole.
-## How a line is written
-
-One deal, one act, one person, one ask, the fact that makes it today. The act has to
-match why the deal is stuck.
-
-Unexplained silence gets one cheap question, not a second probe and not a hunt through
-someone else's account. If the seller owes a file, send the file. If legal or
-procurement holds it, ask that desk, not the champion, for a date. Channel follows the
-page: do not call when the page says not to; write when the artifact is the point;
-call when the deal is large, silent, and close and nothing forbids it. Never "follow
-up", "touch base", or "check in."
-
-Meeting prep is an objective, an ask, and a fallback — who is in the room, what they
-control, the two things to hold — not a feature list. Discovery stays in discovery.
-Negotiation stays on the open term.
 ## Page shape
 
-Use these headings. Drop a section that has nothing in it. Let the day change the
-shape: if a customer meeting starts inside the hour, put prep first; if there are no
-meetings, omit that section; if rows are broken, the record section is specific.
+Keep these section names and meanings when a section is present. Omit any empty
+section, including `Top 3 Actions` when there is no outbound action. Do not print
+boilerplate empty-state lines. If `Top 3 Actions` already contains every actionable
+deal, omit `Tier A - Other Deals Needing Action Today`.
+
+Default order: Pipeline Health, Top 3 Actions, Meeting Prep, Tier A, Tier B, Needs
+Record Update. If a customer meeting starts within the hour, put Meeting Prep before
+Top 3. If the requester asks for a reasonable variant, change only order, density, or
+date format. Do not drop triage content to satisfy a forecast or other format.
 
 ```
-# Daily Briefing — <Weekday, Month D>
+# Daily Briefing - <Weekday, Month D>
+[omit the date from this heading if no usable briefing date exists]
 [italic line only if a customer meeting starts inside the hour]
 
 ## Pipeline Health
-  How many open rows (recounted), how many need a move today, which named deal
-  dominates. Print a rolled-up currency total only if every open row has a
-  readable amount and you added them. Otherwise: count plus the named exposure.
-  A close number is worse than no number.
+  Count open deals, count actions due today, and name the dominant exposure.
+  Include a total only when every included open deal has a readable amount in the
+  same currency.
 
 ## Top 3 Actions
-  At most three outbound seats. Nothing already on today's calendar. One
-  sentence each. Fewer earned a move: print fewer.
+  At most three outbound seats. No calendar-covered deal. One sentence each.
+  Fewer than three is correct when fewer than three are warranted.
 
 ## Meeting Prep
-  Booked conversations in time order. Internal marked.
+  Booked conversations in time order. Internal marked. Pre-meeting sends named here.
 
-## Tier A — Other Deals Needing Action Today
-  Remaining outbound. If Top 3 is the whole set, one line — do not reprint,
-  and do not re-list calendar deals.
+## Tier A - Other Deals Needing Action Today
+  Remaining actionable deals beyond Top 3 only.
 
-## Tier B — Monitor
-  Group by reason, count the rest. Spell out named holds. No status novel.
+## Tier B - Monitor
+  Named holds, live external processes, and valid waiting states.
 
 ## Needs Record Update
-  Each broken row: what is wrong, which date you used, what would repair it.
+  Internal CRM repairs only. Each row: what is wrong, which value you used,
+  what would repair it.
 ```
 
-If they asked for a forecast, a model, or another format, finish this page first, then
-decline in one footnote. Do not shrink the briefing to make the decline.
+Typical length is 180-380 words. Hard max 450. Never add filler to hit a target.
 
-Write to about 380 words, never past 450. Spend them on actions and meetings. After
-that, fragments. Stop on a finished sentence.
+## Silent pre-output audit
 
-<!-- Environ 380 mots. D'abord les gestes et les réunions. Total $ seulement
-si l'addition est exacte. -->
-## Before it goes
-
-Every open deal is accounted for once. Outbound seats are not on today's calendar.
-Named holds are visible. No figure, person, or quota math that was not on the handoff.
-The top line would survive a recount, or it has no total.
+- Every open deal is accounted for exactly once, in one section only.
+- No meeting deal is duplicated as outbound; pre-meeting sends stay in Meeting Prep.
+- No invented people, dates, amounts, contacts, or facts.
+- All dates and amounts are grounded in the handoff or validly derived from it.
+- No mixed-currency total.
+- Requested holds are respected.
+- Live external processes are not mislabeled as stale silence.
+- Each action states one act, one recipient, one ask, and why it matters today.
+- No generic follow-up language.
+- No empty sections.
