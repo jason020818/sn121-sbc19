@@ -527,6 +527,69 @@ def free_release_check(candidate: str = typer.Option(..., "--candidate")) -> Non
         raise typer.Exit(code=2)
 
 
+@app.command("domain-oracle-generate")
+def domain_oracle_generate(
+    count: int = typer.Option(3000, "--count"),
+    seed: int = typer.Option(121190200, "--seed"),
+) -> None:
+    from eval_lab.domain_oracle import domain_oracle_path, generate_domain_oracle, write_jsonl
+
+    _guard_skill_md()
+    records = generate_domain_oracle(count=count, seed=seed)
+    path = write_jsonl(records, domain_oracle_path())
+    console.print(f"Wrote {len(records)} independent domain cases to {path}")
+
+
+@app.command("domain-policy-tournament")
+def domain_policy_tournament_cmd() -> None:
+    from eval_lab.domain_tournament import domain_summary_path, render_domain_summary, run_domain_policy_tournament
+
+    _guard_skill_md()
+    payload = run_domain_policy_tournament()
+    path = domain_summary_path()
+    path.write_text(render_domain_summary(payload), encoding="utf-8")
+    path.with_suffix(".json").write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
+    console.print(payload["disclaimer"])
+    console.print(f"recommended_semantic_policy: {payload['recommended_semantic_policy']}")
+    console.print(f"discriminating_cases: {payload['discriminating_cases']}")
+    for row in payload["results"]:
+        console.print(f"{row['rank']}. {row['candidate']} f1={row['action_f1']:.4f} false_action={row['false_action_rate']:.4f}")
+    console.print(f"Wrote {path}")
+
+
+@app.command("rendering-risk-tournament")
+def rendering_risk_tournament_cmd() -> None:
+    from eval_lab.rendering_risk import render_rendering_summary, rendering_summary_path, run_rendering_risk_tournament
+
+    _guard_skill_md()
+    payload = run_rendering_risk_tournament()
+    path = rendering_summary_path()
+    path.write_text(render_rendering_summary(payload), encoding="utf-8")
+    path.with_suffix(".json").write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
+    console.print(payload["disclaimer"])
+    for row in payload["results"]:
+        console.print(f"{row['rank']}. {row['candidate']} risk={row['rendering_risk']} words={row['markdown_words']}")
+    console.print(f"Wrote {path}")
+
+
+@app.command("free-champion-plan")
+def free_champion_plan_cmd() -> None:
+    from eval_lab.free_champion import champion_plan_path, render_champion_plan, run_free_champion_plan
+
+    _guard_skill_md()
+    payload = run_free_champion_plan()
+    path = champion_plan_path()
+    path.write_text(render_champion_plan(payload), encoding="utf-8")
+    path.with_suffix(".json").write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
+    console.print(payload["remaining_uncertainty"])
+    console.print(f"recommended_semantic_policy: {payload['recommended_semantic_policy']}")
+    console.print(f"recommended_rendering: {payload['recommended_rendering']}")
+    console.print(f"reserve_policy_1: {payload['reserve_policy_1']}")
+    console.print(f"reserve_policy_2: {payload['reserve_policy_2']}")
+    console.print(f"reserve_rendering: {payload['reserve_rendering']}")
+    console.print(f"Wrote {path}")
+
+
 def main() -> None:
     app()
 

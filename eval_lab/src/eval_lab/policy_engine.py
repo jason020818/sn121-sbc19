@@ -24,54 +24,88 @@ EXTERNAL_WAIT_STATES = {
 }
 
 
+def _active_contact_hold(deal: DealFact) -> bool:
+    if deal.constraint_expired:
+        return False
+    return deal.constraint in {"do_not_contact", "wait_until"}
+
+
+def _seller_owned_move(deal: DealFact, policy: PolicyManifest) -> bool:
+    if deal.seller_deliverable_due or deal.seller_owns_next:
+        return True
+    if deal.state == "seller_owned_deliverable" and policy.action.seller_owned_deliverable:
+        return True
+    if deal.state == "seller_answer_due" and policy.action.seller_answer_due:
+        return True
+    if deal.state == "schedule_needed_interaction" and policy.action.schedule_needed_interaction:
+        return True
+    if deal.state == "correct_operational_blocker" and policy.action.correct_operational_blocker:
+        return True
+    return False
+
+
+def _owner_identification_action(deal: DealFact, policy: PolicyManifest) -> bool:
+    if not policy.action.identify_missing_owner_when_needed:
+        return False
+    if deal.owner_named:
+        return False
+    if deal.state == "champion_left":
+        return True
+    if deal.state in OWNER_STATES and deal.owner_identification_needed_now:
+        return True
+    return False
+
+
+def _wait_escalation(deal: DealFact, policy: PolicyManifest) -> bool:
+    if policy.action.external_wait_default != "monitor":
+        return True
+    esc = policy.action.external_wait_escalation
+    timing_ok = deal.timing_material or esc.timing_material != "required"
+    if esc.checkpoint == "passed_only":
+        checkpoint_ok = deal.checkpoint == "passed"
+    elif esc.checkpoint == "missing_or_passed":
+        checkpoint_ok = deal.checkpoint in {"missing", "passed"}
+    else:
+        checkpoint_ok = True
+    info_ok = deal.uncertainty_reduction or esc.uncertainty_reduction != "required"
+    if timing_ok and checkpoint_ok and info_ok:
+        return True
+    if esc.champion_silence_near_close and deal.champion_silent:
+        if deal.timing_material or deal.close_offset_days <= 7:
+            return True
+    return False
+
+
 def _eligible_action(deal: DealFact, policy: PolicyManifest) -> bool:
     if deal.meeting_today and policy.meeting.replaces_same_objective_outbound:
         return False
-    if policy.constraints.explicit_wait_overrides and deal.constraint in {
-        "do_not_contact",
-        "wait_until",
-    }:
+    if policy.constraints.explicit_wait_overrides and _active_contact_hold(deal):
         return False
-    if deal.seller_owns_next or deal.state in ACTION_STATES:
-        if deal.state == "seller_answer_due" and not policy.action.seller_answer_due:
-            return False
-        if deal.state == "seller_owned_deliverable" and not policy.action.seller_owned_deliverable:
-            return False
-        if deal.state == "schedule_needed_interaction" and not policy.action.schedule_needed_interaction:
-            return False
-        if deal.state == "correct_operational_blocker" and not policy.action.correct_operational_blocker:
-            return False
-        if deal.state in ACTION_STATES or deal.seller_owns_next:
-            return True
-    if deal.state in OWNER_STATES and policy.action.identify_missing_owner_when_needed and not deal.owner_named:
+    if _seller_owned_move(deal, policy):
         return True
-    if deal.state in OWNER_STATES and policy.action.identify_missing_owner_when_needed and deal.state == "champion_left":
+    if _owner_identification_action(deal, policy):
         return True
-    if deal.state in {"no_checkpoint", "missed_checkpoint"} or deal.checkpoint in {"missing", "passed"}:
-        if deal.seller_owns_next:
-            return True
-        if policy.action.external_wait_default == "monitor":
-            esc = policy.action.external_wait_escalation
-            timing_ok = deal.timing_material or esc.timing_material != "required"
-            checkpoint_ok = deal.checkpoint in {"missing", "passed"} or deal.state in {
-                "no_checkpoint",
-                "missed_checkpoint",
-            }
-            if esc.checkpoint != "missing_or_passed":
-                checkpoint_ok = True
-            info_ok = deal.uncertainty_reduction or esc.uncertainty_reduction != "required"
-            return bool(timing_ok and checkpoint_ok and info_ok)
+    external = deal.state in EXTERNAL_WAIT_STATES or deal.checkpoint in {"missing", "passed"} or deal.champion_silent
+    if external and not deal.seller_owns_next and not deal.seller_deliverable_due:
+        return _wait_escalation(deal, policy)
     return False
+
+
+def _blocking_record(deal: DealFact, policy: PolicyManifest) -> bool:
+    if deal.decision_blocking_record_problem:
+        return True
+    if policy.action.record_only_decision_blocking:
+        return False
+    return bool(deal.record_kind)
 
 
 def classify_deal(deal: DealFact, policy: PolicyManifest) -> tuple[Disposition, str]:
     if deal.meeting_today and policy.meeting.replaces_same_objective_outbound:
-        if "meeting" in policy.disposition_precedence:
-            return "MEETING", "rule.meeting_covers_objective"
+        return "MEETING", "rule.meeting_covers_objective"
     for step in policy.disposition_precedence:
         if step == "meeting" and deal.meeting_today:
             return "MEETING", "rule.meeting_covers_objective"
-        if step == "record" and deal.record_kind:
+        if step == "record" and _blocking_record(deal, policy):
             return "RECORD", "rule.record_blocks_decision"
         if step == "action" and _eligible_action(deal, policy):
             return "ACTION", "rule.seller_owned_or_escalated_wait"
@@ -91,7 +125,7 @@ def apply_policy(deals: list[DealFact], policy: PolicyManifest) -> PolicyDecisio
             catastrophic.append(f"duplicate_disposition:{deal.name}")
         seen.add(deal.name)
         disp, reason = classify_deal(deal, policy)
-        if deal.constraint in {"do_not_contact", "wait_until"} and disp == "ACTION":
+        if _active_contact_hold(deal) and disp == "ACTION":
             if policy.constraints.explicit_wait_overrides:
                 disp = "MONITOR"
                 reason = "rule.explicit_wait_overrides"
@@ -103,7 +137,7 @@ def apply_policy(deals: list[DealFact], policy: PolicyManifest) -> PolicyDecisio
             catastrophic.append(f"meeting_action_duplicate:{deal.name}")
         dispositions[deal.name] = disp
         reasons[deal.name] = reason
-        if deal.constraint:
+        if deal.constraint and not deal.constraint_expired:
             holds[deal.name] = deal.constraint
     if policy.evidence.allow_invented_recipient or policy.evidence.allow_invented_channel:
         catastrophic.append("policy_allows_invented_recipient_or_channel")

@@ -68,6 +68,7 @@ class HoldoutRecord(BaseModel):
     dimensions: dict[str, Any] = Field(default_factory=dict)
     deals: list[dict[str, Any]] = Field(default_factory=list)
     expected_dispositions: dict[str, str] = Field(default_factory=dict)
+    oracle_rules: dict[str, str] = Field(default_factory=dict)
     variant_kind: str | None = None
     parent_id: str | None = None
     transform: str | None = None

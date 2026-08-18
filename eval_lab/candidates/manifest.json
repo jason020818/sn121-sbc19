@@ -17,6 +17,22 @@
       "bytes": 3603
     },
     {
+      "name": "candidate-b-minimal",
+      "path": "candidates/candidate-b-minimal.md",
+      "sha256": "f8a468f21d0ac168dc84cf53aa8459d46973850d7a0987631841efbc5ec25cae",
+      "added_at": "2026-08-18T14:32:13.971727+00:00",
+      "source_file": "candidates/candidate-b-minimal.md",
+      "bytes": 2740
+    },
+    {
+      "name": "candidate-c-assertive",
+      "path": "candidates/candidate-c-assertive.md",
+      "sha256": "23bf814a8a84230aeb44716c71948e376d316c5f5ace36171752bc01d7f4e2ee",
+      "added_at": "2026-08-18T14:32:13.971727+00:00",
+      "source_file": "candidates/candidate-c-assertive.md",
+      "bytes": 3148
+    },
+    {
       "name": "candidate-c-minimal",
       "path": "candidates/candidate-c-minimal.md",
       "sha256": "f8a468f21d0ac168dc84cf53aa8459d46973850d7a0987631841efbc5ec25cae",

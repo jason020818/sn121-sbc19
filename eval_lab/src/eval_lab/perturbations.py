@@ -235,6 +235,7 @@ def apply_controlled_flip(record: HoldoutRecord, transform: str) -> HoldoutRecor
         )
         if target:
             target.record_kind = "human_correction"
+            target.decision_blocking_record_problem = True
     elif transform == "unnamed_to_named_owner":
         target = next(
             (

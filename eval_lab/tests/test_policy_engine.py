@@ -13,7 +13,13 @@ def test_meeting_outranks_action() -> None:
 
 def test_record_outranks_action() -> None:
     policy = load_policy("production")
-    deal = DealFact(name="A", record_kind="human_correction", seller_owns_next=True, state="seller_owned_deliverable")
+    deal = DealFact(
+        name="A",
+        record_kind="contradiction",
+        decision_blocking_record_problem=True,
+        seller_owns_next=True,
+        state="seller_owned_deliverable",
+    )
     assert classify_deal(deal, policy)[0] == "RECORD"
 
 
@@ -55,8 +61,35 @@ def test_three_part_wait_escalation() -> None:
 
 def test_unknown_owner_is_action_when_unnamed() -> None:
     policy = load_policy("candidate-b")
-    deal = DealFact(name="A", state="unknown_owner", owner_named=False)
+    deal = DealFact(name="A", state="unknown_owner", owner_named=False, owner_identification_needed_now=True)
     assert classify_deal(deal, policy)[0] == "ACTION"
+
+
+def test_policies_diverge_on_wait_escalation() -> None:
+    a = load_policy("candidate-a-conservative")
+    b = load_policy("candidate-b-ledger")
+    c = load_policy("candidate-c-assertive")
+    missing_three = DealFact(
+        name="W",
+        state="no_checkpoint",
+        checkpoint="missing",
+        timing_material=True,
+        uncertainty_reduction=True,
+    )
+    timing_only = DealFact(
+        name="W",
+        state="no_checkpoint",
+        checkpoint="missing",
+        timing_material=True,
+        uncertainty_reduction=False,
+    )
+    silence = DealFact(name="W", state="customer_legal", champion_silent=True, close_offset_days=3, checkpoint="present")
+    assert classify_deal(missing_three, a)[0] == "MONITOR"
+    assert classify_deal(missing_three, b)[0] == "ACTION"
+    assert classify_deal(timing_only, b)[0] == "MONITOR"
+    assert classify_deal(timing_only, c)[0] == "ACTION"
+    assert classify_deal(silence, b)[0] == "MONITOR"
+    assert classify_deal(silence, c)[0] == "ACTION"
 
 
 def test_unique_dispositions() -> None:

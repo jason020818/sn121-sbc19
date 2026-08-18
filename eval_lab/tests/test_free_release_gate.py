@@ -22,6 +22,6 @@ def test_free_release_passes_on_tiny_consistent_corpus() -> None:
     decision = evaluate_free_release("candidate-c-minimal", corpora)
     assert decision["passed"]
     assert decision["network_calls"] == 0
-    row = evaluate_candidate("candidate-a-conservative", corpora)
+    row = evaluate_candidate("candidate-b-ledger", corpora)
     assert row["candidate_policy_alignment_pass"] is True
     assert row["catastrophic_logic_failures"] == 0

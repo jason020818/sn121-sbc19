@@ -20,6 +20,8 @@ def test_all_candidates_align_with_policies() -> None:
         "production-f9e5400",
         "candidate-a-conservative",
         "candidate-b-ledger",
+        "candidate-b-minimal",
+        "candidate-c-assertive",
         "candidate-c-minimal",
     ]
     for name in names:

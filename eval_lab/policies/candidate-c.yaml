@@ -1,4 +1,4 @@
-name: candidate-c
+name: candidate-c-assertive
 evidence:
   human_correction_overrides_field: true
   automated_activity_counts_as_human_touch: false
@@ -16,11 +16,13 @@ action:
   schedule_needed_interaction: true
   identify_missing_owner_when_needed: true
   correct_operational_blocker: true
+  record_only_decision_blocking: true
   external_wait_default: monitor
   external_wait_escalation:
     timing_material: required
     checkpoint: missing_or_passed
-    uncertainty_reduction: required
+    uncertainty_reduction: optional
+    champion_silence_near_close: true
   ranking:
     - consequence
     - timing
@@ -40,8 +42,8 @@ output:
   filler_actions: false
   unique_operational_assignment: true
   pipeline_total: explicit_only
-  target_words: [170, 250]
-  max_words: 300
+  target_words: [190, 280]
+  max_words: 330
 constraints:
   explicit_wait_overrides: true
   explicit_channel_overrides: true

@@ -26,21 +26,16 @@ python -m eval_lab.cli release-check --candidate candidate-a --dry-run
 
 Paid OpenRouter runs require `--yes` after the CLI prints the call estimate. Dry-runs never call the API.
 
-Zero-cost oracle/metamorphic commands never call the network:
+Zero-cost domain-policy and rendering-risk commands never call the network:
 
 ```bash
-python -m eval_lab.cli oracle-generate --count 1200 --seed 121190100
-python -m eval_lab.cli metamorphic-generate --variants-per-base 4
-python -m eval_lab.cli pairwise-generate --count 1000
-python -m eval_lab.cli policy-check --candidate candidate-a-conservative
-python -m eval_lab.cli free-tournament \
-  --candidates production-f9e5400 \
-  --candidates candidate-a-conservative \
-  --candidates candidate-b-ledger \
-  --candidates candidate-c-minimal
-python -m eval_lab.cli free-release-check --candidate candidate-a-conservative
+python -m eval_lab.cli domain-oracle-generate --count 3000 --seed 121190200
+python -m eval_lab.cli domain-policy-tournament
+python -m eval_lab.cli rendering-risk-tournament
+python -m eval_lab.cli free-champion-plan
 ```
 
-The policy engine verifies logic; it does not simulate Haiku instruction-following.
+Expected domain labels are an independent sales-ops contract, not `apply_policy(production)`.
+Rendering-risk is static text analysis and does not simulate Haiku or predict official scores.
 
 Copy `config.example.yaml` to `config.yaml` only if you need a local override. Configured model ids are required; the lab will not silently substitute another model.

@@ -16,11 +16,13 @@ action:
   schedule_needed_interaction: true
   identify_missing_owner_when_needed: true
   correct_operational_blocker: true
+  record_only_decision_blocking: true
   external_wait_default: monitor
   external_wait_escalation:
     timing_material: required
-    checkpoint: missing_or_passed
+    checkpoint: passed_only
     uncertainty_reduction: required
+    champion_silence_near_close: false
 non_triggers:
   - amount_alone
   - stage_alone

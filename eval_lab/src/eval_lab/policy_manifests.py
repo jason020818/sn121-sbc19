@@ -15,10 +15,15 @@ CANDIDATE_POLICY_FILES = {
     "production-f9e5400": "production.yaml",
     "candidate-a": "candidate-a.yaml",
     "candidate-a-conservative": "candidate-a.yaml",
+    "conservative": "candidate-a.yaml",
     "candidate-b": "candidate-b.yaml",
     "candidate-b-ledger": "candidate-b.yaml",
+    "candidate-b-minimal": "candidate-b.yaml",
+    "balanced": "candidate-b.yaml",
     "candidate-c": "candidate-c.yaml",
-    "candidate-c-minimal": "candidate-c.yaml",
+    "candidate-c-assertive": "candidate-c.yaml",
+    "assertive": "candidate-c.yaml",
+    "candidate-c-minimal": "candidate-b.yaml",
 }
 
 

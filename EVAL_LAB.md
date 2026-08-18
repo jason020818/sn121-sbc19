@@ -180,21 +180,20 @@ the only official validator sample.
 These commands make zero network calls and zero OpenRouter calls:
 
 ```bash
-python -m eval_lab.cli oracle-generate --count 1200 --seed 121190100
-python -m eval_lab.cli metamorphic-generate --variants-per-base 4
-python -m eval_lab.cli pairwise-generate --count 1000
-python -m eval_lab.cli policy-check --candidate candidate-a-conservative
-python -m eval_lab.cli oracle-run --candidate candidate-a-conservative
-python -m eval_lab.cli free-tournament \
-  --candidates production-f9e5400 \
-  --candidates candidate-a-conservative \
-  --candidates candidate-b-ledger \
-  --candidates candidate-c-minimal
-python -m eval_lab.cli free-release-check --candidate candidate-a-conservative
+python -m eval_lab.cli domain-oracle-generate --count 3000 --seed 121190200
+python -m eval_lab.cli domain-policy-tournament
+python -m eval_lab.cli rendering-risk-tournament
+python -m eval_lab.cli free-champion-plan
 ```
 
-Free-release PASS is an internal logic gate (catastrophic failures, disposition/action
-metrics, invariant/flip/pairwise rates, alignment). It is not an official SN121 threshold.
+Domain expected labels are an independent sales-ops contract. They are not produced by
+`apply_policy(production)` or any candidate manifest. Semantic-policy ranking does not use
+markdown length. Rendering-risk is a separate static layer and does not simulate Haiku.
 
-The committed summary lives at `eval_lab/reports/free-tournament-summary.md`. Full corpora
-stay gitignored under `eval_lab/generated/`.
+Committed summaries:
+- `eval_lab/reports/domain-policy-tournament.md`
+- `eval_lab/reports/rendering-risk-tournament.md`
+- `eval_lab/reports/free-champion-plan.md`
+
+Full corpora stay gitignored under `eval_lab/generated/`. Do not promote a candidate to
+`SKILL.md` from these internal reports alone.

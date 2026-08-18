@@ -19,8 +19,9 @@ class EvidencePolicy(BaseModel):
 
 class EscalationPolicy(BaseModel):
     timing_material: Literal["required", "optional"] = "required"
-    checkpoint: Literal["missing_or_passed", "optional"] = "missing_or_passed"
+    checkpoint: Literal["missing_or_passed", "passed_only", "optional"] = "missing_or_passed"
     uncertainty_reduction: Literal["required", "optional"] = "required"
+    champion_silence_near_close: bool = False
 
 
 class ActionPolicy(BaseModel):
@@ -29,6 +30,7 @@ class ActionPolicy(BaseModel):
     schedule_needed_interaction: bool = True
     identify_missing_owner_when_needed: bool = True
     correct_operational_blocker: bool = True
+    record_only_decision_blocking: bool = True
     external_wait_default: Literal["monitor", "action"] = "monitor"
     external_wait_escalation: EscalationPolicy = Field(default_factory=EscalationPolicy)
     ranking: list[str] = Field(default_factory=list)
@@ -81,15 +83,20 @@ class DealFact(BaseModel):
     close_offset_days: int = 14
     last_offset_days: int = 5
     contact: str | None = None
-    state: str = "customer_legal_review"
+    state: str = "customer_legal"
     meeting_today: bool = False
     record_kind: str | None = None
+    decision_blocking_record_problem: bool = False
     constraint: str | None = None
+    constraint_expired: bool = False
     timing_material: bool = False
     checkpoint: Literal["present", "missing", "passed", "none"] = "present"
     owner_named: bool = True
+    owner_identification_needed_now: bool = False
     seller_owns_next: bool = False
+    seller_deliverable_due: bool = False
     uncertainty_reduction: bool = False
+    champion_silent: bool = False
     channel: str | None = None
 
 
