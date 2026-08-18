@@ -1,0 +1,53 @@
+{
+  "challenge": "SBC19",
+  "challenge_title": "Sales Rep Daily Briefing Composer",
+  "display_name": "SKL-7471-aee6-SBC19",
+  "submission_id": null,
+  "score": 0.6974800000000001,
+  "evaluated_skill_sha256": "894b4d8ad7d6c2cb416f9c292136292e0bc21a7757c6e26ad73dcedc78312aa1",
+  "source_files": {
+    "raw_evaluation_uploaded_name": "test-output-bdd9e100-e4ee-4a06-9985-f617c825292f.json",
+    "skill_uploaded_name": "SKL-7471-aee6-SBC19.md"
+  },
+  "metrics": {
+    "avg_score_total": 0.6974800000000001,
+    "skill_use": 0.8,
+    "scenario_quality": 0.5326000000000001,
+    "rubric": 0.6589999999999999,
+    "skill_alignment": 0.9000000000000001,
+    "novelty_check": 1,
+    "dataset_derived": 0.9000000000000001,
+    "tests_count": 10,
+    "total_tokens": 50044,
+    "max_tokens_per_eval": 157000,
+    "tokens_used": 50044,
+    "samples_prorated": 0,
+    "samples_zeroed": 0,
+    "overall_gate_passed": 1
+  },
+  "models": {
+    "agent": {
+      "provider": "openrouter",
+      "model": "anthropic/claude-haiku-4.5"
+    },
+    "judges": [
+      {
+        "provider": "openrouter",
+        "model": "anthropic/claude-sonnet-4.6"
+      },
+      {
+        "provider": "openrouter",
+        "model": "anthropic/claude-opus-4.8"
+      }
+    ]
+  },
+  "duration_seconds": 339.064,
+  "comparison_baselines": {
+    "previous_mine_score": 0.70529,
+    "champion_score_at_previous_snapshot": 0.76684
+  },
+  "notes": [
+    "submission_id is not present in the uploaded evaluation JSON.",
+    "The uploaded skill text matches the current generalized SKILL.md content semantically; verify exact hash against the remote before using as submission identity."
+  ]
+}
