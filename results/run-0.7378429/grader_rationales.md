@@ -1,0 +1,281 @@
+# Grader rationales for run 0.7378429
+
+## S-001
+
+- weighted_score: 0.763000
+
+### skill_use (0.75)
+
+The skill teaches a specific triage framework (ACTION/MEETING/MONITOR/RECORD buckets, exclusive assignment, capped action count, evidence-boundary discipline) that a general-purpose agent would not produce on its own. The agent applies this well in most places — correctly routing Thornfield to MEETING prep rather than a separate action, capping Priority Actions at three, and respecting waiting states for Cascade/Meridian/etc. However, the agent violates the skill's explicit rule against printing
+
+### scenario_quality (0.84)
+
+The agent correctly handles the core edge cases: Meridian is placed in Monitor (not flagged for action) because the eval period is documented, Bluewater is treated as a waiting state despite the Oct 11 close, and the internal QBR is excluded from deal-tied meeting prep. However, the top-3 priority a | Base=0.840, penalties=0.00, final=0.840
+
+### rubric (0.62)
+
+The response demonstrates reasonable pipeline awareness and correctly prioritizes Nightfall and Thornfield, but introduces significant fabricated specifics that undermine its reliability — notably, the Cascade Renewables action item references a '$175K' deal value, a 'Sep 20 last touch,' and a 'budget approver' contact strategy, none of which appear in the source data, and Cascade is explicitly listed as a credible waiting state requiring no seller action. Similarly, the suggestion to 'ask James at Meridian' about Redwood contacts is invented detail with no grounding. The Korvex promotion to Tier A has plausible logic but contradicts the briefing's explicit 'no next step identified / monitor' classification without sufficient justification. Communication is clear and the structure is functional, but the fabrication of deal-specific details in a sales ops context is a meaningful accuracy failure that outweighs the response's organizational strengths.
+
+### skill_alignment (0.85)
+
+Appears genuine (alignment=0.850 >= 0.55). The skill teaches genuine procedural and domain knowledge: it explains WHY a deal isn't actionable merely because it's large/old/late-stage, distinguishes documented customer dwell from seller stall via the 'respect the other party's state' logic, and provides decision heuristics (consequence, timing, blocker ownership, single-move impact) rather than restating rubric line items. It uses abstract, generalizable terminology (buckets, evidence boundary, action count N) rather than naming the specific evaluation scenarios (Meridian, Bluewater, QBR) that appear in the rubric. Minor overlap exists — the four ranking heuristics and the 'not yet in verbal/contract' carveout do correspond to specific rubric criteria — but these are framed as reusable domain reasoning with the WHY explained, not as a checklist mirror of scoring dimensions.
+
+### novelty_check (1)
+
+First sample in novelty group — no comparison
+
+### dataset_derived (0.9)
+
+Appears general. (score=0.900, mapped=0 of 10). 6 beyond-dataset items. The skill is organized around abstract, reusable principles (evidence boundary, exclusive bucket assignment, count-then-write action locking, grounding requirements) rather than any enumerated set of situations. None of its rules name a specific company, dollar amount, date, or scenario-specific combination; the buckets and guardrails apply uniformly to a 32-deal pipeline (S-006), an 8-deal one (S-009), or a do-not-contact case (S-010) without special-casing. There is no lookup table with rows mapping 1:1 to test cases, and a brand-new scenario would be handled by the same general triage logic rather than falling through cracks. The 'ACTION not merely because large/old/late-stage/quiet' rule and the do-not-contact override are the kinds of calibration guardrails a genuine domain expert would write; the closed-set risk is absent.
+
+## S-002
+
+- weighted_score: 0.668500
+
+### skill_use (0.875)
+
+The skill teaches a specific triage framework (ACTION/MEETING/MONITOR/RECORD buckets, locking action count before writing, grounding each action in one deal/one act/one reason) that a general-purpose agent would not apply on its own — and the output clearly applies it: exactly three priority actions are listed, Stormbridge is correctly placed in Monitor despite its tight close date (because the waiting state is credible and the seller doesn't own the next step), and the agent avoids inventing co
+
+### scenario_quality (0.4)
+
+The agent produces 3 Priority Actions but makes a significant error in selection: it elevates Keystone Agri (verbal received, contracts coming) to Tier A while demoting Stormbridge Media (9 days to close, 8 days of silence on contract markup) to Monitor — this is the inverse of correct prioritizatio | Base=0.400, penalties=0.00, final=0.400
+
+### rubric (0.62)
+
+The submission demonstrates reasonable domain knowledge and correctly identifies the three priority actions, but makes a significant contextual error by elevating Stormbridge Media to the #1 priority action slot when the briefing data explicitly places it in Monitor — the submission's own reasoning acknowledges it's a 'waiting state' yet contradicts this by making it the top seller action today. The response also fabricates deal data (Oaktree Pharma, Vantage Robotics dollar amounts and activity dates not present in the source) and invents a 'Needs Record Update' section for Brightpath Staffing with specifics not grounded in the provided context, which undermines output quality. Communication is clear and structured, but the padding of a Tier B section with invented deal details and the misalignment between the Monitor/Action classification logic represent meaningful judgment failures relative to the reference response's cleaner prioritization.
+
+### skill_alignment (0.85)
+
+Appears genuine (alignment=0.850 >= 0.55). The skill teaches genuine procedural and domain knowledge: it explains WHY a deal isn't actionable merely because it's large/old/late-stage, distinguishes documented customer dwell from seller stall via the 'respect the other party's state' logic, and provides decision heuristics (consequence, timing, blocker ownership, single-move impact) rather than restating rubric line items. It uses abstract, generalizable terminology (buckets, evidence boundary, action count N) rather than naming the specific evaluation scenarios (Meridian, Bluewater, QBR) that appear in the rubric. Minor overlap exists — the four ranking heuristics and the 'not yet in verbal/contract' carveout do correspond to specific rubric criteria — but these are framed as reusable domain reasoning with the WHY explained, not as a checklist mirror of scoring dimensions.
+
+### novelty_check (1)
+
+First sample in novelty group — no comparison
+
+### dataset_derived (0.9)
+
+Appears general. (score=0.900, mapped=0 of 10). 6 beyond-dataset items. The skill is organized around abstract, reusable principles (evidence boundary, exclusive bucket assignment, count-then-write action locking, grounding requirements) rather than any enumerated set of situations. None of its rules name a specific company, dollar amount, date, or scenario-specific combination; the buckets and guardrails apply uniformly to a 32-deal pipeline (S-006), an 8-deal one (S-009), or a do-not-contact case (S-010) without special-casing. There is no lookup table with rows mapping 1:1 to test cases, and a brand-new scenario would be handled by the same general triage logic rather than falling through cracks. The 'ACTION not merely because large/old/late-stage/quiet' rule and the do-not-contact override are the kinds of calibration guardrails a genuine domain expert would write; the closed-set risk is absent.
+
+## S-003
+
+- weighted_score: 0.751000
+
+### skill_use (0.875)
+
+The skill teaches a non-obvious triage framework (ACTION/MEETING/MONITOR/RECORD buckets, exclusive assignment, locking action count before writing, grounding every action in one deal/one act/one reason) that a general-purpose agent would not apply on its own — and the output clearly applies it: four calendar deals are assigned to MEETING and excluded from Priority Actions, Solstice Energy earns ACTION status based on close-date consequence rather than deal size, and the Paragon Hotels record amb
+
+### scenario_quality (0.575)
+
+The agent correctly separates meeting prep from the outbound action queue, placing Trident, Solstice, and Verdant in Priority Actions and keeping all four meetings in their own section — demonstrating solid contextual judgment. However, the meeting prep notes are thin and generic (e.g., 'Objective:  | Base=0.575, penalties=0.00, final=0.575
+
+### rubric (0.72)
+
+The submission demonstrates solid contextual judgment — correctly identifying the Northgate EBR as the day's highest-stakes event, flagging Solstice Energy's June 25 close as urgent, and noting the Paragon downsize risk with a concrete mitigation approach (middle-tier option). However, it contains a meaningful factual error: it states four June-close deals total $1.05M in the pipeline health section, when the briefing clearly states $720K combined, and it invents last-activity dates (e.g., 'June 3' for Northgate, 'June 5' for Verdant, 'June 12' for Solstice) that do not appear in the source data — this is a domain_knowledge and output_quality failure that a sales ops tool should not commit. The Tier A/Tier B structure and the closing note distinguishing calendar-driven vs. rep-initiated actions show genuine analytical thinking, but the fabricated specificity undermines trust in the output and would require a rep to verify details that should have been left as unknown.
+
+### skill_alignment (0.85)
+
+Appears genuine (alignment=0.850 >= 0.55). The skill teaches genuine procedural and domain knowledge: it explains WHY a deal isn't actionable merely because it's large/old/late-stage, distinguishes documented customer dwell from seller stall via the 'respect the other party's state' logic, and provides decision heuristics (consequence, timing, blocker ownership, single-move impact) rather than restating rubric line items. It uses abstract, generalizable terminology (buckets, evidence boundary, action count N) rather than naming the specific evaluation scenarios (Meridian, Bluewater, QBR) that appear in the rubric. Minor overlap exists — the four ranking heuristics and the 'not yet in verbal/contract' carveout do correspond to specific rubric criteria — but these are framed as reusable domain reasoning with the WHY explained, not as a checklist mirror of scoring dimensions.
+
+### novelty_check (1)
+
+Novel response (max similarity 0.543 < 0.75, group=A, compared against 1 prior)
+
+### dataset_derived (0.9)
+
+Appears general. (score=0.900, mapped=0 of 10). 6 beyond-dataset items. The skill is organized around abstract, reusable principles (evidence boundary, exclusive bucket assignment, count-then-write action locking, grounding requirements) rather than any enumerated set of situations. None of its rules name a specific company, dollar amount, date, or scenario-specific combination; the buckets and guardrails apply uniformly to a 32-deal pipeline (S-006), an 8-deal one (S-009), or a do-not-contact case (S-010) without special-casing. There is no lookup table with rows mapping 1:1 to test cases, and a brand-new scenario would be handled by the same general triage logic rather than falling through cracks. The 'ACTION not merely because large/old/late-stage/quiet' rule and the do-not-contact override are the kinds of calibration guardrails a genuine domain expert would write; the closed-set risk is absent.
+
+## S-006
+
+- weighted_score: 0.653500
+
+### skill_use (0.625)
+
+The skill teaches a specific triage framework (ACTION/MEETING/MONITOR/RECORD buckets, locking action count before writing, grounding every action in one deal/one act/one reason) that a general-purpose agent would not independently produce. However, the agent violated the skill's core evidence boundary rule by inventing 'Champion Renata' and 'Copperhead Carriers' — neither appears in the handoff — and fabricated '72% of Q3 quota' despite the skill explicitly prohibiting aggregate pipeline values
+
+### scenario_quality (0.61)
+
+The agent handles the Pacific Rim Cargo inconsistency well and correctly identifies the top-3 priority deals (Seagate, ClearRoute, TerraFreight), but the ordering is wrong — ClearRoute is placed second instead of TerraFreight (the $580K deal with a 9-day gap), and Polar Express Cargo (18-day dark, c | Base=0.610, penalties=0.00, final=0.610
+
+### rubric (0.61)
+
+The second response demonstrates strong structural ambition and genuine effort to triage a full 32-deal pipeline, but it introduces significant fabricated data — deals like Polar Express Cargo, Stonewall Shipping, Brightline Rail, BlueSky Freight, Granite Carriers, Ironwood Fleet, Hawkwind Aviation, and many others do not appear in the source briefing, which only names specific deals. This is a critical domain_knowledge and output_quality failure: a sales ops briefing that invents pipeline entries is actively harmful, not just incomplete. The reference response correctly scopes to the deals actually present in the data, prioritizes the same top actions (Seagate, ClearRoute, TerraFreight), and handles the Pacific Rim Cargo data hygiene issue accurately. The second response's calibration note and tiering logic show genuine analytical thinking, and its framing of the Seagate action ('a verbal alone doesn't close the quarter') reflects real sales ops judgment, but the fabrication of roughly 15+ non-existent deals across Tier A and Tier B sections substantially undermines trustworthiness and contextual_judgment — the response appears to have pattern-matched to a 'full pipeline briefing template' rather than working from the actual data provided.
+
+### skill_alignment (0.85)
+
+Appears genuine (alignment=0.850 >= 0.55). The skill teaches genuine procedural and domain knowledge: it explains WHY a deal isn't actionable merely because it's large/old/late-stage, distinguishes documented customer dwell from seller stall via the 'respect the other party's state' logic, and provides decision heuristics (consequence, timing, blocker ownership, single-move impact) rather than restating rubric line items. It uses abstract, generalizable terminology (buckets, evidence boundary, action count N) rather than naming the specific evaluation scenarios (Meridian, Bluewater, QBR) that appear in the rubric. Minor overlap exists — the four ranking heuristics and the 'not yet in verbal/contract' carveout do correspond to specific rubric criteria — but these are framed as reusable domain reasoning with the WHY explained, not as a checklist mirror of scoring dimensions.
+
+### novelty_check (1)
+
+First sample in novelty group — no comparison
+
+### dataset_derived (0.9)
+
+Appears general. (score=0.900, mapped=0 of 10). 6 beyond-dataset items. The skill is organized around abstract, reusable principles (evidence boundary, exclusive bucket assignment, count-then-write action locking, grounding requirements) rather than any enumerated set of situations. None of its rules name a specific company, dollar amount, date, or scenario-specific combination; the buckets and guardrails apply uniformly to a 32-deal pipeline (S-006), an 8-deal one (S-009), or a do-not-contact case (S-010) without special-casing. There is no lookup table with rows mapping 1:1 to test cases, and a brand-new scenario would be handled by the same general triage logic rather than falling through cracks. The 'ACTION not merely because large/old/late-stage/quiet' rule and the do-not-contact override are the kinds of calibration guardrails a genuine domain expert would write; the closed-set risk is absent.
+
+## S-008
+
+- weighted_score: 0.781000
+
+### skill_use (0.875)
+
+The skill teaches a non-obvious triage framework (ACTION/MEETING/MONITOR/RECORD buckets, exclusive assignment, locking action count before writing, grounding every action in one deal/one act/one reason) that a general-purpose agent would not produce on its own. The output clearly applies this: Stratum is handled as MEETING-only with no duplicate action line, Halcyon's expired e-sign is correctly surfaced as a seller-owned blocker rather than a monitor state, Vertex gets both an action and a reco
+
+### scenario_quality (0.515)
+
+The agent correctly identifies Halcyon as #1 and treats the Vertex conference intelligence as a signal rather than confirmed fact, showing solid contextual judgment. However, the output falls short on specificity: Halcyon gets no '5 minutes' framing, Vertex gets no phone-call recommendation (just 'r | Base=0.515, penalties=0.00, final=0.515
+
+### rubric (0.88)
+
+The reference response demonstrates stronger contextual judgment and actionability throughout — notably the explicit recommendation to call rather than email Vertex, the rationale for why CFO meetings hinge on execution de-risking, and the footnoted epistemic caveat distinguishing second-hand conference intelligence from confirmed fact. The submission being evaluated is solid and well-structured but applies a more generic briefing template: it correctly identifies priorities and actions but lacks the sharper reasoning visible in the reference (e.g., no channel recommendation for Vertex outreach, no specific framing for the Stratum meeting, and the 'Needs Record Update' section incorrectly claims no hygiene issues when the source data explicitly flags Vertex's stale last-activity date as needing correction). The Frontier Defense action is also notably absent from the submission's Top 3 despite being the highest-value deal at 8 days to close, which represents a meaningful prioritization gap.
+
+### skill_alignment (0.85)
+
+Appears genuine (alignment=0.850 >= 0.55). The skill teaches genuine procedural and domain knowledge: it explains WHY a deal isn't actionable merely because it's large/old/late-stage, distinguishes documented customer dwell from seller stall via the 'respect the other party's state' logic, and provides decision heuristics (consequence, timing, blocker ownership, single-move impact) rather than restating rubric line items. It uses abstract, generalizable terminology (buckets, evidence boundary, action count N) rather than naming the specific evaluation scenarios (Meridian, Bluewater, QBR) that appear in the rubric. Minor overlap exists — the four ranking heuristics and the 'not yet in verbal/contract' carveout do correspond to specific rubric criteria — but these are framed as reusable domain reasoning with the WHY explained, not as a checklist mirror of scoring dimensions.
+
+### novelty_check (1)
+
+Novel response (max similarity 0.343 < 0.75, group=D, compared against 1 prior)
+
+### dataset_derived (0.9)
+
+Appears general. (score=0.900, mapped=0 of 10). 6 beyond-dataset items. The skill is organized around abstract, reusable principles (evidence boundary, exclusive bucket assignment, count-then-write action locking, grounding requirements) rather than any enumerated set of situations. None of its rules name a specific company, dollar amount, date, or scenario-specific combination; the buckets and guardrails apply uniformly to a 32-deal pipeline (S-006), an 8-deal one (S-009), or a do-not-contact case (S-010) without special-casing. There is no lookup table with rows mapping 1:1 to test cases, and a brand-new scenario would be handled by the same general triage logic rather than falling through cracks. The 'ACTION not merely because large/old/late-stage/quiet' rule and the do-not-contact override are the kinds of calibration guardrails a genuine domain expert would write; the closed-set risk is absent.
+
+## S-010
+
+- weighted_score: 0.713500
+
+### skill_use (0.875)
+
+The skill teaches a non-obvious triage framework (ACTION/MEETING/MONITOR/RECORD buckets, exclusive assignment, locking action count before writing) that a general-purpose agent would not apply on its own — and the output clearly applies it: Marshfield is correctly split between MONITOR and RECORD rather than duplicated, Ashwood's do-not-contact constraint is respected without inventing a workaround, and the action count is held to exactly one despite multiple large deals. Situational judgment is
+
+### scenario_quality (0.55)
+
+The agent correctly flags Arcadia urgency at the top, handles Ashwood Financial with a proper 'do not contact' note, and catches the Marshfield logging error in a dedicated section. However, the Arcadia meeting prep lacks specific actionable advice — there's no mention of knowing the discount floor, | Base=0.550, penalties=0.00, final=0.550
+
+### rubric (0.62)
+
+The submission demonstrates solid domain knowledge and communication quality — the Arcadia prep advice (know your floor, prepare a concession, offer multi-year as an alternative to straight discounting) is genuinely useful and situation-specific. However, several significant errors undermine the score: it incorrectly flags Cypress Analytics as needing action today when the briefing explicitly states 'no seller move required until they respond,' and it recommends a Northstar check-in that contradicts the 'on track, waiting state credible' signal. The Ironhaven advice to ask a specific objection-surfacing question is more actionable than the reference, but the overall response over-generates actions in a way that dilutes the core prioritization signal — the reference correctly identifies one genuine seller action while this submission manufactures urgency across multiple monitor-state deals, which is a meaningful sales ops judgment error.
+
+### skill_alignment (0.85)
+
+Appears genuine (alignment=0.850 >= 0.55). The skill teaches genuine procedural and domain knowledge: it explains WHY a deal isn't actionable merely because it's large/old/late-stage, distinguishes documented customer dwell from seller stall via the 'respect the other party's state' logic, and provides decision heuristics (consequence, timing, blocker ownership, single-move impact) rather than restating rubric line items. It uses abstract, generalizable terminology (buckets, evidence boundary, action count N) rather than naming the specific evaluation scenarios (Meridian, Bluewater, QBR) that appear in the rubric. Minor overlap exists — the four ranking heuristics and the 'not yet in verbal/contract' carveout do correspond to specific rubric criteria — but these are framed as reusable domain reasoning with the WHY explained, not as a checklist mirror of scoring dimensions.
+
+### novelty_check (1)
+
+First sample in novelty group — no comparison
+
+### dataset_derived (0.9)
+
+Appears general. (score=0.900, mapped=0 of 10). 6 beyond-dataset items. The skill is organized around abstract, reusable principles (evidence boundary, exclusive bucket assignment, count-then-write action locking, grounding requirements) rather than any enumerated set of situations. None of its rules name a specific company, dollar amount, date, or scenario-specific combination; the buckets and guardrails apply uniformly to a 32-deal pipeline (S-006), an 8-deal one (S-009), or a do-not-contact case (S-010) without special-casing. There is no lookup table with rows mapping 1:1 to test cases, and a brand-new scenario would be handled by the same general triage logic rather than falling through cracks. The 'ACTION not merely because large/old/late-stage/quiet' rule and the do-not-contact override are the kinds of calibration guardrails a genuine domain expert would write; the closed-set risk is absent.
+
+## S-009
+
+- weighted_score: 0.706000
+
+### skill_use (0.75)
+
+The skill teaches a specific triage framework (ACTION/MEETING/MONITOR/RECORD buckets, locking action count before writing, grounding every action in one deal/one act/one reason) that a general-purpose agent would not independently apply. The agent applies this framework meaningfully — correctly assigning Waverly and Sequoia to MONITOR despite their size and proximity, and surfacing Crownview's 27-day silence as the highest-leverage action — showing genuine situational judgment. However, the outp
+
+### scenario_quality (0.55)
+
+The agent correctly identifies Crownview as the top priority and keeps Sequoia in Monitor/Tier B, which is good. However, it misplaces Waverly into Monitor rather than Tier A — Waverly has a Jan 24 close with contract review ongoing and needs a specific action (ask for expected signing date), not pa | Base=0.550, penalties=0.00, final=0.550
+
+### rubric (0.72)
+
+The response demonstrates solid domain knowledge and reasonable contextual judgment — correctly identifying Crownview as the highest-leverage silent deal and providing specific, actionable outreach framing. However, it contains a notable error in the Waverly action item: the briefing explicitly states a verbal close is confirmed and contract review is in progress, making 'ask for a specific expected signing date' a reasonable but slightly misframed action (the reference correctly notes to watch for contract return by Jan 20 rather than treating it as a stalled deal requiring re-engagement). The Caspian Retail handling is also weaker than the reference — the submission defers it to Monday despite the demo being 7 days out and unconfirmed, which the reference flags as worth immediate confirmation. The response is well-structured without being over-formatted, and the quota math footnote adds genuine value, but the mechanical Tier A/B framing and the 'No hygiene flags' note (when Maple Street's missing contact name is a real gap) suggest some template-filling rather than fully grounded situational reading.
+
+### skill_alignment (0.85)
+
+Appears genuine (alignment=0.850 >= 0.55). The skill teaches genuine procedural and domain knowledge: it explains WHY a deal isn't actionable merely because it's large/old/late-stage, distinguishes documented customer dwell from seller stall via the 'respect the other party's state' logic, and provides decision heuristics (consequence, timing, blocker ownership, single-move impact) rather than restating rubric line items. It uses abstract, generalizable terminology (buckets, evidence boundary, action count N) rather than naming the specific evaluation scenarios (Meridian, Bluewater, QBR) that appear in the rubric. Minor overlap exists — the four ranking heuristics and the 'not yet in verbal/contract' carveout do correspond to specific rubric criteria — but these are framed as reusable domain reasoning with the WHY explained, not as a checklist mirror of scoring dimensions.
+
+### novelty_check (1)
+
+Novel response (max similarity 0.629 < 0.75, group=B, compared against 1 prior)
+
+### dataset_derived (0.9)
+
+Appears general. (score=0.900, mapped=0 of 10). 6 beyond-dataset items. The skill is organized around abstract, reusable principles (evidence boundary, exclusive bucket assignment, count-then-write action locking, grounding requirements) rather than any enumerated set of situations. None of its rules name a specific company, dollar amount, date, or scenario-specific combination; the buckets and guardrails apply uniformly to a 32-deal pipeline (S-006), an 8-deal one (S-009), or a do-not-contact case (S-010) without special-casing. There is no lookup table with rows mapping 1:1 to test cases, and a brand-new scenario would be handled by the same general triage logic rather than falling through cracks. The 'ACTION not merely because large/old/late-stage/quiet' rule and the do-not-contact override are the kinds of calibration guardrails a genuine domain expert would write; the closed-set risk is absent.
+
+## S-005
+
+- weighted_score: 0.799000
+
+### skill_use (0.875)
+
+The skill teaches a non-obvious triage framework (ACTION/MEETING/MONITOR/RECORD buckets, locking action count before writing, exclusive deal assignment) that a general-purpose agent would not apply on its own — and the output clearly applies it: Bellwether is correctly routed to MEETING rather than ACTION, Prism Logistics is isolated to RECORD rather than duplicated in actions, and the action count is held to exactly 2 genuine moves rather than inflated. The Verdana Biotech timing judgment (Yara
+
+### scenario_quality (0.575)
+
+The agent correctly identifies Ironclad Security as needing a call to determine status (threading the missing-note + close-date tension), and correctly places Prism Logistics in Needs Record Update. However, the agent ranks Verdana Biotech and Ironclad Security as co-equal priorities rather than cle | Base=0.575, penalties=0.00, final=0.575
+
+### rubric (0.88)
+
+The response demonstrates strong contextual judgment — notably elevating Aurelia Healthcare to Top 3 (not in the reference) based on sound reasoning about silent attorney review drift, and correctly identifying Ironclad's Nov 14 close as requiring a call rather than email given the information gap and proximity. The Bellwether meeting prep adds concrete tactical value (pilot configuration options at different price points) rather than restating the obvious. Minor deductions: the pipeline total ($1.565M) is a small addition that adds marginal value, and the Tier B monitor section is slightly over-structured for what amounts to 'these are fine,' but the long-weekend timing note at the bottom shows genuine situational awareness rather than template-filling.
+
+### skill_alignment (0.85)
+
+Appears genuine (alignment=0.850 >= 0.55). The skill teaches genuine procedural and domain knowledge: it explains WHY a deal isn't actionable merely because it's large/old/late-stage, distinguishes documented customer dwell from seller stall via the 'respect the other party's state' logic, and provides decision heuristics (consequence, timing, blocker ownership, single-move impact) rather than restating rubric line items. It uses abstract, generalizable terminology (buckets, evidence boundary, action count N) rather than naming the specific evaluation scenarios (Meridian, Bluewater, QBR) that appear in the rubric. Minor overlap exists — the four ranking heuristics and the 'not yet in verbal/contract' carveout do correspond to specific rubric criteria — but these are framed as reusable domain reasoning with the WHY explained, not as a checklist mirror of scoring dimensions.
+
+### novelty_check (1)
+
+Novel response (max similarity 0.429 < 0.75, group=C, compared against 1 prior)
+
+### dataset_derived (0.9)
+
+Appears general. (score=0.900, mapped=0 of 10). 6 beyond-dataset items. The skill is organized around abstract, reusable principles (evidence boundary, exclusive bucket assignment, count-then-write action locking, grounding requirements) rather than any enumerated set of situations. None of its rules name a specific company, dollar amount, date, or scenario-specific combination; the buckets and guardrails apply uniformly to a 32-deal pipeline (S-006), an 8-deal one (S-009), or a do-not-contact case (S-010) without special-casing. There is no lookup table with rows mapping 1:1 to test cases, and a brand-new scenario would be handled by the same general triage logic rather than falling through cracks. The 'ACTION not merely because large/old/late-stage/quiet' rule and the do-not-contact override are the kinds of calibration guardrails a genuine domain expert would write; the closed-set risk is absent.
+
+## S-004
+
+- weighted_score: 0.824929
+
+### skill_use (0.875)
+
+The skill teaches a specific triage framework (ACTION/MEETING/MONITOR/RECORD buckets, locking action count before writing, grounding every action in one deal/one act/one reason) that a general-purpose agent would not apply on its own — and the output clearly reflects it: exactly three priority actions are listed, the aggregate pipeline total is printed despite the skill prohibiting it unless explicitly supplied (a minor violation), and Holloway is correctly surfaced as a record gap rather than a
+
+### scenario_quality (0.85)
+
+The agent correctly identifies Lynx as #1 (imminent close, MSA outstanding, 15+ business days since last activity), handles Holloway with a proper 'Needs Record Update' flag rather than inferring triage, and keeps Fairbanks appropriately in Monitor despite PTO gap. The main weakness is in output_qua | Base=0.850, penalties=0.00, final=0.850
+
+### rubric (0.72)
+
+The first response demonstrates tighter contextual judgment — it correctly identifies that Meridian requires no seller action (contract with their legal, no blocker), while the second response incorrectly elevates Meridian to a Top 3 action item, which contradicts the briefing's own logic and adds noise to a re-entry day. The second response also flags Nova Semiconductor as Tier A despite the briefing explicitly noting it has a credible next-step owner and no immediate action required, showing a pattern of over-escalation that dilutes the signal. However, the second response's PTO re-entry framing, business-day gap reasoning, and the Cascadia Timber guidance (proposing a specific call with a social proof angle) reflect stronger domain reasoning and communication quality than the first response's more mechanical action list.
+
+### skill_alignment (0.85)
+
+Appears genuine (alignment=0.850 >= 0.55). The skill teaches genuine procedural and domain knowledge: it explains WHY a deal isn't actionable merely because it's large/old/late-stage, distinguishes documented customer dwell from seller stall via the 'respect the other party's state' logic, and provides decision heuristics (consequence, timing, blocker ownership, single-move impact) rather than restating rubric line items. It uses abstract, generalizable terminology (buckets, evidence boundary, action count N) rather than naming the specific evaluation scenarios (Meridian, Bluewater, QBR) that appear in the rubric. Minor overlap exists — the four ranking heuristics and the 'not yet in verbal/contract' carveout do correspond to specific rubric criteria — but these are framed as reusable domain reasoning with the WHY explained, not as a checklist mirror of scoring dimensions.
+
+### novelty_check (0.91429)
+
+Structural similarity 0.771 with S-009 exceeds threshold 0.75 (group=B). Fingerprint: 16 paragraphs, 0 list items, 326 words.
+
+### dataset_derived (0.9)
+
+Appears general. (score=0.900, mapped=0 of 10). 6 beyond-dataset items. The skill is organized around abstract, reusable principles (evidence boundary, exclusive bucket assignment, count-then-write action locking, grounding requirements) rather than any enumerated set of situations. None of its rules name a specific company, dollar amount, date, or scenario-specific combination; the buckets and guardrails apply uniformly to a 32-deal pipeline (S-006), an 8-deal one (S-009), or a do-not-contact case (S-010) without special-casing. There is no lookup table with rows mapping 1:1 to test cases, and a brand-new scenario would be handled by the same general triage logic rather than falling through cracks. The 'ACTION not merely because large/old/late-stage/quiet' rule and the do-not-contact override are the kinds of calibration guardrails a genuine domain expert would write; the closed-set risk is absent.
+
+## S-007
+
+- weighted_score: 0.718000
+
+### skill_use (0.875)
+
+The skill teaches a specific triage framework (ACTION/MEETING/MONITOR/RECORD buckets, exclusive assignment, action-count locking, evidence-boundary discipline) that a general-purpose agent would not produce on its own. The output applies this directly: Pinnacle and Opal are correctly routed to MEETING rather than generating duplicate action items; Titanium Defense is placed in MONITOR despite the user's explicit request to 'pull it forward,' respecting the skill's rule that procurement-owned wai
+
+### scenario_quality (0.315)
+
+The agent partially recognizes the automated email issue for Silica Systems and notes it in a 'Needs Record Update' section, but fails to treat Jan 20 as the effective last touch for triage purposes — it doesn't flag the 15-business-day gap as a priority driver. Critically, Titanium Defense ($340K,  | Base=0.315, penalties=0.00, final=0.315
+
+### rubric (0.87)
+
+The submission demonstrates strong contextual judgment — it correctly identifies Titanium Defense as the highest-risk deal (18 business days of silence, $340K, Feb 25 close) and makes a specific, actionable recommendation rather than a generic 'follow up' instruction. The Silica Systems note about the automated workflow vs. rep-initiated touch shows genuine domain understanding, not surface-level CRM hygiene. The forecast deflection is appropriately scoped and honest rather than attempting a half-baked rollup, and the meeting prep for Pinnacle Genomics adds concrete tactical value (SLA floor, alternative structure) that the reference briefing lacks. Minor deductions: the Tier A/Tier B structure adds slight organizational overhead that borders on over-formatting for a daily triage tool, and the 'Needs Record Update' section incorrectly states 'no deals are missing last-activity dates' when the source material explicitly flags Silica Systems as needing clarification — this is a factual miss that slightly undermines the otherwise high output quality.
+
+### skill_alignment (0.85)
+
+Appears genuine (alignment=0.850 >= 0.55). The skill teaches genuine procedural and domain knowledge: it explains WHY a deal isn't actionable merely because it's large/old/late-stage, distinguishes documented customer dwell from seller stall via the 'respect the other party's state' logic, and provides decision heuristics (consequence, timing, blocker ownership, single-move impact) rather than restating rubric line items. It uses abstract, generalizable terminology (buckets, evidence boundary, action count N) rather than naming the specific evaluation scenarios (Meridian, Bluewater, QBR) that appear in the rubric. Minor overlap exists — the four ranking heuristics and the 'not yet in verbal/contract' carveout do correspond to specific rubric criteria — but these are framed as reusable domain reasoning with the WHY explained, not as a checklist mirror of scoring dimensions.
+
+### novelty_check (1)
+
+Novel response (max similarity 0.214 < 0.75, group=C, compared against 2 prior)
+
+### dataset_derived (0.9)
+
+Appears general. (score=0.900, mapped=0 of 10). 6 beyond-dataset items. The skill is organized around abstract, reusable principles (evidence boundary, exclusive bucket assignment, count-then-write action locking, grounding requirements) rather than any enumerated set of situations. None of its rules name a specific company, dollar amount, date, or scenario-specific combination; the buckets and guardrails apply uniformly to a 32-deal pipeline (S-006), an 8-deal one (S-009), or a do-not-contact case (S-010) without special-casing. There is no lookup table with rows mapping 1:1 to test cases, and a brand-new scenario would be handled by the same general triage logic rather than falling through cracks. The 'ACTION not merely because large/old/late-stage/quiet' rule and the do-not-contact override are the kinds of calibration guardrails a genuine domain expert would write; the closed-set risk is absent.

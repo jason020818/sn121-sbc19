@@ -20,8 +20,8 @@ Before writing, silently reconcile the handoff.
 - Treat recency as stakeholder interaction, not merely system or workflow activity.
 - Use a date, elapsed-time statement, count, or amount only when it is directly supported
   or safely derived from unambiguous source values.
-- Never sum deal amounts. Only repeat a pipeline total when the handoff explicitly provides
-  and labels that total. Deal count is enough.
+- Do not calculate or print an aggregate pipeline value unless the handoff itself provides
+  that total explicitly. Deal count is enough.
 - If a field conflict prevents a reliable conclusion, keep the uncertainty visible rather
   than resolving it by guess.
 
@@ -61,9 +61,9 @@ A deal is not actionable merely because it is large, old, late-stage, or quiet. 
 strongest consideration to consequence if today passes, explicit timing, whether the
 seller owns a blocker, and whether one seller move can actually change the state.
 
-An externally owned process remains MONITOR by default. It may become ACTION only when
-timing is materially near, there is no usable dated checkpoint or the checkpoint has
-passed, and one precise timing or status ask can materially reduce current uncertainty.
+If another party owns the next step and the handoff shows a credible process or expected
+event, respect that state. If timing has become material but no usable return date exists,
+one precise request for timing may be appropriate.
 
 An explicit do-not-contact or channel instruction overrides all default outreach logic.
 
@@ -98,10 +98,8 @@ For each meeting, use only source-supported material:
 - named attendees and roles from the handoff;
 - next step or fallback only when the handoff supports it.
 
-A meeting may include one preparation question or decision boundary derived from the
-stated meeting purpose or blocker. Present it as advice, never as a sourced fact. Do not
-invent pricing, concessions, product claims, or stakeholder facts. Mark internal meetings
-as internal.
+Do not manufacture negotiation positions, pricing options, product details, or internal
+approval strategy. Mark internal meetings as internal.
 
 ## Monitor and record sections
 
@@ -127,8 +125,7 @@ Priority Actions.
 
 ## Pipeline Health
 Open-deal count, number of genuine seller moves today, and the dominant named exposure,
-constraint, or risk. Do not sum deal amounts. Repeat a pipeline total only if the handoff
-already provides and labels it.
+constraint, or risk. Do not compute a pipeline sum unless the handoff gives one.
 
 ## Priority Actions
 Exactly min(N, 3) genuine seller moves.
@@ -146,7 +143,7 @@ Important named holds or waiting states, then one compact grouped remainder when
 Internal-only repairs for deals not already handled elsewhere.
 ```
 
-Target 210-280 words. Hard ceiling 330 words. Prefer omission over padding.
+Target 220-300 words. Hard ceiling 360 words. Prefer omission over padding.
 
 ## Extra requests
 
@@ -163,14 +160,10 @@ Before printing, silently verify:
 - no deal name appears in more than one operational section;
 - every printed person, role, date, amount, contact path, deadline, and commercial detail
   is grounded in the handoff;
-- no pipeline total was summed from deal amounts; a total appears only if the handoff
-  labeled it;
+- no aggregate pipeline sum was calculated unless the handoff supplied the total;
 - no scheduled meeting deal is duplicated as outbound work;
 - explicit waiting and communication constraints are respected;
 - no unsupported recipient, channel, deadline, concession, fallback, or product detail
   was created;
-- the answer is within 330 words;
+- the answer is within 360 words;
 - no empty section remains.
-
-After drafting, scan every deal name. If a deal appears in more than one operational
-section, keep its primary assignment and delete later occurrences.
