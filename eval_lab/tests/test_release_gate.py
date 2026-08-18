@@ -1,7 +1,7 @@
 """Release-gate and tournament ranking tests."""
 
 from eval_lab.config import ReleaseGateConfig
-from eval_lab.release_gate import RELEASE_DISCLAIMER, evaluate_release
+from eval_lab.release_gate import RELEASE_DISCLAIMER, combined_hard_failures, evaluate_release
 from eval_lab.scoring import rank_tournament
 
 
@@ -79,3 +79,43 @@ def test_tournament_sorting() -> None:
     ranked = rank_tournament(rows)
     assert [row["candidate"] for row in ranked] == ["stable-b", "stable-a", "lucky-max"]
     assert ranked[0]["rank"] == 1
+
+
+def test_one_regression_catastrophic_fails_release_despite_high_medians() -> None:
+    decision = evaluate_release(
+        gate=ReleaseGateConfig(),
+        regression_median=0.90,
+        holdout_median=0.90,
+        holdout_worst_repeat=0.88,
+        holdout_stddev=0.01,
+        grounding_pass_rate=1.0,
+        catastrophic_failures=1,
+        generalization_proxy=1.0,
+    )
+    assert decision.passed is False
+    assert "no_catastrophic_deterministic_failures" in decision.failed_names()
+
+
+def test_tournament_catastrophic_count_combines_regression_and_holdout() -> None:
+    assert combined_hard_failures({"hard_failures": 1}, {"hard_failures": 2}) == 3
+    rows = [
+        {
+            "candidate": "reg-fail",
+            "catastrophic_failures": combined_hard_failures({"hard_failures": 1}, {"hard_failures": 0}),
+            "holdout_median": 0.99,
+            "holdout_worst_repeat": 0.98,
+            "regression_median": 0.99,
+            "stddev": 0.001,
+        },
+        {
+            "candidate": "clean",
+            "catastrophic_failures": combined_hard_failures({"hard_failures": 0}, {"hard_failures": 0}),
+            "holdout_median": 0.80,
+            "holdout_worst_repeat": 0.78,
+            "regression_median": 0.76,
+            "stddev": 0.02,
+        },
+    ]
+    ranked = rank_tournament(rows)
+    assert [row["candidate"] for row in ranked] == ["clean", "reg-fail"]
+    assert ranked[1]["catastrophic_failures"] == 1

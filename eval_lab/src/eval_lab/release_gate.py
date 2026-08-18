@@ -13,6 +13,11 @@ RELEASE_DISCLAIMER = (
 )
 
 
+def combined_hard_failures(regression: dict | None, holdout: dict | None) -> int:
+    """Sum catastrophic deterministic failures across regression and holdout."""
+    return int((regression or {}).get("hard_failures") or 0) + int((holdout or {}).get("hard_failures") or 0)
+
+
 class ReleaseDecision:
     def __init__(self, passed: bool, conditions: list[dict[str, Any]], mode: str = "live") -> None:
         self.passed = passed

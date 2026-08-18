@@ -21,7 +21,7 @@ from eval_lab.config import LabConfig, load_config, repo_root
 from eval_lab.deterministic_checks import calibrate_archived_outputs
 from eval_lab.holdout_generator import generate_holdouts, load_holdouts, write_holdouts
 from eval_lab.regression import run_regression
-from eval_lab.release_gate import RELEASE_DISCLAIMER, evaluate_release
+from eval_lab.release_gate import RELEASE_DISCLAIMER, combined_hard_failures, evaluate_release
 from eval_lab.report import render_eval_markdown, render_release_markdown, timestamp_slug, write_pair
 from eval_lab.runner import OpenRouterClient, estimate_calls, run_holdout_evaluation
 from eval_lab.scoring import generalization_proxy, rank_tournament
@@ -276,7 +276,7 @@ def tournament_cmd(
             {
                 "candidate": path.stem,
                 "candidate_sha256": digest,
-                "catastrophic_failures": holdout_payload.get("hard_failures", 0),
+                "catastrophic_failures": combined_hard_failures(regression_payload, holdout_payload),
                 "holdout_median": holdout_payload.get("repeat_mean_summary", {}).get("median", 0.0),
                 "holdout_worst_repeat": holdout_payload.get("holdout_worst_repeat", 0.0),
                 "regression_median": regression_payload.get("repeat_mean_summary", {}).get("median", 0.0),
@@ -389,7 +389,7 @@ def _load_latest_metrics(candidate: str) -> dict | None:
         "holdout_worst_repeat": holdout.get("holdout_worst_repeat", holdout.get("worst_repeat")),
         "holdout_stddev": (holdout.get("repeat_mean_summary") or holdout.get("repeat_summary") or {}).get("stddev"),
         "grounding_pass_rate": _grounding_from_outputs(holdout.get("outputs", []) + regression.get("outputs", [])),
-        "catastrophic_failures": int(holdout.get("hard_failures") or 0),
+        "catastrophic_failures": combined_hard_failures(regression, holdout),
     }
 
 

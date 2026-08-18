@@ -170,12 +170,16 @@ def run_jobs_with_concurrency(
     cap = max(1, int(config.evaluation.max_concurrency))
     gate = threading.Semaphore(cap)
 
-    def guarded_invoke(model: str, messages: list[dict[str, str]]) -> ModelResponse:
+    def guarded_invoke(model: str, messages: list[dict[str, str]], temperature: float) -> ModelResponse:
         with gate:
-            return invoke_model(client, model, messages, config.evaluation.temperature)
+            return invoke_model(client, model, messages, temperature)
 
     def run_one(job: ScenarioJob) -> dict[str, Any]:
-        agent = guarded_invoke(config.models.agent, agent_messages(candidate_text, job.scenario_text))
+        agent = guarded_invoke(
+            config.models.agent,
+            agent_messages(candidate_text, job.scenario_text),
+            config.evaluation.temperature,
+        )
         from eval_lab.deterministic_checks import run_deterministic_checks
         from eval_lab.llm_judges import JUDGE_SYSTEM, judge_prompt, parse_judge_json
 
@@ -187,7 +191,7 @@ def run_jobs_with_concurrency(
                 {"role": "system", "content": JUDGE_SYSTEM},
                 {"role": "user", "content": judge_prompt(job.scenario_text, candidate_text, agent.text, checks)},
             ]
-            response = guarded_invoke(model, messages)
+            response = guarded_invoke(model, messages, 0.0)
             judge_responses.append(response)
             parsed_judges.append(parse_judge_json(response.text, model=response.model))
         record = score_one(job, agent, judge_responses)

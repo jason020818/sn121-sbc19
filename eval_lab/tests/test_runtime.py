@@ -37,6 +37,36 @@ def test_dry_run_performs_zero_client_calls() -> None:
     assert holdout["call_estimate"]["total_calls"] == 3 * 5 * 3
 
 
+def test_fake_client_records_agent_temperature_02_and_judge_temperature_00() -> None:
+    cfg = load_config()
+    client = FakeChatClient()
+    skill = "# skill\nUse only supplied facts.\n"
+    run_regression(
+        config=cfg,
+        candidate_name="temp",
+        candidate_text=skill,
+        candidate_sha256="abc",
+        source="results/run-0.7378429/raw_evaluation.json",
+        repeats=1,
+        client=client,
+        limit=1,
+        dry_run=False,
+    )
+    assert client.calls
+    agent_temps = []
+    judge_temps = []
+    for call in client.calls:
+        contents = " ".join(message.get("content", "") for message in call["messages"])
+        if "local quality judge" in contents or "grounding_accuracy" in contents:
+            judge_temps.append(call["temperature"])
+        else:
+            agent_temps.append(call["temperature"])
+    assert agent_temps
+    assert judge_temps
+    assert set(agent_temps) == {0.2}
+    assert set(judge_temps) == {0.0}
+
+
 def test_calibration_performs_zero_client_calls() -> None:
     client = FakeChatClient()
     payload = calibrate_archived_outputs("results/run-0.7378429/raw_evaluation.json")

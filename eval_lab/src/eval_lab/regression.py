@@ -58,6 +58,7 @@ def run_regression(
         "disclaimer": "Local internal_quality is not an official SN121 score.",
         "scenario_ids": [item.scenario_id for item in samples],
         "max_concurrency": config.evaluation.max_concurrency,
+        "hard_failures": 0,
     }
     if dry_run:
         return payload
@@ -78,12 +79,15 @@ def run_regression(
     per_scenario: dict[str, list[float]] = defaultdict(list)
     by_repeat: dict[int, list[float]] = defaultdict(list)
     failure_counts: Counter[str] = Counter()
+    hard_failures = 0
     raw_outputs: list[dict[str, Any]] = []
     for record in records:
         score = float(record["internal_score"]["penalized"])
         per_scenario[str(record["scenario_id"])].append(score)
         by_repeat[int(record["repeat_index"])].append(score)
         checks = record["_checks"]
+        if checks.catastrophic:
+            hard_failures += 1
         for check in checks.checks:
             if not check.passed:
                 failure_counts[str(check.name)] += 1
@@ -97,6 +101,7 @@ def run_regression(
         key: summarize_repeats(vals).model_dump() for key, vals in per_scenario.items()
     }
     payload["deterministic_failures"] = dict(failure_counts)
+    payload["hard_failures"] = hard_failures
     payload["outputs"] = raw_outputs
     payload["generalization_proxy"] = generalization_proxy(candidate_text)
     return payload
