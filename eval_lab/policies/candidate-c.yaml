@@ -1,0 +1,47 @@
+name: candidate-c
+evidence:
+  human_correction_overrides_field: true
+  automated_activity_counts_as_human_touch: false
+  allow_derived_pipeline_total: false
+  allow_invented_recipient: false
+  allow_invented_channel: false
+disposition_precedence:
+  - meeting
+  - record
+  - action
+  - monitor
+action:
+  seller_owned_deliverable: true
+  seller_answer_due: true
+  schedule_needed_interaction: true
+  identify_missing_owner_when_needed: true
+  correct_operational_blocker: true
+  external_wait_default: monitor
+  external_wait_escalation:
+    timing_material: required
+    checkpoint: missing_or_passed
+    uncertainty_reduction: required
+  ranking:
+    - consequence
+    - timing
+    - seller_control
+    - information_gain
+non_triggers:
+  - amount_alone
+  - stage_alone
+  - age_alone
+  - quota_pressure_alone
+  - close_date_alone
+meeting:
+  replaces_same_objective_outbound: true
+  max_derived_prep_questions: 1
+output:
+  max_priority_actions: 3
+  filler_actions: false
+  unique_operational_assignment: true
+  pipeline_total: explicit_only
+  target_words: [170, 250]
+  max_words: 300
+constraints:
+  explicit_wait_overrides: true
+  explicit_channel_overrides: true

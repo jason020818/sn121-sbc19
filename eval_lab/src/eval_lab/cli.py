@@ -414,6 +414,119 @@ def _grounding_from_outputs(outputs: list[dict]) -> float:
     return 1.0 if total == 0 else passed / total
 
 
+@app.command("oracle-generate")
+def oracle_generate(
+    count: int = typer.Option(1200, "--count"),
+    seed: int = typer.Option(121190100, "--seed"),
+) -> None:
+    from eval_lab.oracle_evaluator import generate_oracle_corpus, oracle_base_path, write_jsonl
+
+    _guard_skill_md()
+    records = generate_oracle_corpus(count=count, seed=seed)
+    path = write_jsonl(records, oracle_base_path())
+    console.print(f"Wrote {len(records)} oracle holdouts to {path}")
+
+
+@app.command("metamorphic-generate")
+def metamorphic_generate(
+    variants_per_base: int = typer.Option(4, "--variants-per-base"),
+) -> None:
+    from eval_lab.metamorphic import generate_metamorphic, metamorphic_path
+    from eval_lab.oracle_evaluator import write_jsonl
+
+    _guard_skill_md()
+    records = generate_metamorphic(variants_per_base=variants_per_base)
+    path = write_jsonl(records, metamorphic_path())
+    console.print(f"Wrote {len(records)} metamorphic cases to {path}")
+
+
+@app.command("pairwise-generate")
+def pairwise_generate(count: int = typer.Option(1000, "--count")) -> None:
+    from eval_lab.metamorphic import generate_pairwise, pairwise_path
+    from eval_lab.oracle_evaluator import write_jsonl
+
+    _guard_skill_md()
+    records = generate_pairwise(count=count)
+    path = write_jsonl(records, pairwise_path())
+    console.print(f"Wrote {len(records)} pairwise checks to {path}")
+
+
+@app.command("policy-check")
+def policy_check(candidate: str = typer.Option(..., "--candidate")) -> None:
+    from eval_lab.policy_lint import lint_candidate_policy
+    from eval_lab.policy_manifests import load_policy
+
+    _guard_skill_md()
+    try:
+        path, text, digest = read_candidate(candidate)
+    except CandidateStoreError as exc:
+        console.print(f"[red]{exc}[/red]")
+        raise typer.Exit(code=3) from exc
+    result = lint_candidate_policy(text, load_policy(candidate))
+    console.print(f"{path.stem} sha256={digest} alignment={'PASS' if result['passed'] else 'FAIL'}")
+    if result["missing"]:
+        console.print(f"missing: {result['missing']}")
+    if result["contradictions"]:
+        console.print(f"contradictions: {result['contradictions']}")
+    if not result["passed"]:
+        raise typer.Exit(code=2)
+
+
+@app.command("oracle-run")
+def oracle_run(candidate: str = typer.Option(..., "--candidate")) -> None:
+    from eval_lab.free_tournament import evaluate_candidate
+
+    _guard_skill_md()
+    row = evaluate_candidate(candidate)
+    console.print(row["limitation"])
+    for key in (
+        "disposition_accuracy",
+        "action_precision",
+        "action_recall",
+        "action_f1",
+        "constraint_accuracy",
+        "invariant_pass_rate",
+        "controlled_flip_pass_rate",
+        "pairwise_bias_pass_rate",
+        "catastrophic_logic_failures",
+    ):
+        console.print(f"{key}: {row[key]}")
+
+
+@app.command("free-tournament")
+def free_tournament_cmd(candidates: list[str] = typer.Option(..., "--candidates")) -> None:
+    from eval_lab.free_tournament import render_summary, run_free_tournament, summary_path
+
+    _guard_skill_md()
+    payload = run_free_tournament(candidates)
+    path = summary_path()
+    path.write_text(render_summary(payload), encoding="utf-8")
+    json_path = path.with_suffix(".json")
+    json_path.write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
+    console.print(payload["disclaimer"])
+    console.print(f"production_recommendation: {payload['production_recommendation']}")
+    console.print(f"reserve_1: {payload['reserve_1']}")
+    console.print(f"reserve_2: {payload['reserve_2']}")
+    for row in payload["results"]:
+        console.print(f"{row['rank']}. {row['candidate']} words={row['markdown_words']}")
+    console.print(f"Wrote {path}")
+
+
+@app.command("free-release-check")
+def free_release_check(candidate: str = typer.Option(..., "--candidate")) -> None:
+    from eval_lab.free_release_gate import DISCLAIMER, evaluate_free_release
+
+    _guard_skill_md()
+    decision = evaluate_free_release(candidate)
+    console.print(DISCLAIMER)
+    for item in decision["conditions"]:
+        console.print(
+            f"{item['status']}: {item['name']} observed={item['observed']} threshold={item['threshold']}"
+        )
+    if not decision["passed"]:
+        raise typer.Exit(code=2)
+
+
 def main() -> None:
     app()
 

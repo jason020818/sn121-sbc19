@@ -169,3 +169,32 @@ The generalization proxy is a conservative static lint, not the official `datase
 - Keep production candidate and reserve candidate separate.
 - Do not live-submit a candidate that fails release-check.
 - Do not overwrite historical result folders.
+
+## 11. Zero-cost oracle / metamorphic lab
+
+A markdown skill cannot be exhaustively verified by static lint. Each candidate has a
+machine-readable policy manifest and a deterministic policy engine. The engine verifies
+LOGIC. It does not simulate Haiku instruction-following. A live SN121 submission remains
+the only official validator sample.
+
+These commands make zero network calls and zero OpenRouter calls:
+
+```bash
+python -m eval_lab.cli oracle-generate --count 1200 --seed 121190100
+python -m eval_lab.cli metamorphic-generate --variants-per-base 4
+python -m eval_lab.cli pairwise-generate --count 1000
+python -m eval_lab.cli policy-check --candidate candidate-a-conservative
+python -m eval_lab.cli oracle-run --candidate candidate-a-conservative
+python -m eval_lab.cli free-tournament \
+  --candidates production-f9e5400 \
+  --candidates candidate-a-conservative \
+  --candidates candidate-b-ledger \
+  --candidates candidate-c-minimal
+python -m eval_lab.cli free-release-check --candidate candidate-a-conservative
+```
+
+Free-release PASS is an internal logic gate (catastrophic failures, disposition/action
+metrics, invariant/flip/pairwise rates, alignment). It is not an official SN121 threshold.
+
+The committed summary lives at `eval_lab/reports/free-tournament-summary.md`. Full corpora
+stay gitignored under `eval_lab/generated/`.

@@ -1,6 +1,30 @@
 {
   "candidates": [
     {
+      "name": "candidate-a-conservative",
+      "path": "candidates/candidate-a-conservative.md",
+      "sha256": "35b591f94a503a4cad04279ec1d13a8f757caa8e0c672c0b7b263ea493d47390",
+      "added_at": "2026-08-18T12:04:25.381206+00:00",
+      "source_file": "/mnt/c/Users/hirak/Downloads/candidate-a-conservative.md",
+      "bytes": 3744
+    },
+    {
+      "name": "candidate-b-ledger",
+      "path": "candidates/candidate-b-ledger.md",
+      "sha256": "2bd80eb6607fd6288cf107ea9b4d7a8c53586455e507d2222c3406e45b1f7a99",
+      "added_at": "2026-08-18T12:04:25.381206+00:00",
+      "source_file": "/mnt/c/Users/hirak/Downloads/candidate-b-ledger.md",
+      "bytes": 3603
+    },
+    {
+      "name": "candidate-c-minimal",
+      "path": "candidates/candidate-c-minimal.md",
+      "sha256": "f8a468f21d0ac168dc84cf53aa8459d46973850d7a0987631841efbc5ec25cae",
+      "added_at": "2026-08-18T12:04:25.381206+00:00",
+      "source_file": "/mnt/c/Users/hirak/Downloads/candidate-c-minimal.md",
+      "bytes": 2740
+    },
+    {
       "name": "production-f9e5400",
       "path": "candidates/production-f9e5400.md",
       "sha256": "e6cd5a14bf8734d36474b02f81d5baf41e4a1a18a348867f19d2916bac786fa3",

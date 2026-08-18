@@ -66,6 +66,15 @@ class HoldoutRecord(BaseModel):
     scenario: str
     hidden_expectations: HiddenExpectations
     dimensions: dict[str, Any] = Field(default_factory=dict)
+    deals: list[dict[str, Any]] = Field(default_factory=list)
+    expected_dispositions: dict[str, str] = Field(default_factory=dict)
+    variant_kind: str | None = None
+    parent_id: str | None = None
+    transform: str | None = None
+    name_map: dict[str, str] = Field(default_factory=dict)
+    flip_deals: list[str] = Field(default_factory=list)
+    expected_before: dict[str, str] = Field(default_factory=dict)
+    expected_after: dict[str, str] = Field(default_factory=dict)
 
 
 class CheckResult(BaseModel):

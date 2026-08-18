@@ -15,6 +15,7 @@ generated/*
 !generated/.gitkeep
 reports/*
 !reports/.gitkeep
+!reports/free-tournament-summary.md
 
 # Local overrides may contain no secrets, but still stay untracked.
 config.yaml

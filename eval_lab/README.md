@@ -26,4 +26,21 @@ python -m eval_lab.cli release-check --candidate candidate-a --dry-run
 
 Paid OpenRouter runs require `--yes` after the CLI prints the call estimate. Dry-runs never call the API.
 
+Zero-cost oracle/metamorphic commands never call the network:
+
+```bash
+python -m eval_lab.cli oracle-generate --count 1200 --seed 121190100
+python -m eval_lab.cli metamorphic-generate --variants-per-base 4
+python -m eval_lab.cli pairwise-generate --count 1000
+python -m eval_lab.cli policy-check --candidate candidate-a-conservative
+python -m eval_lab.cli free-tournament \
+  --candidates production-f9e5400 \
+  --candidates candidate-a-conservative \
+  --candidates candidate-b-ledger \
+  --candidates candidate-c-minimal
+python -m eval_lab.cli free-release-check --candidate candidate-a-conservative
+```
+
+The policy engine verifies logic; it does not simulate Haiku instruction-following.
+
 Copy `config.example.yaml` to `config.yaml` only if you need a local override. Configured model ids are required; the lab will not silently substitute another model.
