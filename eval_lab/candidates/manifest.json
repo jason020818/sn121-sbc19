@@ -47,6 +47,14 @@
       "added_at": "2026-08-18T11:18:47.205272+00:00",
       "source_file": "../SKILL.md",
       "bytes": 7417
+    },
+    {
+      "name": "reserve-production-0.7378429",
+      "path": "candidates/reserve-production-0.7378429.md",
+      "sha256": "e6cd5a14bf8734d36474b02f81d5baf41e4a1a18a348867f19d2916bac786fa3",
+      "added_at": "2026-08-18T14:50:46.256923+00:00",
+      "source_file": "../SKILL.md",
+      "bytes": 7417
     }
   ]
 }
