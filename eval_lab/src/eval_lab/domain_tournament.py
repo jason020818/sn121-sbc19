@@ -34,16 +34,32 @@ DOMAIN_CANDIDATES = [
 ]
 
 
-def ensure_domain_corpora(count: int = 3000, seed: int = 121190200) -> dict:
+CANDIDATE_FAMILY = {
+    "candidate-b-ledger": "balanced",
+    "candidate-b-minimal": "balanced",
+    "candidate-a-conservative": "conservative",
+    "candidate-c-assertive": "assertive",
+    "production-f9e5400": "production",
+}
+
+SAFETY_KEYS = ("catastrophic_logic_failures", "constraint_accuracy", "false_action_rate")
+WINNING_FLIP_MIN = 0.995
+
+
+def ensure_domain_corpora(count: int = 3000, seed: int = 121190200, rebuild_aux: bool = False) -> dict:
     base_path = domain_oracle_path()
     meta_path = domain_metamorphic_path()
     pair_path = domain_pairwise_path()
     if not base_path.exists():
         write_jsonl(generate_domain_oracle(count=count, seed=seed), base_path)
     bases = load_jsonl(base_path)
-    if not meta_path.exists():
+    stale_meta = False
+    if meta_path.exists() and not rebuild_aux:
+        existing = load_jsonl(meta_path)
+        stale_meta = any(item.variant_kind == "controlled_flip" and not item.mutation_kind for item in existing)
+    if rebuild_aux or not meta_path.exists() or stale_meta:
         write_jsonl(generate_domain_metamorphic(bases), meta_path)
-    if not pair_path.exists():
+    if rebuild_aux or not pair_path.exists():
         write_jsonl(generate_domain_pairwise(count=1000, seed=seed), pair_path)
     return {"bases": bases, "variants": load_jsonl(meta_path), "pairs": load_jsonl(pair_path)}
 
@@ -123,10 +139,46 @@ def score_against_oracle(records: list[HoldoutRecord], policy: PolicyManifest) -
     }
 
 
+def check_controlled_flip(variant: HoldoutRecord, actual_dispositions: dict[str, str]) -> dict:
+    after = dict(variant.expected_after or {})
+    before = dict(variant.expected_before or {})
+    allowed = set(variant.allowed_changed_deals or variant.flip_deals or [])
+    if variant.target_deal:
+        allowed.add(variant.target_deal)
+    exact = actual_dispositions == after
+    for name, disp in after.items():
+        if actual_dispositions.get(name) != disp:
+            exact = False
+    collateral = [name for name in before if actual_dispositions.get(name) != before[name] and name not in allowed]
+    targets = list(variant.flip_deals or ([variant.target_deal] if variant.target_deal else []))
+    direction_miss = 0
+    noop = 0
+    for name in targets:
+        got = actual_dispositions.get(name)
+        exp_after = after.get(name)
+        exp_before = before.get(name)
+        if exp_after is not None and got != exp_after:
+            if got == exp_before:
+                noop += 1
+            else:
+                direction_miss += 1
+    passed = bool(exact and not collateral and direction_miss == 0 and noop == 0)
+    return {
+        "passed": passed,
+        "exact": exact,
+        "collateral": collateral,
+        "direction_miss_count": direction_miss,
+        "noop_count": noop,
+    }
+
+
 def evaluate_invariants(bases: list[HoldoutRecord], variants: list[HoldoutRecord], policy: PolicyManifest) -> dict:
     by_id = {item.id: item for item in bases}
     inv_n = inv_pass = 0
     flip_n = flip_pass = 0
+    direction_miss = 0
+    collateral_n = 0
+    noop_n = 0
     for variant in variants:
         parent = by_id.get(variant.parent_id or "")
         if parent is None:
@@ -142,14 +194,18 @@ def evaluate_invariants(bases: list[HoldoutRecord], variants: list[HoldoutRecord
             inv_pass += int(ok)
         elif variant.variant_kind == "controlled_flip":
             flip_n += 1
-            before = variant.expected_before or parent.expected_dispositions
-            changed = [name for name in before if actual.dispositions.get(name) != before[name]]
-            new_names = [name for name in actual.dispositions if name not in before]
-            collateral = [name for name in changed if name not in set(variant.flip_deals)]
-            flip_pass += int(bool(not collateral and (changed or new_names)))
+            result = check_controlled_flip(variant, dict(actual.dispositions))
+            flip_pass += int(result["passed"])
+            direction_miss += result["direction_miss_count"]
+            collateral_n += len(result["collateral"])
+            noop_n += result["noop_count"]
     return {
         "invariant_pass_rate": inv_pass / inv_n if inv_n else 1.0,
         "controlled_flip_pass_rate": flip_pass / flip_n if flip_n else 1.0,
+        "controlled_flip_exact_pass_rate": flip_pass / flip_n if flip_n else 1.0,
+        "controlled_flip_direction_miss_count": direction_miss,
+        "controlled_flip_collateral_change_count": collateral_n,
+        "controlled_flip_noop_count": noop_n,
         "invariant_n": inv_n,
         "controlled_flip_n": flip_n,
     }
@@ -200,6 +256,48 @@ def discriminating_case_count(corpora: dict, names: list[str] | None = None) -> 
     return count
 
 
+def decision_signature(name: str, corpora: dict) -> tuple:
+    policy = load_policy(name)
+    parts = []
+    for record in corpora["bases"]:
+        actual = apply_policy(_deals(record), policy)
+        parts.append((record.id, tuple(sorted(actual.dispositions.items()))))
+    return tuple(parts)
+
+
+def _safety_tuple(row: dict) -> tuple:
+    return tuple(row.get(key) for key in SAFETY_KEYS)
+
+
+def family_for_names(names: list[str]) -> str:
+    labels = {CANDIDATE_FAMILY.get(name, name) for name in names}
+    if "balanced" in labels or ("production" in labels and any(n.startswith("candidate-b") for n in names)):
+        if labels <= {"balanced", "production"}:
+            return "balanced"
+    if len(labels) == 1:
+        return next(iter(labels))
+    return "mixed"
+
+
+def semantic_equivalence_groups(rows: list[dict], corpora: dict) -> list[dict]:
+    buckets: dict[tuple, list[dict]] = {}
+    for row in rows:
+        key = (decision_signature(row["candidate"], corpora), _safety_tuple(row))
+        buckets.setdefault(key, []).append(row)
+    groups = []
+    for members in buckets.values():
+        names = sorted(item["candidate"] for item in members)
+        groups.append(
+            {
+                "family": family_for_names(names),
+                "members": names,
+                "tied": len(names) > 1,
+                "representative": members[0],
+            }
+        )
+    return groups
+
+
 def rank_domain_policies(rows: list[dict]) -> list[dict]:
     ranked = sorted(
         rows,
@@ -222,7 +320,7 @@ def rank_domain_policies(rows: list[dict]) -> list[dict]:
 
 def run_domain_policy_tournament(candidates: list[str] | None = None, corpora: dict | None = None) -> dict:
     candidates = candidates or DOMAIN_CANDIDATES
-    corpora = corpora or ensure_domain_corpora()
+    corpora = corpora or ensure_domain_corpora(rebuild_aux=True)
     rows = [evaluate_domain_policy(name, corpora) for name in candidates]
     metric_keys = (
         "disposition_accuracy",
@@ -233,7 +331,27 @@ def run_domain_policy_tournament(candidates: list[str] | None = None, corpora: d
     identical = all(all(abs(row[k] - rows[0][k]) < 1e-12 for k in metric_keys) for row in rows)
     if identical:
         raise RuntimeError(NON_DISCRIMINATING)
+    groups = semantic_equivalence_groups(rows, corpora)
+    ranked_groups = sorted(
+        groups,
+        key=lambda group: (
+            int(group["representative"].get("catastrophic_logic_failures", 0)),
+            -float(group["representative"].get("constraint_accuracy", 0.0)),
+            float(group["representative"].get("false_action_rate", 0.0)),
+            -float(group["representative"].get("action_f1", 0.0)),
+            -float(group["representative"].get("boundary_accuracy_external_wait", 0.0)),
+            -float(group["representative"].get("disposition_accuracy", 0.0)),
+            group["family"],
+        ),
+    )
     ranked = rank_domain_policies(rows)
+    for row in ranked:
+        for group in groups:
+            if row["candidate"] in group["members"]:
+                row["semantic_family"] = group["family"]
+                row["semantic_tie"] = group["tied"]
+    winner = ranked_groups[0]
+    winner_flip = min(float(row.get("controlled_flip_exact_pass_rate", 0.0)) for row in rows if row["candidate"] in winner["members"])
     payload = {
         "kind": "domain-policy-tournament",
         "disclaimer": LIMITATION,
@@ -243,9 +361,16 @@ def run_domain_policy_tournament(candidates: list[str] | None = None, corpora: d
         "total_independent_cases": len(corpora["bases"]) + len(corpora["variants"]) + len(corpora["pairs"]),
         "discriminating_cases": discriminating_case_count(corpora, candidates),
         "results": ranked,
-        "recommended_semantic_policy": ranked[0]["candidate"],
-        "reserve_policy_1": ranked[1]["candidate"] if len(ranked) > 1 else None,
-        "reserve_policy_2": ranked[2]["candidate"] if len(ranked) > 2 else None,
+        "semantic_equivalence_groups": [
+            {"family": group["family"], "members": group["members"], "tied": group["tied"]} for group in ranked_groups
+        ],
+        "recommended_semantic_policy_family": winner["family"],
+        "semantic_equivalents": winner["members"],
+        "recommended_semantic_policy": winner["family"],
+        "reserve_policy_1": ranked_groups[1]["family"] if len(ranked_groups) > 1 else None,
+        "reserve_policy_2": ranked_groups[2]["family"] if len(ranked_groups) > 2 else None,
+        "winning_controlled_flip_exact_pass_rate": winner_flip,
+        "winning_flip_gate_passed": winner_flip >= WINNING_FLIP_MIN,
         "network_calls": 0,
         "openrouter_calls": 0,
     }
@@ -264,13 +389,23 @@ def render_domain_summary(payload: dict) -> str:
         f"Total independent cases: {payload.get('total_independent_cases')}",
         f"Discriminating cases: {payload.get('discriminating_cases')}",
         "",
-        f"recommended_semantic_policy: {payload.get('recommended_semantic_policy')}",
+        f"recommended_semantic_policy_family: {payload.get('recommended_semantic_policy_family')}",
+        f"semantic_equivalents: {payload.get('semantic_equivalents')}",
         f"reserve_policy_1: {payload.get('reserve_policy_1')}",
         f"reserve_policy_2: {payload.get('reserve_policy_2')}",
         "",
-        "## Ranking",
+        "## Semantic equivalence groups",
         "",
     ]
+    for group in payload.get("semantic_equivalence_groups") or []:
+        lines.append(f"- {group['family']}: {group['members']} tied={group['tied']}")
+    lines.extend(
+        [
+            "",
+            "## Ranking",
+            "",
+        ]
+    )
     for row in payload.get("results", []):
         lines.append(
             f"{row['rank']}. {row['candidate']} false_action={row['false_action_rate']:.4f} "
@@ -296,6 +431,10 @@ def render_domain_summary(payload: dict) -> str:
         "pairwise_bias_pass_rate",
         "invariant_pass_rate",
         "controlled_flip_pass_rate",
+        "controlled_flip_exact_pass_rate",
+        "controlled_flip_direction_miss_count",
+        "controlled_flip_collateral_change_count",
+        "controlled_flip_noop_count",
     ]
     for row in payload.get("results", []):
         lines.append(f"### {row['candidate']}")

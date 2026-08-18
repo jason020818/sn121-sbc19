@@ -382,49 +382,101 @@ def apply_invariant_domain(record: HoldoutRecord, transform: str, rng: Random) -
 
 
 def apply_controlled_flip_domain(record: HoldoutRecord, kind: str) -> HoldoutRecord:
+    """Apply the requested mutation. If the base cannot support it, synthesize a valid target."""
     out = HoldoutRecord.model_validate(record.model_dump())
     out.variant_kind = "controlled_flip"
     out.parent_id = record.id
     out.transform = kind
-    out.expected_before = dict(record.expected_dispositions)
+    out.mutation_kind = kind
     deals = [DealFact.model_validate(item) for item in out.deals]
-    target = next((d for d in deals if out.expected_before.get(d.name) == "MONITOR" and not d.meeting_today), None)
-    if kind == "wait_to_seller_deliverable" and target:
+    before = {deal.name: domain_label(deal)[0] for deal in deals}
+
+    def _relabel() -> dict[str, str]:
+        return {deal.name: domain_label(deal)[0] for deal in deals}
+
+    if kind == "wait_to_seller_deliverable":
+        target = next(
+            (
+                d
+                for d in deals
+                if before.get(d.name) == "MONITOR"
+                and not d.meeting_today
+                and not d.decision_blocking_record_problem
+            ),
+            None,
+        )
+        if target is None:
+            target = DealFact(name=f"WaitSeed-{record.id}", state="customer_legal", checkpoint="present")
+            deals.append(target)
+            before[target.name] = domain_label(target)[0]
         target.state = "seller_owned_deliverable"
         target.seller_owns_next = True
         target.seller_deliverable_due = True
         target.constraint = None
-    elif kind == "checkpoint_passed" and target:
+        target.constraint_expired = True
+        target.meeting_today = False
+        target.decision_blocking_record_problem = False
+    elif kind == "checkpoint_passed":
+        target = next(
+            (
+                d
+                for d in deals
+                if before.get(d.name) == "MONITOR"
+                and not d.meeting_today
+                and d.constraint not in {"do_not_contact", "wait_until"}
+            ),
+            None,
+        )
+        if target is None:
+            target = DealFact(name=f"WaitSeed-{record.id}", state="customer_legal", checkpoint="present")
+            deals.append(target)
+            before[target.name] = domain_label(target)[0]
         target.timing_material = True
         target.checkpoint = "passed"
         target.uncertainty_reduction = True
         target.state = "missed_checkpoint"
+        target.meeting_today = False
+        target.decision_blocking_record_problem = False
+        target.constraint = None
     elif kind == "add_meeting_today":
-        target = next((d for d in deals if out.expected_before.get(d.name) in {"ACTION", "MONITOR"}), deals[0])
+        target = next((d for d in deals if before.get(d.name) in {"ACTION", "MONITOR"} and not d.meeting_today), None)
+        if target is None:
+            target = DealFact(name=f"MeetSeed-{record.id}", state="customer_legal", checkpoint="present")
+            deals.append(target)
+            before[target.name] = domain_label(target)[0]
         target.meeting_today = True
         target.decision_blocking_record_problem = False
+        target.constraint = None
     elif kind == "add_do_not_contact":
-        target = next((d for d in deals if out.expected_before.get(d.name) == "ACTION" and not d.meeting_today), None)
-        if target:
-            target.constraint = "do_not_contact"
-            target.constraint_expired = False
-            target.seller_owns_next = False
-            target.seller_deliverable_due = False
-    if target is None:
-        target = DealFact(name=f"FlipExtra-{record.id}", state="seller_owned_deliverable", seller_owns_next=True, seller_deliverable_due=True)
-        deals.append(target)
-        out.transform = "wait_to_seller_deliverable"
-    expected = {}
-    rules = {}
-    for deal in deals:
-        disp, rule = domain_label(deal)
-        expected[deal.name] = disp
-        rules[deal.name] = rule
-    out.deals = [d.model_dump() for d in deals]
-    out.expected_dispositions = expected
-    out.oracle_rules = rules
-    out.expected_after = expected
+        target = next((d for d in deals if before.get(d.name) == "ACTION" and not d.meeting_today), None)
+        if target is None:
+            target = DealFact(
+                name=f"ActionSeed-{record.id}",
+                state="seller_owned_deliverable",
+                seller_owns_next=True,
+                seller_deliverable_due=True,
+            )
+            deals.append(target)
+            before[target.name] = domain_label(target)[0]
+        target.constraint = "do_not_contact"
+        target.constraint_expired = False
+        target.meeting_today = False
+    else:
+        raise ValueError(f"Unknown controlled-flip kind: {kind}")
+
+    after = _relabel()
+    if after.get(target.name) == before.get(target.name):
+        raise RuntimeError(f"controlled flip {kind} did not change {target.name}")
+    out.deals = [item.model_dump() for item in deals]
+    out.expected_before = before
+    out.expected_after = after
+    out.expected_dispositions = after
+    out.oracle_rules = {deal.name: domain_label(deal)[1] for deal in deals}
     out.flip_deals = [target.name]
+    out.target_deal = target.name
+    out.target_before = before[target.name]
+    out.target_after = after[target.name]
+    out.allowed_changed_deals = [target.name]
     return out
 
 

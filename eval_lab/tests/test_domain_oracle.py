@@ -7,13 +7,21 @@ import hashlib
 from pathlib import Path
 
 from eval_lab.config import repo_root
-from eval_lab.domain_oracle import generate_domain_metamorphic, generate_domain_oracle, generate_domain_pairwise
+from eval_lab.domain_oracle import (
+    apply_controlled_flip_domain,
+    generate_domain_metamorphic,
+    generate_domain_oracle,
+    generate_domain_pairwise,
+)
 from eval_lab.domain_tournament import (
     NON_DISCRIMINATING,
+    check_controlled_flip,
     discriminating_case_count,
     rank_domain_policies,
+    run_domain_policy_tournament,
     score_against_oracle,
 )
+from eval_lab.models import HiddenExpectations, HoldoutRecord
 from eval_lab.policy_manifests import load_policy
 
 PRODUCTION_SHA = "e6cd5a14bf8734d36474b02f81d5baf41e4a1a18a348867f19d2916bac786fa3"
@@ -126,6 +134,108 @@ def test_minimal_and_ledger_share_balanced_policy() -> None:
     minimal = load_policy("candidate-b-minimal")
     assert ledger.model_dump() == minimal.model_dump()
     assert ledger.action.external_wait_escalation.checkpoint == "missing_or_passed"
+
+
+def _flip_record() -> HoldoutRecord:
+    return HoldoutRecord(
+        id="F-1",
+        seed=1,
+        scenario="flip",
+        hidden_expectations=HiddenExpectations(),
+        deals=[{"name": "A"}, {"name": "B"}],
+        expected_before={"A": "MONITOR", "B": "MONITOR"},
+        expected_after={"A": "ACTION", "B": "MONITOR"},
+        variant_kind="controlled_flip",
+        mutation_kind="wait_to_seller_deliverable",
+        target_deal="A",
+        flip_deals=["A"],
+        allowed_changed_deals=["A"],
+    )
+
+
+def test_controlled_flip_fails_wrong_direction() -> None:
+    result = check_controlled_flip(_flip_record(), {"A": "MEETING", "B": "MONITOR"})
+    assert result["passed"] is False
+    assert result["direction_miss_count"] == 1
+
+
+def test_controlled_flip_fails_when_target_does_not_change() -> None:
+    result = check_controlled_flip(_flip_record(), {"A": "MONITOR", "B": "MONITOR"})
+    assert result["passed"] is False
+    assert result["noop_count"] == 1
+
+
+def test_controlled_flip_fails_on_collateral_change() -> None:
+    result = check_controlled_flip(_flip_record(), {"A": "ACTION", "B": "ACTION"})
+    assert result["passed"] is False
+    assert result["collateral"] == ["B"]
+
+
+def test_controlled_flip_passes_only_on_exact_expected_after() -> None:
+    result = check_controlled_flip(_flip_record(), {"A": "ACTION", "B": "MONITOR"})
+    assert result["passed"] is True
+    assert result["exact"] is True
+
+
+def test_controlled_flip_keeps_requested_mutation_kind() -> None:
+    base = generate_domain_oracle(count=3, seed=121190200)[0]
+    variant = apply_controlled_flip_domain(base, "add_do_not_contact")
+    assert variant.mutation_kind == "add_do_not_contact"
+    assert variant.transform == "add_do_not_contact"
+    assert variant.target_deal
+    assert variant.target_before != variant.target_after
+    assert variant.allowed_changed_deals == [variant.target_deal]
+    assert variant.expected_after[variant.target_deal] != variant.expected_before[variant.target_deal]
+
+
+def test_semantic_equivalent_policies_are_tied_regardless_of_order() -> None:
+    bases = generate_domain_oracle(count=400, seed=121190200)
+    variants = generate_domain_metamorphic(bases[:8], variants_per_base=4)
+    pairs = generate_domain_pairwise(count=16)
+    corpora = {"bases": bases, "variants": variants, "pairs": pairs}
+    forward = run_domain_policy_tournament(
+        candidates=["candidate-b-ledger", "production-f9e5400", "candidate-a-conservative", "candidate-c-assertive"],
+        corpora=corpora,
+    )
+    reverse = run_domain_policy_tournament(
+        candidates=["candidate-c-assertive", "candidate-a-conservative", "production-f9e5400", "candidate-b-ledger"],
+        corpora=corpora,
+    )
+    assert forward["recommended_semantic_policy_family"] == reverse["recommended_semantic_policy_family"] == "balanced"
+    assert set(forward["semantic_equivalents"]) == set(reverse["semantic_equivalents"]) == {
+        "candidate-b-ledger",
+        "production-f9e5400",
+    }
+    assert "candidate-b-ledger" in forward["semantic_equivalents"]
+    assert forward["recommended_semantic_policy"] == "balanced"
+
+
+def test_markdown_length_never_breaks_semantic_policy_ties() -> None:
+    rows = [
+        {
+            "candidate": "long",
+            "catastrophic_logic_failures": 0,
+            "constraint_accuracy": 1.0,
+            "false_action_rate": 0.0,
+            "action_f1": 1.0,
+            "boundary_accuracy_external_wait": 1.0,
+            "disposition_accuracy": 1.0,
+            "markdown_words": 2000,
+        },
+        {
+            "candidate": "short",
+            "catastrophic_logic_failures": 0,
+            "constraint_accuracy": 1.0,
+            "false_action_rate": 0.0,
+            "action_f1": 1.0,
+            "boundary_accuracy_external_wait": 1.0,
+            "disposition_accuracy": 1.0,
+            "markdown_words": 10,
+        },
+    ]
+    ranked = rank_domain_policies(rows)
+    assert ranked[0]["candidate"] == "long"
+    assert ranked[1]["candidate"] == "short"
 
 
 def test_production_skill_sha_unchanged() -> None:

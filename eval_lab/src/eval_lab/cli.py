@@ -550,10 +550,15 @@ def domain_policy_tournament_cmd() -> None:
     path.write_text(render_domain_summary(payload), encoding="utf-8")
     path.with_suffix(".json").write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
     console.print(payload["disclaimer"])
-    console.print(f"recommended_semantic_policy: {payload['recommended_semantic_policy']}")
+    console.print(f"recommended_semantic_policy_family: {payload['recommended_semantic_policy_family']}")
+    console.print(f"semantic_equivalents: {payload['semantic_equivalents']}")
     console.print(f"discriminating_cases: {payload['discriminating_cases']}")
+    console.print(f"winning_controlled_flip_exact_pass_rate: {payload['winning_controlled_flip_exact_pass_rate']}")
     for row in payload["results"]:
-        console.print(f"{row['rank']}. {row['candidate']} f1={row['action_f1']:.4f} false_action={row['false_action_rate']:.4f}")
+        console.print(
+            f"{row['rank']}. {row['candidate']} f1={row['action_f1']:.4f} "
+            f"false_action={row['false_action_rate']:.4f} flip_exact={row['controlled_flip_exact_pass_rate']:.4f}"
+        )
     console.print(f"Wrote {path}")
 
 
@@ -569,6 +574,9 @@ def rendering_risk_tournament_cmd() -> None:
     console.print(payload["disclaimer"])
     for row in payload["results"]:
         console.print(f"{row['rank']}. {row['candidate']} risk={row['rendering_risk']} words={row['markdown_words']}")
+    if payload.get("recommended_rendering"):
+        console.print(f"recommended_rendering: {payload['recommended_rendering']}")
+        console.print(f"reserve_rendering: {payload['reserve_rendering']}")
     console.print(f"Wrote {path}")
 
 
@@ -582,11 +590,13 @@ def free_champion_plan_cmd() -> None:
     path.write_text(render_champion_plan(payload), encoding="utf-8")
     path.with_suffix(".json").write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
     console.print(payload["remaining_uncertainty"])
-    console.print(f"recommended_semantic_policy: {payload['recommended_semantic_policy']}")
+    console.print(f"semantic_policy_family: {payload['semantic_policy_family']}")
+    console.print(f"semantic_equivalents: {payload['semantic_equivalents']}")
     console.print(f"recommended_rendering: {payload['recommended_rendering']}")
-    console.print(f"reserve_policy_1: {payload['reserve_policy_1']}")
-    console.print(f"reserve_policy_2: {payload['reserve_policy_2']}")
     console.print(f"reserve_rendering: {payload['reserve_rendering']}")
+    console.print(f"aggressive_policy_status: {payload['aggressive_policy_status']}")
+    console.print(f"conservative_policy_status: {payload['conservative_policy_status']}")
+    console.print(f"controlled_flip_exact_pass_rate: {payload['controlled_flip_exact_pass_rate']}")
     console.print(f"Wrote {path}")
 
 

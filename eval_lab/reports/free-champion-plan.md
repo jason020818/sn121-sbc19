@@ -1,29 +1,30 @@
 # Free champion plan
 
-Remaining uncertainty: Haiku instruction-following is not measured here. A live SN121 submission remains the only official validator sample. Do not promote a candidate to SKILL.md from these internal reports alone.
+Remaining uncertainty: Haiku instruction-following is not measured here. A live SN121 submission remains the only official validator sample. The recommended rendering does not have a predicted official score.
 
-recommended_semantic_policy: candidate-b-ledger
+semantic_policy_family: balanced
+semantic_equivalents: ['candidate-b-ledger', 'production-f9e5400']
 recommended_rendering: candidate-b-minimal
-reserve_policy_1: production-f9e5400
-reserve_policy_2: candidate-a-conservative
 reserve_rendering: candidate-b-ledger
+aggressive_policy_status: rank=4 f1=0.9942238267148015 false_action=0.006666666666666667 missed_action=0.0 flip_exact=0.9933333333333333
+conservative_policy_status: rank=3 f1=0.8005226480836237 false_action=0.0 missed_action=0.19083333333333333 flip_exact=0.49333333333333335
+controlled_flip_exact_pass_rate: 1.0
 
+No predicted official score is attached to the recommended rendering.
 SKILL.md was not modified.
 
 ## Domain ranking
 
-1. candidate-b-ledger f1=1.0 false_action=0.0
-2. production-f9e5400 f1=1.0 false_action=0.0
-3. candidate-a-conservative f1=0.8005226480836237 false_action=0.0
-4. candidate-c-assertive f1=0.9942238267148015 false_action=0.006666666666666667
+1. candidate-b-ledger family=balanced f1=1.0 false_action=0.0 flip_exact=1.0
+2. production-f9e5400 family=balanced f1=1.0 false_action=0.0 flip_exact=1.0
+3. candidate-a-conservative family=conservative f1=0.8005226480836237 false_action=0.0 flip_exact=0.49333333333333335
+4. candidate-c-assertive family=assertive f1=0.9942238267148015 false_action=0.006666666666666667 flip_exact=0.9933333333333333
 
 ## Rendering ranking
 
 1. candidate-b-minimal risk=0.0 words=408
 2. candidate-b-ledger risk=0.0 words=510
 3. production-f9e5400 risk=2.675 words=1170
-4. candidate-c-assertive risk=5.25 words=475
-5. candidate-a-conservative risk=7.0 words=558
 
 ## Historical calibration
 

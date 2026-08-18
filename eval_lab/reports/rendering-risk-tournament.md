@@ -2,6 +2,9 @@
 
 Rendering-risk scoring is static text analysis. It does not predict official SN121 scores and does not simulate Haiku instruction-following.
 
+recommended_rendering: candidate-b-minimal
+reserve_rendering: candidate-b-ledger
+
 ## Ranking
 
 1. candidate-b-minimal policy=balanced risk=0.000 words=408 coverage=complete contradictions=0

@@ -8,9 +8,16 @@ Pairwise cases: 1000
 Total independent cases: 16000
 Discriminating cases: 1620
 
-recommended_semantic_policy: candidate-b-ledger
-reserve_policy_1: production-f9e5400
-reserve_policy_2: candidate-a-conservative
+recommended_semantic_policy_family: balanced
+semantic_equivalents: ['candidate-b-ledger', 'production-f9e5400']
+reserve_policy_1: conservative
+reserve_policy_2: assertive
+
+## Semantic equivalence groups
+
+- balanced: ['candidate-b-ledger', 'production-f9e5400'] tied=True
+- conservative: ['candidate-a-conservative'] tied=False
+- assertive: ['candidate-c-assertive'] tied=False
 
 ## Ranking
 
@@ -38,7 +45,11 @@ reserve_policy_2: candidate-a-conservative
 - boundary_accuracy_contact: 1.0
 - pairwise_bias_pass_rate: 1.0
 - invariant_pass_rate: 1.0
-- controlled_flip_pass_rate: 0.9866666666666667
+- controlled_flip_pass_rate: 1.0
+- controlled_flip_exact_pass_rate: 1.0
+- controlled_flip_direction_miss_count: 0
+- controlled_flip_collateral_change_count: 0
+- controlled_flip_noop_count: 0
 
 ### production-f9e5400
 - disposition_accuracy: 1.0
@@ -57,7 +68,11 @@ reserve_policy_2: candidate-a-conservative
 - boundary_accuracy_contact: 1.0
 - pairwise_bias_pass_rate: 1.0
 - invariant_pass_rate: 1.0
-- controlled_flip_pass_rate: 0.9866666666666667
+- controlled_flip_pass_rate: 1.0
+- controlled_flip_exact_pass_rate: 1.0
+- controlled_flip_direction_miss_count: 0
+- controlled_flip_collateral_change_count: 0
+- controlled_flip_noop_count: 0
 
 ### candidate-a-conservative
 - disposition_accuracy: 0.8091666666666667
@@ -76,7 +91,11 @@ reserve_policy_2: candidate-a-conservative
 - boundary_accuracy_contact: 1.0
 - pairwise_bias_pass_rate: 1.0
 - invariant_pass_rate: 0.4866666666666667
-- controlled_flip_pass_rate: 0.48
+- controlled_flip_pass_rate: 0.49333333333333335
+- controlled_flip_exact_pass_rate: 0.49333333333333335
+- controlled_flip_direction_miss_count: 0
+- controlled_flip_collateral_change_count: 2270
+- controlled_flip_noop_count: 0
 
 ### candidate-c-assertive
 - disposition_accuracy: 0.9933333333333333
@@ -95,4 +114,8 @@ reserve_policy_2: candidate-a-conservative
 - boundary_accuracy_contact: 1.0
 - pairwise_bias_pass_rate: 1.0
 - invariant_pass_rate: 0.9733333333333334
-- controlled_flip_pass_rate: 0.98
+- controlled_flip_pass_rate: 0.9933333333333333
+- controlled_flip_exact_pass_rate: 0.9933333333333333
+- controlled_flip_direction_miss_count: 0
+- controlled_flip_collateral_change_count: 20
+- controlled_flip_noop_count: 0

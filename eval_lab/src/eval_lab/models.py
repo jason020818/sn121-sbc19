@@ -76,6 +76,11 @@ class HoldoutRecord(BaseModel):
     flip_deals: list[str] = Field(default_factory=list)
     expected_before: dict[str, str] = Field(default_factory=dict)
     expected_after: dict[str, str] = Field(default_factory=dict)
+    mutation_kind: str | None = None
+    target_deal: str | None = None
+    target_before: str | None = None
+    target_after: str | None = None
+    allowed_changed_deals: list[str] = Field(default_factory=list)
 
 
 class CheckResult(BaseModel):

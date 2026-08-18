@@ -59,6 +59,17 @@ CONTRADICTION_PAIRS = [
     ),
 ]
 
+FAMILY_RENDERINGS = {
+    "balanced": [
+        ("production-f9e5400", "balanced"),
+        ("candidate-b-ledger", "balanced"),
+        ("candidate-b-minimal", "balanced"),
+    ],
+    "conservative": [("candidate-a-conservative", "conservative")],
+    "assertive": [("candidate-c-assertive", "assertive")],
+    "production": [("production-f9e5400", "production")],
+}
+
 RENDERINGS = [
     ("production-f9e5400", "production"),
     ("candidate-a-conservative", "conservative"),
@@ -249,8 +260,41 @@ def historical_calibration() -> dict:
     return {"runs": runs, "notes": notes, "risk_envelope": {"min": min(envelopes) if envelopes else None, "max": max(envelopes) if envelopes else None}}
 
 
-def run_rendering_risk_tournament(renderings: list[tuple[str, str]] | None = None) -> dict:
-    renderings = renderings or RENDERINGS
+def minimal_rendering_eligible(minimal: dict, ledger: dict) -> bool:
+    from eval_lab.policy_manifests import load_policy
+
+    same_manifest = load_policy("candidate-b-minimal").model_dump() == load_policy("candidate-b-ledger").model_dump()
+    return bool(
+        minimal.get("complete_coverage")
+        and minimal.get("zero_contradictions")
+        and (minimal.get("generalization_proxy") or 0) >= 0.85
+        and not minimal.get("missing_mandatory")
+        and float(minimal.get("rendering_risk", 99)) <= float(ledger.get("rendering_risk", 99))
+        and same_manifest
+    )
+
+
+def choose_recommended_renderings(family: str, ranked: list[dict]) -> tuple[str | None, str | None]:
+    ledger = next((row for row in ranked if row["candidate"] == "candidate-b-ledger"), None)
+    eligible = []
+    for row in ranked:
+        if family == "balanced" and row["candidate"] == "candidate-b-minimal":
+            if not ledger or not minimal_rendering_eligible(row, ledger):
+                continue
+        eligible.append(row)
+    if not eligible:
+        eligible = list(ranked)
+    recommended = eligible[0]["candidate"] if eligible else None
+    reserve = eligible[1]["candidate"] if len(eligible) > 1 else (ranked[1]["candidate"] if len(ranked) > 1 else None)
+    return recommended, reserve
+
+
+def run_rendering_risk_tournament(
+    renderings: list[tuple[str, str]] | None = None,
+    family: str | None = None,
+) -> dict:
+    if renderings is None:
+        renderings = FAMILY_RENDERINGS.get(family, RENDERINGS) if family else RENDERINGS
     rows = [evaluate_rendering(name, label) for name, label in renderings]
     ranked = rank_renderings(rows)
     calibration = historical_calibration()
@@ -261,10 +305,14 @@ def run_rendering_risk_tournament(renderings: list[tuple[str, str]] | None = Non
             row["outside_historical_envelope"] = False
         else:
             row["outside_historical_envelope"] = row["rendering_risk"] < lo - 0.5 or row["rendering_risk"] > hi + 0.5
+    recommended, reserve = choose_recommended_renderings(family or "balanced", ranked)
     return {
         "kind": "rendering-risk-tournament",
         "disclaimer": LIMITATION,
+        "semantic_family": family,
         "results": ranked,
+        "recommended_rendering": recommended,
+        "reserve_rendering": reserve,
         "historical_calibration": calibration,
         "network_calls": 0,
         "openrouter_calls": 0,
@@ -272,7 +320,12 @@ def run_rendering_risk_tournament(renderings: list[tuple[str, str]] | None = Non
 
 
 def render_rendering_summary(payload: dict) -> str:
-    lines = ["# Rendering-risk tournament", "", payload.get("disclaimer", LIMITATION), "", "## Ranking", ""]
+    lines = ["# Rendering-risk tournament", "", payload.get("disclaimer", LIMITATION), ""]
+    if payload.get("semantic_family"):
+        lines.append(f"semantic_family: {payload.get('semantic_family')}")
+    lines.append(f"recommended_rendering: {payload.get('recommended_rendering')}")
+    lines.append(f"reserve_rendering: {payload.get('reserve_rendering')}")
+    lines.extend(["", "## Ranking", ""])
     for row in payload.get("results", []):
         lines.append(
             f"{row['rank']}. {row['candidate']} policy={row['semantic_policy']} "
