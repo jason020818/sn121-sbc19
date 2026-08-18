@@ -1,152 +1,169 @@
 ---
 name: morning-read
-description: Turn a seller's calendar, open-deal ledger, and attached notes into a concise daily pipeline briefing. Use only supplied facts, identify the few actions that can change outcomes today, and make waiting states and record problems visible without inventing detail.
+description: Turn a seller's calendar, open-deal ledger, and attached notes into a concise daily pipeline briefing. Use only supplied facts, surface the few seller moves that can change outcomes today, and keep waiting states and record problems visible without inventing detail.
 ---
 
 # Daily pipeline briefing
 
 Write the page a seller reads before starting the day. This is triage, not a CRM recap.
-Return only the finished briefing.
+Return the finished briefing first.
 
-The handoff is the evidence boundary. Do not invent a person, role, date, amount, contact,
-stage, deadline, reason, or instruction that is not supported by it. Omission is better
-than plausible fiction.
+The handoff is the evidence boundary. Never invent a person, role, date, amount, contact
+path, stage, deadline, commercial term, reason, or instruction. Omission is better than
+plausible detail.
 
-## Establish the facts first
+## Build a clean working view
 
-Before ranking anything, silently reconcile the handoff.
+Before writing, silently reconcile the handoff.
 
-- Treat an explicit human correction or note as authoritative when it clearly corrects
-  a structured field. Keep the contradiction visible only when it matters to the seller.
-- For recency, use evidence of actual stakeholder interaction. Operational or automated
-  activity counts only when the handoff makes clear that a person actually engaged.
-- Derive dates, elapsed time, counts, and money only from unambiguous source values.
-  If sources conflict, use the supported correction and avoid a derived number that
-  depends on the unresolved value.
-- Recount open deals from the handoff. Print an aggregate pipeline value only when every
-  included open deal has a readable amount in the same currency and the arithmetic has
-  been independently recomputed. Never convert currency without a supplied rate.
-- When a working-day count is genuinely useful, use Monday-Friday unless the handoff
-  supplies another calendar. Do not print a day count merely to sound precise.
+- Prefer an explicit human correction when it clearly corrects a structured field.
+- Treat recency as stakeholder interaction, not merely system or workflow activity.
+- Use a date, elapsed-time statement, count, or amount only when it is directly supported
+  or safely derived from unambiguous source values.
+- Do not calculate or print an aggregate pipeline value unless the handoff itself provides
+  that total explicitly. Deal count is enough.
+- If a field conflict prevents a reliable conclusion, keep the uncertainty visible rather
+  than resolving it by guess.
 
-For each open deal, identify only what is needed to decide today's treatment:
+For each open deal, silently identify:
 
 1. the next meaningful event, decision, deliverable, or information gap;
-2. who currently owns that next step;
-3. any explicit expected date, deadline, or contact constraint;
-4. what the seller can actually do today that would change the state;
-5. whether today's calendar already provides the needed interaction.
+2. who owns that next step, if the handoff says;
+3. any explicit timing or communication constraint;
+4. whether seller action today can materially change the state;
+5. whether today's calendar already supplies the needed interaction.
 
-If a missing or contradictory field prevents a reliable decision, treat that as a
-record problem rather than filling the gap with a guess.
+## Assign each deal once
 
-## Decide what deserves action
+Before composing prose, assign every open deal to exactly one working bucket:
 
-A deal deserves an action only when seller work today is likely to change the outcome,
-remove a material blocker, or obtain information that is worth having today.
+- `ACTION` — seller work today can materially change the outcome or remove a real blocker;
+- `MEETING` — today's scheduled interaction is the useful work for that deal;
+- `MONITOR` — a credible next event, owner, or waiting state exists and no seller move is
+  worth a seat today;
+- `RECORD` — internal data repair is the only useful next step.
 
-Give strongest consideration to work that is still on the seller's side, explicit
-near-term commitments that remain unresolved, and situations with no credible next
-event where delay itself increases risk. A large amount or an old timestamp is not,
-by itself, a reason to act.
+This assignment is exclusive. Once a deal is assigned, do not print that deal name in a
+second operational section. If a record issue belongs to an ACTION or MEETING deal,
+mention it inside that line instead of repeating the deal elsewhere.
 
-If the handoff shows a credible next event, a named owner, or an agreed waiting state,
-respect that state unless something material has changed. An explicit communication
-instruction overrides any default outreach instinct. If another party owns the next
-step and timing has become material but no usable return date exists, one precise ask
-for the expected date is enough.
+## Lock the action count before writing
 
-A scheduled customer interaction that already accomplishes the objective replaces a
-separate outbound action. Put the work in Meeting Prep instead of counting the same
-deal twice.
+Count genuine `ACTION` deals before producing the briefing. Call this number `N`.
 
-Do not manufacture a third action to fill a quota. A quiet book may have one or two
-real moves; a heavy book may have more than three. Rank the real moves by:
+- Print exactly `N` action items, subject to a maximum of three in `Priority Actions`.
+- If `N` is 0, omit the action section.
+- If `N` is 1 or 2, print 1 or 2. Never fill unused seats.
+- If `N` is greater than 3, put the best three in `Priority Actions` and the remainder
+  in `Other Actions Today`.
 
-- consequence if today passes without action;
-- explicit timing or close proximity;
-- how directly the seller can change the state;
-- material exposure and information gained.
+A deal is not actionable merely because it is large, old, late-stage, or quiet. Give
+strongest consideration to consequence if today passes, explicit timing, whether the
+seller owns a blocker, and whether one seller move can actually change the state.
 
-Use those factors together. Do not rank mechanically by amount, age, or stage.
+If another party owns the next step and the handoff shows a credible process or expected
+event, respect that state. If timing has become material but no usable return date exists,
+one precise request for timing may be appropriate.
 
-## Write concrete moves
+An explicit do-not-contact or channel instruction overrides all default outreach logic.
 
-Each action line should contain one deal, one concrete act, one supported recipient or
-role, one ask or deliverable, and the fact that makes it worth doing today.
+## Ground every action
+
+Each action line should contain:
+
+- one deal;
+- one concrete seller act;
+- one recipient only if that person or role is explicitly supplied;
+- one ask or deliverable;
+- one grounded reason it matters today.
+
+If no recipient or role is supplied, do not invent one and do not choose a channel.
+State what owner or information must be identified.
 
 Prefer verbs that perform the work: send, answer, schedule, confirm, request, identify,
-prepare. Avoid empty phrases such as "follow up", "touch base", or "check in".
+prepare. Avoid generic language such as "follow up", "touch base", or "check in".
 
-Choose a channel only when the handoff or the nature of the act supports it. Written
-artifacts and precise written questions belong in writing; urgent ambiguity can justify
-a call when an appropriate contact is actually present and no instruction conflicts.
-Never invent a contact path.
+Do not invent exact response deadlines, signature dates, escalation dates, pricing
+structures, concessions, fallback offers, product claims, or stakeholder duties.
 
-If the current decision owner is unknown, say what must be identified without naming a
-replacement person who is not in the handoff.
+## Meeting Prep
 
-## Meetings, monitoring, and records
+A scheduled customer interaction replaces a separate outbound action for the same
+objective.
 
-Meeting Prep is practical: objective, central ask or decision, relevant attendees from
-the handoff, and a fallback or next step. Do not invent product details, negotiation
-positions, or stakeholder responsibilities. Mark internal meetings as internal.
+For each meeting, use only source-supported material:
 
-Monitor means the deal has a defensible current state but no seller move worth a seat
-today. Keep it brief. Name important holds or constraints; group the unremarkable tail
-instead of writing a status novel.
+- objective;
+- central question, decision, or blocker;
+- named attendees and roles from the handoff;
+- next step or fallback only when the handoff supports it.
 
-Needs Record Update is for internal data repair that is itself the useful next step.
-State what is unreliable and what would resolve it. If a deal already appears as an
-action or meeting, incorporate the record issue there rather than listing the deal a
-second time.
+Do not manufacture negotiation positions, pricing options, product details, or internal
+approval strategy. Mark internal meetings as internal.
 
-Every open deal should be accounted for once across the action, meeting, monitor, or
-record treatment.
+## Monitor and record sections
+
+`Monitor` is for defensible waiting states. Name only the important holds or constraints;
+group the ordinary remainder compactly. Do not turn Monitor into a second CRM export.
+
+`Needs Record Update` is for internal-only repairs. State the unreliable field and what
+would resolve it. Do not repeat deals already printed under actions or meetings.
+
+Internally account for every open deal, but the finished page does not need to restate
+every row individually when a grouped monitor line is sufficient.
 
 ## Page shape
 
-Use the following sections when they contain useful content; omit empty sections and
-empty-state boilerplate. If a customer meeting starts within the hour, put Meeting Prep
-before Top 3 Actions.
+Use only sections that contain useful content. Omit empty sections and empty-state
+boilerplate. If a customer meeting starts within the hour, put Meeting Prep before
+Priority Actions.
 
 ```text
 # Daily Briefing - <Weekday, Month D>
-[omit the date if the handoff does not establish one]
-[optional italic urgency line only for an imminent customer meeting]
+[omit date if the handoff does not establish one]
+[optional one-line urgency note for an imminent customer meeting]
 
 ## Pipeline Health
-Open-deal count, number of genuine moves today, and the dominant named exposure or
-risk. Include an aggregate value only after the arithmetic rule above passes.
+Open-deal count, number of genuine seller moves today, and the dominant named exposure,
+constraint, or risk. Do not compute a pipeline sum unless the handoff gives one.
 
-## Top 3 Actions
-At most three highest-value seller moves. No deal already covered by today's meeting.
+## Priority Actions
+Exactly min(N, 3) genuine seller moves.
 
 ## Meeting Prep
 Today's scheduled conversations in time order. Internal meetings marked internal.
 
-## Tier A - Other Deals Needing Action Today
-Only genuine actions beyond the top three.
+## Other Actions Today
+Only when N > 3.
 
-## Tier B - Monitor
-Named holds or important waiting states, then a compact grouped remainder.
+## Monitor
+Important named holds or waiting states, then one compact grouped remainder when useful.
 
 ## Needs Record Update
 Internal-only repairs for deals not already handled elsewhere.
 ```
 
-Aim for roughly 200-350 words; hard maximum 450. Use fewer words when the book is
-simple. Never add filler to reach a target.
+Target 220-300 words. Hard ceiling 360 words. Prefer omission over padding.
 
-## Before printing
+## Extra requests
 
-Silently verify the finished page:
+If the user also asks for a forecast, model, or adjacent analysis, finish the briefing
+first. Then provide only conclusions that can be computed directly from the supplied
+handoff. If assumptions are required, state the missing assumptions briefly instead of
+inventing them.
 
-* every printed name, role, date, amount, stage, deadline, and contact instruction is
-  grounded in the handoff;
-* every derived number has been recomputed from the exact source values, or omitted;
-* no deal occupies two operational sections;
-* today's scheduled interactions are not duplicated as outbound work;
-* explicit waiting or communication constraints are respected;
-* each action names a real act and explains why today matters;
-* no generic outreach language, invented certainty, or empty sections remain.
+## Final audit
+
+Before printing, silently verify:
+
+- `ACTION` count in the output equals the locked count `N`;
+- no deal name appears in more than one operational section;
+- every printed person, role, date, amount, contact path, deadline, and commercial detail
+  is grounded in the handoff;
+- no aggregate pipeline sum was calculated unless the handoff supplied the total;
+- no scheduled meeting deal is duplicated as outbound work;
+- explicit waiting and communication constraints are respected;
+- no unsupported recipient, channel, deadline, concession, fallback, or product detail
+  was created;
+- the answer is within 360 words;
+- no empty section remains.
