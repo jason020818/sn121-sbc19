@@ -6,7 +6,7 @@ from eval_lab.candidate_store import add_candidate
 from eval_lab.config import repo_root
 from eval_lab.deterministic_checks import run_deterministic_checks
 from eval_lab.models import JudgeDimensionScores
-from eval_lab.scoring import generalization_proxy, score_output, summarize_repeats
+from eval_lab.scoring import generalization_proxy, repeat_level_stats, score_output, summarize_repeats
 
 
 def _judge(value: float = 0.8) -> JudgeDimensionScores:
@@ -52,6 +52,18 @@ def test_generalization_proxy_flags_scenario_ids() -> None:
     dirty = generalization_proxy("For S-001 and S-006, always pick the P1 deal.")
     assert clean >= 0.85
     assert dirty < 0.85
+
+
+def test_repeat_stddev_measures_repeat_means_not_scenario_variance() -> None:
+    by_repeat = {
+        0: [0.2, 0.5, 0.8],
+        1: [0.2, 0.5, 0.8],
+        2: [0.2, 0.5, 0.8],
+    }
+    stats = repeat_level_stats(by_repeat)
+    assert stats["repeat_mean_summary"]["stddev"] == 0.0
+    assert stats["scenario_score_summary"]["stddev"] > 0.2
+    assert stats["holdout_worst_repeat"] == stats["repeat_means"][0]
 
 
 def test_candidate_add_does_not_write_skill_md(tmp_path: Path, monkeypatch) -> None:

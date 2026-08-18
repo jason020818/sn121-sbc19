@@ -4,6 +4,14 @@ Local pre-submission evaluation laboratory for this SBC19 skill.
 
 The local score is an **internal signal only**. It is not an exact reproduction of the official validator score and must never be described as one.
 
+Release metrics use **repeat-mean** statistics, not pooled scenario×repeat scores:
+
+- `repeat_means`: mean score of all selected scenarios inside each repeat index
+- `repeat_mean_summary`: mean/median/min/max/stddev/p10 of those repeat means
+- `scenario_score_summary`: informational only; mixes scenario difficulty with stochastic variance
+
+`max_repeat_stddev` is stddev of `repeat_means`.
+
 ## 1. Why live submissions are scarce production releases
 
 Public SN121 validator runs consume budget, expose a candidate to official graders, and cannot be cheaply repeated. The working rule is:
@@ -78,6 +86,12 @@ python -m eval_lab.cli holdout run --candidate production-f9e5400 --repeats 1 --
 ```
 
 A committed 3-scenario smoke sample lives at `eval_lab/tests/fixtures/synthetic_smoke.jsonl`.
+
+Offline deterministic calibration against archived public outputs (zero model calls):
+
+```bash
+python -m eval_lab.cli calibrate-deterministic --source ../results/run-0.7378429/raw_evaluation.json
+```
 
 ## 6. Full repeated evaluation
 

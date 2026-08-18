@@ -65,6 +65,29 @@ def score_output(
     )
 
 
+def repeat_level_stats(scores_by_repeat: dict[int, list[float]]) -> dict:
+    """Separate scenario difficulty variance from repeat-to-repeat stability.
+
+    `scores_by_repeat` maps repeat index -> one score per selected scenario.
+    Release metrics must use `repeat_mean_summary`, not the pooled scenario scores.
+    """
+    repeat_means: list[float] = []
+    for index in sorted(scores_by_repeat):
+        values = scores_by_repeat[index]
+        repeat_means.append(float(mean(values)) if values else 0.0)
+    pooled = [score for index in sorted(scores_by_repeat) for score in scores_by_repeat[index]]
+    summary = summarize_repeats(repeat_means)
+    return {
+        "scenario_score_summary": summarize_repeats(pooled).model_dump(),
+        "repeat_means": repeat_means,
+        "repeat_mean_summary": summary.model_dump(),
+        "holdout_worst_repeat": float(min(repeat_means)) if repeat_means else 0.0,
+        "holdout_median": summary.median,
+        "holdout_stddev": summary.stddev,
+        "regression_median": summary.median,
+    }
+
+
 def summarize_repeats(values: list[float]) -> RepeatSummary:
     if not values:
         return RepeatSummary(mean=0.0, median=0.0, min=0.0, max=0.0, stddev=0.0, p10=None, n=0)

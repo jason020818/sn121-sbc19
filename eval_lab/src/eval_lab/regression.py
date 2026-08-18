@@ -2,18 +2,15 @@
 
 from __future__ import annotations
 
-from collections import Counter
+from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
 from eval_lab.archive_loader import load_archive
-from eval_lab.config import LabConfig, repo_root
 from eval_lab.candidate_store import sha256_text
-from eval_lab.deterministic_checks import run_deterministic_checks
-from eval_lab.llm_judges import run_judges
-from eval_lab.models import DeterministicReport
-from eval_lab.runner import ChatClient, agent_messages, estimate_calls
-from eval_lab.scoring import generalization_proxy, score_output, summarize_repeats
+from eval_lab.config import LabConfig, repo_root
+from eval_lab.runner import ChatClient, ScenarioJob, estimate_calls, run_jobs_with_concurrency
+from eval_lab.scoring import generalization_proxy, repeat_level_stats, summarize_repeats
 
 
 def skill_delta(candidate_text: str, production_text: str) -> str:
@@ -60,53 +57,42 @@ def run_regression(
         "skill_delta": skill_delta(candidate_text, production),
         "disclaimer": "Local internal_quality is not an official SN121 score.",
         "scenario_ids": [item.scenario_id for item in samples],
+        "max_concurrency": config.evaluation.max_concurrency,
     }
     if dry_run:
         return payload
 
-    per_scenario: dict[str, list[float]] = {}
+    jobs = [
+        ScenarioJob(scenario_id=sample.scenario_id, scenario_text=sample.scenario_input, repeat_index=repeat_index)
+        for sample in samples
+        for repeat_index in range(repeats)
+    ]
+    records = run_jobs_with_concurrency(
+        jobs=jobs,
+        config=config,
+        client=client,
+        candidate_text=candidate_text,
+        candidate_sha256=candidate_sha256,
+        score_one=lambda job, agent, judges: {},
+    )
+    per_scenario: dict[str, list[float]] = defaultdict(list)
+    by_repeat: dict[int, list[float]] = defaultdict(list)
     failure_counts: Counter[str] = Counter()
-    reports: list[DeterministicReport] = []
     raw_outputs: list[dict[str, Any]] = []
-    all_scores: list[float] = []
-    for sample in samples:
-        per_scenario.setdefault(sample.scenario_id, [])
-        for repeat_index in range(repeats):
-            output = client.complete(
-                model=config.models.agent,
-                messages=agent_messages(candidate_text, sample.scenario_input),
-                temperature=config.evaluation.temperature,
-            )
-            checks = run_deterministic_checks(sample.scenario_input, output)
-            reports.append(checks)
-            for check in checks.checks:
-                if not check.passed:
-                    failure_counts[str(check.name)] += 1
-            judges = run_judges(
-                client=client,
-                models=config.models.judges,
-                scenario=sample.scenario_input,
-                skill=candidate_text,
-                output=output,
-                checks=checks,
-            )
-            internal = score_output(judges, checks)
-            per_scenario[sample.scenario_id].append(internal.penalized)
-            all_scores.append(internal.penalized)
-            raw_outputs.append(
-                {
-                    "scenario_id": sample.scenario_id,
-                    "repeat_index": repeat_index,
-                    "model": config.models.agent,
-                    "candidate_sha256": candidate_sha256,
-                    "latency_ms": None,
-                    "usage": None,
-                    "response_text": output,
-                    "internal_score": internal.model_dump(),
-                    "deterministic": checks.model_dump(),
-                }
-            )
-    payload["repeat_summary"] = summarize_repeats(all_scores).model_dump()
+    for record in records:
+        score = float(record["internal_score"]["penalized"])
+        per_scenario[str(record["scenario_id"])].append(score)
+        by_repeat[int(record["repeat_index"])].append(score)
+        checks = record["_checks"]
+        for check in checks.checks:
+            if not check.passed:
+                failure_counts[str(check.name)] += 1
+        raw_outputs.append({key: value for key, value in record.items() if not key.startswith("_")})
+    stats = repeat_level_stats(dict(by_repeat))
+    payload["scenario_score_summary"] = stats["scenario_score_summary"]
+    payload["repeat_means"] = stats["repeat_means"]
+    payload["repeat_mean_summary"] = stats["repeat_mean_summary"]
+    payload["repeat_summary"] = stats["repeat_mean_summary"]
     payload["per_scenario"] = {
         key: summarize_repeats(vals).model_dump() for key, vals in per_scenario.items()
     }

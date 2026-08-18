@@ -18,6 +18,7 @@ from eval_lab.candidate_store import (
     read_candidate,
 )
 from eval_lab.config import LabConfig, load_config, repo_root
+from eval_lab.deterministic_checks import calibrate_archived_outputs
 from eval_lab.holdout_generator import generate_holdouts, load_holdouts, write_holdouts
 from eval_lab.regression import run_regression
 from eval_lab.release_gate import RELEASE_DISCLAIMER, evaluate_release
@@ -276,10 +277,10 @@ def tournament_cmd(
                 "candidate": path.stem,
                 "candidate_sha256": digest,
                 "catastrophic_failures": holdout_payload.get("hard_failures", 0),
-                "holdout_median": holdout_payload.get("repeat_summary", {}).get("median", 0.0),
-                "holdout_worst_repeat": holdout_payload.get("worst_repeat", 0.0),
-                "regression_median": regression_payload.get("repeat_summary", {}).get("median", 0.0),
-                "stddev": holdout_payload.get("repeat_summary", {}).get("stddev", 0.0),
+                "holdout_median": holdout_payload.get("repeat_mean_summary", {}).get("median", 0.0),
+                "holdout_worst_repeat": holdout_payload.get("holdout_worst_repeat", 0.0),
+                "regression_median": regression_payload.get("repeat_mean_summary", {}).get("median", 0.0),
+                "stddev": holdout_payload.get("repeat_mean_summary", {}).get("stddev", 0.0),
             }
         )
     ranked = rank_tournament(rows)
@@ -383,10 +384,10 @@ def _load_latest_metrics(candidate: str) -> dict | None:
     if regression.get("dry_run") or holdout.get("dry_run"):
         return None
     return {
-        "regression_median": regression.get("repeat_summary", {}).get("median"),
-        "holdout_median": holdout.get("repeat_summary", {}).get("median"),
-        "holdout_worst_repeat": holdout.get("worst_repeat"),
-        "holdout_stddev": holdout.get("repeat_summary", {}).get("stddev"),
+        "regression_median": (regression.get("repeat_mean_summary") or regression.get("repeat_summary") or {}).get("median"),
+        "holdout_median": (holdout.get("repeat_mean_summary") or holdout.get("repeat_summary") or {}).get("median"),
+        "holdout_worst_repeat": holdout.get("holdout_worst_repeat", holdout.get("worst_repeat")),
+        "holdout_stddev": (holdout.get("repeat_mean_summary") or holdout.get("repeat_summary") or {}).get("stddev"),
         "grounding_pass_rate": _grounding_from_outputs(holdout.get("outputs", []) + regression.get("outputs", [])),
         "catastrophic_failures": int(holdout.get("hard_failures") or 0),
     }
@@ -415,6 +416,50 @@ def _grounding_from_outputs(outputs: list[dict]) -> float:
 
 def main() -> None:
     app()
+
+
+@app.command("calibrate-deterministic")
+def calibrate_deterministic(
+    source: Path = typer.Option(Path("results/run-0.7378429/raw_evaluation.json"), "--source"),
+) -> None:
+    _guard_skill_md()
+    payload = calibrate_archived_outputs(source)
+    stem = f"{timestamp_slug()}-deterministic-calibration"
+    json_path, md_path = write_pair(stem, payload, _render_calibration_markdown(payload))
+    console.print(payload["disclaimer"])
+    console.print(
+        f"Samples: {payload['n_samples']}. Failed samples: {payload['n_failed_samples']}. "
+        f"Failure counts: {payload['failure_counts']}"
+    )
+    console.print(f"Wrote {json_path} and {md_path}")
+
+
+def _render_calibration_markdown(payload: dict) -> str:
+    lines = [
+        "# Deterministic calibration",
+        "",
+        payload.get("disclaimer", ""),
+        "",
+        f"Source: {payload.get('source')}",
+        f"Samples: {payload.get('n_samples')}",
+        f"Failed samples: {payload.get('n_failed_samples')}",
+        "",
+        "## Failure counts",
+        "",
+    ]
+    counts = payload.get("failure_counts") or {}
+    if not counts:
+        lines.append("- none")
+    for name, count in counts.items():
+        lines.append(f"- {name}: {count}")
+    lines.extend(["", "## Samples", ""])
+    for row in payload.get("samples", []):
+        lines.append(f"### {row.get('scenario_id')} — {'PASS' if row.get('passed') else 'FAIL'}")
+        for item in row.get("failures") or []:
+            evidence = "; ".join(str(part) for part in item.get("evidence") or [])
+            lines.append(f"- {item.get('name')} ({item.get('severity')}): {item.get('detail')} {evidence}".rstrip())
+        lines.append("")
+    return "\n".join(lines)
 
 
 if __name__ == "__main__":

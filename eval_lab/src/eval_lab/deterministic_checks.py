@@ -59,6 +59,11 @@ DO_NOT_CONTACT_RE = re.compile(
     r"wait\s+until|no\s+contact\s+before|requested\s+no\s+outreach)",
     re.I,
 )
+DO_NOT_CONTACT_TARGET_RE = re.compile(
+    r"(?i:do\s+not\s+contact|don't\s+contact|no\s+outreach(?:\s+before|\s+to)?)\s+"
+    r"([A-Z][A-Za-z0-9&.'/-]*(?:\s+[A-Z][A-Za-z0-9&.'/-]*){0,4}?)"
+    r"(?=\s+until\b|\s+before\b|\s+through\b|[.,]|$)"
+)
 
 BOLD_NAME_RE = re.compile(r"\*\*([^*]{2,80}?)\*\*")
 DEAL_AMOUNT_RE = re.compile(
@@ -431,6 +436,8 @@ def _constraint_targets(scenario: str, expectations: HiddenExpectations | None) 
     for line in (scenario or "").splitlines():
         if DO_NOT_CONTACT_RE.search(line):
             targets.append(line.strip())
+        for match in DO_NOT_CONTACT_TARGET_RE.finditer(line):
+            targets.append(match.group(0).strip())
     return targets
 
 
@@ -455,6 +462,7 @@ def _explicit_contact_constraint(
     violations: list[str] = []
     for constraint in constraints:
         names = extract_entities_from_text(constraint) + _section_deal_names(constraint)
+        names.extend(match.group(1) for match in DO_NOT_CONTACT_TARGET_RE.finditer(constraint))
         if not names:
             names = [word for word in re.findall(r"\b[A-Z][A-Za-z0-9&.'/-]+\b", constraint)]
         for name in names:
@@ -688,3 +696,39 @@ def _record_correction(scenario: str, output: str) -> CheckResult:
 
 def report_to_json(report: DeterministicReport) -> dict:
     return report.model_dump()
+
+
+def calibrate_archived_outputs(source) -> dict:
+    """Run deterministic checks on archived outputs. Makes zero model calls."""
+    from pathlib import Path
+
+    from eval_lab.archive_loader import load_archive
+
+    archive = load_archive(Path(source))
+    samples = []
+    for item in archive.samples:
+        report = run_deterministic_checks(item.scenario_input, item.assistant_output or "")
+        failed = [check for check in report.checks if not check.passed]
+        samples.append(
+            {
+                "scenario_id": item.scenario_id,
+                "passed": report.passed,
+                "catastrophic": report.catastrophic,
+                "failures": [check.model_dump() for check in failed],
+            }
+        )
+    return {
+        "kind": "deterministic_calibration",
+        "source": str(source),
+        "n_samples": len(samples),
+        "n_failed_samples": sum(1 for row in samples if not row["passed"]),
+        "failure_counts": {
+            name: sum(1 for row in samples for item in row["failures"] if item["name"] == name)
+            for name in sorted({item["name"] for row in samples for item in row["failures"]})
+        },
+        "samples": samples,
+        "disclaimer": (
+            "Compares archived assistant outputs to scenario inputs only. "
+            "Grader rationales are not treated as ground truth. Zero model/API calls."
+        ),
+    }

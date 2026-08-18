@@ -99,8 +99,17 @@ def render_eval_markdown(kind: str, payload: dict[str, Any]) -> str:
                 "",
             ]
         )
-    if payload.get("repeat_summary"):
+    if payload.get("repeat_mean_summary"):
+        lines.extend(render_repeat_block("Repeat-mean summary (release metrics)", payload["repeat_mean_summary"]))
+    elif payload.get("repeat_summary"):
         lines.extend(render_repeat_block("Repeat summary", payload["repeat_summary"]))
+    if payload.get("scenario_score_summary"):
+        lines.extend(
+            render_repeat_block(
+                "Scenario-score summary (informational; mixes difficulty with repeats)",
+                payload["scenario_score_summary"],
+            )
+        )
     if payload.get("historical_official_score") is not None:
         lines.extend(
             [
