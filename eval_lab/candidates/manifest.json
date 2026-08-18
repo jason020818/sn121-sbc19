@@ -1,0 +1,12 @@
+{
+  "candidates": [
+    {
+      "name": "production-f9e5400",
+      "path": "candidates/production-f9e5400.md",
+      "sha256": "e6cd5a14bf8734d36474b02f81d5baf41e4a1a18a348867f19d2916bac786fa3",
+      "added_at": "2026-08-18T11:18:47.205272+00:00",
+      "source_file": "../SKILL.md",
+      "bytes": 7417
+    }
+  ]
+}

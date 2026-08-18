@@ -1,0 +1,20 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+src/*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Generated holdouts and paid-run artifacts stay local.
+generated/*
+!generated/.gitkeep
+reports/*
+!reports/.gitkeep
+
+# Local overrides may contain no secrets, but still stay untracked.
+config.yaml

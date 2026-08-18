@@ -1,0 +1,35 @@
+{
+  "note": "Historical OFFICIAL observed scores from archived public validator runs. These are not local lab scores. Do not treat the champion snapshot as current without a fresh fetch.",
+  "kind": "official_observed_historical",
+  "retrieved_context": "Values copied from existing results/ metadata in this repository.",
+  "runs": [
+    {
+      "label": "historical_best_0.70529",
+      "official_score": 0.70529,
+      "source": "results/mine/",
+      "kind": "official_observed",
+      "note": "jason020818 historical best at archive time."
+    },
+    {
+      "label": "run_0.69748",
+      "official_score": 0.69748,
+      "source": "results/latest/",
+      "kind": "official_observed",
+      "note": "Generalized-skill archive stored as results/latest/."
+    },
+    {
+      "label": "run_0.7378429",
+      "official_score": 0.7378429,
+      "source": "results/run-0.7378429/",
+      "kind": "official_observed",
+      "note": "Current best archived jason020818 run in this repository."
+    },
+    {
+      "label": "historical_champion_0.76684",
+      "official_score": 0.76684,
+      "source": "results/champion/",
+      "kind": "official_observed",
+      "note": "Historical champion snapshot. Not a claim that this champion is still current."
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+models:
+  agent: "anthropic/claude-haiku-4.5"
+  judges:
+    - "anthropic/claude-sonnet-4.6"
+    - "anthropic/claude-opus-4.8"
+
+provider:
+  kind: "openrouter"
+  api_key_env: "OPENROUTER_API_KEY"
+  base_url: "https://openrouter.ai/api/v1"
+
+evaluation:
+  repeats: 5
+  temperature: 0.2
+  max_concurrency: 4
+  seed: 12119
+
+holdout:
+  count: 60
+  generation_seed: 1211901
+
+release_gate:
+  min_regression_median: 0.76
+  min_holdout_median: 0.79
+  min_holdout_worst_repeat: 0.77
+  max_repeat_stddev: 0.035
+  min_grounding_pass_rate: 0.99
+  max_catastrophic_failures: 0
+  min_dataset_generalization_proxy: 0.85
