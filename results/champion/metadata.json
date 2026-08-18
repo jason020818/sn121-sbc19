@@ -1,0 +1,61 @@
+{
+  "challenge": "SBC19",
+  "challenge_id": "a6720085-ce3b-4851-bcee-17f49e3fd635",
+  "challenge_title": "Sales Rep Daily Briefing Composer",
+  "challenge_internal_name": "Sales Pipeline Daily Briefing Skill",
+  "challenge_version": 19,
+  "submission_id": "06d07e60-50a7-4c39-bf0d-5183ab708bdd",
+  "display_name": "SKL-06d0-d1cf-SBC19",
+  "miner": "WeirdCrystal",
+  "miner_uid": 235,
+  "miner_hotkey": "5FkJvziawiBCV4ktQPU4EXAAPA9VXcCjP51W95DZwRmrgjHs",
+  "score": 0.76684,
+  "rank": 1,
+  "submission_rank_among_204": 1,
+  "evaluated_at": "2026-08-17T22:27:04.935Z",
+  "retrieved_at": "2026-08-18T07:25:31Z",
+  "skill_hash": "sha256:8a409641bb8548619f19578f9e95d53cb64ff76aa6fa749f3dc804f28db57d94",
+  "skill_url": "https://gcikyqenfadlhgpmoqco.supabase.co/storage/v1/object/public/agent-submissions/06d07e60-50a7-4c39-bf0d-5183ab708bdd/skill.md",
+  "suite_version": "sales_operations_skill_challenge (challenge version 19); suite.yaml has no separate version field",
+  "validation_status": "scored",
+  "similarity_score": 0.9428,
+  "validator_display_name": "SB Validator - London",
+  "validator_task_id": "a4e14697-86c7-405a-ac8d-db560a115321",
+  "integrity_hash": "sha256:b3ec35ae442d06a8160fa13027ba529445129e9bbd1ec2b79b5cd12418478166",
+  "raw_evaluation_sha256": "21be249c3b9843df79271566d5f586787005c2ce713102646f606fa8af5a080e",
+  "models": {
+    "agent": {
+      "provider": "openrouter",
+      "model": "anthropic/claude-haiku-4.5"
+    },
+    "judges": [
+      {
+        "provider": "openrouter",
+        "model": "anthropic/claude-sonnet-4.6"
+      },
+      {
+        "provider": "openrouter",
+        "model": "anthropic/claude-opus-4.8"
+      }
+    ]
+  },
+  "gate": {
+    "overall_gate_passed": 1,
+    "skill_alignment": 0.9000000000000001,
+    "dataset_derived": 0.75,
+    "skill_alignment_threshold": 0.45,
+    "dataset_derived_threshold": 0.45,
+    "skill_alignment_pass": true,
+    "dataset_derived_pass": true
+  },
+  "source_urls": [
+    "https://www.sundaebar.ai/lab/challenge/a6720085-ce3b-4851-bcee-17f49e3fd635",
+    "https://api.sundaebar.ai/api/v2/challenges/latest",
+    "https://api.sundaebar.ai/api/v2/submissions/06d07e60-50a7-4c39-bf0d-5183ab708bdd",
+    "https://api.sundaebar.ai/api/v2/tasks?submission_id=06d07e60-50a7-4c39-bf0d-5183ab708bdd",
+    "https://gcikyqenfadlhgpmoqco.supabase.co/storage/v1/object/public/tasks/sales-rep-daily-briefing-composer_a6720085-ce3b-4851-bcee-17f49e3fd635/WeirdCrystal_06d07e60-50a7-4c39-bf0d-5183ab708bdd/sb-validator-london_a4e14697-86c7-405a-ac8d-db560a115321.json",
+    "https://gcikyqenfadlhgpmoqco.supabase.co/storage/v1/object/public/agent-submissions/06d07e60-50a7-4c39-bf0d-5183ab708bdd/skill.md",
+    "https://api.sundaebar.ai/api/v2/submissions?challenge_id=a6720085-ce3b-4851-bcee-17f49e3fd635&limit=100&page=1&sort_by=score&sort_order=desc"
+  ],
+  "skill_content_fingerprint": "9ef48f82dc37d6016dd927690080ab609fbc09f831d979c2ca76528fcc010a42"
+}

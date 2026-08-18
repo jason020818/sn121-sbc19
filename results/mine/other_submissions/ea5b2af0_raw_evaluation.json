@@ -1,0 +1,733 @@
+{
+  "summary": {
+    "metrics": {
+      "avg_score_total": 0,
+      "skill_use": 0,
+      "scenario_quality": 0,
+      "rubric": 0,
+      "skill_alignment": 0.85,
+      "novelty_check": 0,
+      "dataset_derived": 0.35,
+      "tests_count": 10,
+      "total_tokens": 0,
+      "max_tokens_per_eval": 157000,
+      "tokens_used": 0,
+      "samples_prorated": 0,
+      "samples_zeroed": 10,
+      "overall_gate_passed": 0,
+      "pre_gate_blocked": 1
+    },
+    "tokens_by_grader": {
+      "skill_alignment": {
+        "inputTokens": 2274,
+        "outputTokens": 327,
+        "cachedTokens": 0,
+        "reasoningTokens": 0,
+        "totalTokens": 2601
+      },
+      "dataset_derived": {
+        "inputTokens": 7211,
+        "outputTokens": 1836,
+        "cachedTokens": 0,
+        "reasoningTokens": 0,
+        "totalTokens": 9047
+      }
+    },
+    "tokens_by_kind": {
+      "agent": {
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "cachedTokens": 0,
+        "reasoningTokens": 0,
+        "totalTokens": 0
+      },
+      "judges": {
+        "inputTokens": 9485,
+        "outputTokens": 2163,
+        "cachedTokens": 0,
+        "reasoningTokens": 0,
+        "totalTokens": 11648
+      }
+    },
+    "cost_by_grader": {
+      "skill_alignment": {
+        "inputTokens": 2274,
+        "outputTokens": 327,
+        "cachedTokens": 0,
+        "reasoningTokens": 0,
+        "cacheCreationTokens": 0,
+        "totalTokens": 2601,
+        "costUsd": 0.019545,
+        "costSource": "measured"
+      },
+      "dataset_derived": {
+        "inputTokens": 7211,
+        "outputTokens": 1836,
+        "cachedTokens": 0,
+        "reasoningTokens": 0,
+        "cacheCreationTokens": 0,
+        "totalTokens": 9047,
+        "costUsd": 0.081955,
+        "costSource": "measured"
+      }
+    },
+    "cost_by_kind": {
+      "agent": {
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "cachedTokens": 0,
+        "reasoningTokens": 0,
+        "cacheCreationTokens": 0,
+        "totalTokens": 0,
+        "costUsd": 0,
+        "costSource": "computed"
+      },
+      "judges": {
+        "inputTokens": 9485,
+        "outputTokens": 2163,
+        "cachedTokens": 0,
+        "reasoningTokens": 0,
+        "cacheCreationTokens": 0,
+        "totalTokens": 11648,
+        "costUsd": 0.1015,
+        "costSource": "measured"
+      }
+    },
+    "cost_by_phase": {
+      "pre_gate": 0.1015,
+      "agent": 0,
+      "scoring": 0
+    },
+    "cost_total_usd": 0.1015,
+    "cost_source": "measured",
+    "models": {
+      "agent": {
+        "provider": "openrouter",
+        "model": "anthropic/claude-haiku-4.5"
+      },
+      "judges": [
+        {
+          "provider": "openrouter",
+          "model": "anthropic/claude-sonnet-4.6"
+        },
+        {
+          "provider": "openrouter",
+          "model": "anthropic/claude-opus-4.8"
+        }
+      ]
+    }
+  },
+  "results": [
+    {
+      "id": "S-001",
+      "sample_id": "S-001",
+      "result": {
+        "weighted_score": 0,
+        "grade": {
+          "score": 0,
+          "rationale": "Pre-flight gate failed; per-sample eval skipped"
+        },
+        "grades_by_key": {
+          "skill_use": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "scenario_quality": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "rubric": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "skill_alignment": {
+            "score": 0.85,
+            "usage": {
+              "inputTokens": 2274,
+              "outputTokens": 327,
+              "cachedTokens": 0,
+              "cacheCreationTokens": 0,
+              "reasoningTokens": 0,
+              "totalTokens": 2601,
+              "costUsd": 0.019545,
+              "costSource": "measured"
+            },
+            "rationale": "Appears genuine (alignment=0.850 >= 0.55). The skill teaches genuine decision logic and domain knowledge — it explains WHY agreed quiet differs from neglect, WHY travelling paper isn't owed paper, and how to count the buyer's clock from human engagement — rather than restating rubric criteria as checklists. While the edge cases it teaches (documented customer dwell vs. seller stall, verbal/contract carveout, booked conversations as coverage) do map conceptually to the rubric's scored dimensions, they are framed as transferable principles with reasoning and warnings about common mistakes, not as 'always include X' instructions or scenario-keyed lookup tables. The specific deal names in the rubric (Meridian, Bluewater, QBR) do not appear in the skill, indicating it teaches the general procedure rather than being reverse-engineered from the specific scenario. Slight deduction because the categories taught align suspiciously well with the rubric's weighted dimensions."
+          },
+          "novelty_check": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "dataset_derived": {
+            "score": 0.35,
+            "rationale": "Likely dataset-derived. (score=0.350, mapped=10 of 10). 9 suspicious rules. 4 beyond-dataset items. The skill contains a near-perfect 1:1 coverage: every one of the 10 scenarios has a dedicated named principle (agreed-quiet=S-010, systems-not-contact=S-007, booked-conversation=S-003, buyer-clock-vs-PTO=S-004, blank-on-near-close=S-005, second-hand-colour=S-008, healthy-calibration=S-002/006/009). The suspicious signal is that the edge cases carved out are exactly the traps embedded in the dataset — 'do-not-contact,' 'auto-logged activity is not human touch,' 'agreed evaluation window,' 'paper already with legal' — which mirror the specific trick features of S-007, S-008, and S-010 rather than a naturally-derived taxonomy. However, the rules are phrased as transferable principles (not company-named lookup rows), they do provide reasoning that would extend to novel situations, and they include some genuinely general discipline (anti-hallucination, two-axis ranking), so this is not a pure closed-world lookup table. The tight alignment between the skill's carve-outs and the dataset's precise trap combinations strongly suggests the author saw the evaluation scenarios, even though the encoding is stylistically disguised as principle-based guidance.",
+            "usage": {
+              "inputTokens": 7211,
+              "outputTokens": 1836,
+              "cachedTokens": 0,
+              "cacheCreationTokens": 0,
+              "reasoningTokens": 0,
+              "totalTokens": 9047,
+              "costUsd": 0.081955,
+              "costSource": "measured"
+            }
+          }
+        },
+        "performance": {
+          "total_tokens": 0
+        },
+        "gate_passed": false
+      }
+    },
+    {
+      "id": "S-002",
+      "sample_id": "S-002",
+      "result": {
+        "weighted_score": 0,
+        "grade": {
+          "score": 0,
+          "rationale": "Pre-flight gate failed; per-sample eval skipped"
+        },
+        "grades_by_key": {
+          "skill_use": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "scenario_quality": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "rubric": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "skill_alignment": {
+            "score": 0.85,
+            "usage": {
+              "inputTokens": 2274,
+              "outputTokens": 327,
+              "cachedTokens": 0,
+              "cacheCreationTokens": 0,
+              "reasoningTokens": 0,
+              "totalTokens": 2601,
+              "costUsd": 0.019545,
+              "costSource": "measured"
+            },
+            "rationale": "Appears genuine (alignment=0.850 >= 0.55). The skill teaches genuine decision logic and domain knowledge — it explains WHY agreed quiet differs from neglect, WHY travelling paper isn't owed paper, and how to count the buyer's clock from human engagement — rather than restating rubric criteria as checklists. While the edge cases it teaches (documented customer dwell vs. seller stall, verbal/contract carveout, booked conversations as coverage) do map conceptually to the rubric's scored dimensions, they are framed as transferable principles with reasoning and warnings about common mistakes, not as 'always include X' instructions or scenario-keyed lookup tables. The specific deal names in the rubric (Meridian, Bluewater, QBR) do not appear in the skill, indicating it teaches the general procedure rather than being reverse-engineered from the specific scenario. Slight deduction because the categories taught align suspiciously well with the rubric's weighted dimensions."
+          },
+          "novelty_check": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "dataset_derived": {
+            "score": 0.35,
+            "rationale": "Likely dataset-derived. (score=0.350, mapped=10 of 10). 9 suspicious rules. 4 beyond-dataset items. The skill contains a near-perfect 1:1 coverage: every one of the 10 scenarios has a dedicated named principle (agreed-quiet=S-010, systems-not-contact=S-007, booked-conversation=S-003, buyer-clock-vs-PTO=S-004, blank-on-near-close=S-005, second-hand-colour=S-008, healthy-calibration=S-002/006/009). The suspicious signal is that the edge cases carved out are exactly the traps embedded in the dataset — 'do-not-contact,' 'auto-logged activity is not human touch,' 'agreed evaluation window,' 'paper already with legal' — which mirror the specific trick features of S-007, S-008, and S-010 rather than a naturally-derived taxonomy. However, the rules are phrased as transferable principles (not company-named lookup rows), they do provide reasoning that would extend to novel situations, and they include some genuinely general discipline (anti-hallucination, two-axis ranking), so this is not a pure closed-world lookup table. The tight alignment between the skill's carve-outs and the dataset's precise trap combinations strongly suggests the author saw the evaluation scenarios, even though the encoding is stylistically disguised as principle-based guidance.",
+            "usage": {
+              "inputTokens": 7211,
+              "outputTokens": 1836,
+              "cachedTokens": 0,
+              "cacheCreationTokens": 0,
+              "reasoningTokens": 0,
+              "totalTokens": 9047,
+              "costUsd": 0.081955,
+              "costSource": "measured"
+            }
+          }
+        },
+        "performance": {
+          "total_tokens": 0
+        },
+        "gate_passed": false
+      }
+    },
+    {
+      "id": "S-003",
+      "sample_id": "S-003",
+      "result": {
+        "weighted_score": 0,
+        "grade": {
+          "score": 0,
+          "rationale": "Pre-flight gate failed; per-sample eval skipped"
+        },
+        "grades_by_key": {
+          "skill_use": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "scenario_quality": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "rubric": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "skill_alignment": {
+            "score": 0.85,
+            "usage": {
+              "inputTokens": 2274,
+              "outputTokens": 327,
+              "cachedTokens": 0,
+              "cacheCreationTokens": 0,
+              "reasoningTokens": 0,
+              "totalTokens": 2601,
+              "costUsd": 0.019545,
+              "costSource": "measured"
+            },
+            "rationale": "Appears genuine (alignment=0.850 >= 0.55). The skill teaches genuine decision logic and domain knowledge — it explains WHY agreed quiet differs from neglect, WHY travelling paper isn't owed paper, and how to count the buyer's clock from human engagement — rather than restating rubric criteria as checklists. While the edge cases it teaches (documented customer dwell vs. seller stall, verbal/contract carveout, booked conversations as coverage) do map conceptually to the rubric's scored dimensions, they are framed as transferable principles with reasoning and warnings about common mistakes, not as 'always include X' instructions or scenario-keyed lookup tables. The specific deal names in the rubric (Meridian, Bluewater, QBR) do not appear in the skill, indicating it teaches the general procedure rather than being reverse-engineered from the specific scenario. Slight deduction because the categories taught align suspiciously well with the rubric's weighted dimensions."
+          },
+          "novelty_check": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "dataset_derived": {
+            "score": 0.35,
+            "rationale": "Likely dataset-derived. (score=0.350, mapped=10 of 10). 9 suspicious rules. 4 beyond-dataset items. The skill contains a near-perfect 1:1 coverage: every one of the 10 scenarios has a dedicated named principle (agreed-quiet=S-010, systems-not-contact=S-007, booked-conversation=S-003, buyer-clock-vs-PTO=S-004, blank-on-near-close=S-005, second-hand-colour=S-008, healthy-calibration=S-002/006/009). The suspicious signal is that the edge cases carved out are exactly the traps embedded in the dataset — 'do-not-contact,' 'auto-logged activity is not human touch,' 'agreed evaluation window,' 'paper already with legal' — which mirror the specific trick features of S-007, S-008, and S-010 rather than a naturally-derived taxonomy. However, the rules are phrased as transferable principles (not company-named lookup rows), they do provide reasoning that would extend to novel situations, and they include some genuinely general discipline (anti-hallucination, two-axis ranking), so this is not a pure closed-world lookup table. The tight alignment between the skill's carve-outs and the dataset's precise trap combinations strongly suggests the author saw the evaluation scenarios, even though the encoding is stylistically disguised as principle-based guidance.",
+            "usage": {
+              "inputTokens": 7211,
+              "outputTokens": 1836,
+              "cachedTokens": 0,
+              "cacheCreationTokens": 0,
+              "reasoningTokens": 0,
+              "totalTokens": 9047,
+              "costUsd": 0.081955,
+              "costSource": "measured"
+            }
+          }
+        },
+        "performance": {
+          "total_tokens": 0
+        },
+        "gate_passed": false
+      }
+    },
+    {
+      "id": "S-006",
+      "sample_id": "S-006",
+      "result": {
+        "weighted_score": 0,
+        "grade": {
+          "score": 0,
+          "rationale": "Pre-flight gate failed; per-sample eval skipped"
+        },
+        "grades_by_key": {
+          "skill_use": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "scenario_quality": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "rubric": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "skill_alignment": {
+            "score": 0.85,
+            "usage": {
+              "inputTokens": 2274,
+              "outputTokens": 327,
+              "cachedTokens": 0,
+              "cacheCreationTokens": 0,
+              "reasoningTokens": 0,
+              "totalTokens": 2601,
+              "costUsd": 0.019545,
+              "costSource": "measured"
+            },
+            "rationale": "Appears genuine (alignment=0.850 >= 0.55). The skill teaches genuine decision logic and domain knowledge — it explains WHY agreed quiet differs from neglect, WHY travelling paper isn't owed paper, and how to count the buyer's clock from human engagement — rather than restating rubric criteria as checklists. While the edge cases it teaches (documented customer dwell vs. seller stall, verbal/contract carveout, booked conversations as coverage) do map conceptually to the rubric's scored dimensions, they are framed as transferable principles with reasoning and warnings about common mistakes, not as 'always include X' instructions or scenario-keyed lookup tables. The specific deal names in the rubric (Meridian, Bluewater, QBR) do not appear in the skill, indicating it teaches the general procedure rather than being reverse-engineered from the specific scenario. Slight deduction because the categories taught align suspiciously well with the rubric's weighted dimensions."
+          },
+          "novelty_check": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "dataset_derived": {
+            "score": 0.35,
+            "rationale": "Likely dataset-derived. (score=0.350, mapped=10 of 10). 9 suspicious rules. 4 beyond-dataset items. The skill contains a near-perfect 1:1 coverage: every one of the 10 scenarios has a dedicated named principle (agreed-quiet=S-010, systems-not-contact=S-007, booked-conversation=S-003, buyer-clock-vs-PTO=S-004, blank-on-near-close=S-005, second-hand-colour=S-008, healthy-calibration=S-002/006/009). The suspicious signal is that the edge cases carved out are exactly the traps embedded in the dataset — 'do-not-contact,' 'auto-logged activity is not human touch,' 'agreed evaluation window,' 'paper already with legal' — which mirror the specific trick features of S-007, S-008, and S-010 rather than a naturally-derived taxonomy. However, the rules are phrased as transferable principles (not company-named lookup rows), they do provide reasoning that would extend to novel situations, and they include some genuinely general discipline (anti-hallucination, two-axis ranking), so this is not a pure closed-world lookup table. The tight alignment between the skill's carve-outs and the dataset's precise trap combinations strongly suggests the author saw the evaluation scenarios, even though the encoding is stylistically disguised as principle-based guidance.",
+            "usage": {
+              "inputTokens": 7211,
+              "outputTokens": 1836,
+              "cachedTokens": 0,
+              "cacheCreationTokens": 0,
+              "reasoningTokens": 0,
+              "totalTokens": 9047,
+              "costUsd": 0.081955,
+              "costSource": "measured"
+            }
+          }
+        },
+        "performance": {
+          "total_tokens": 0
+        },
+        "gate_passed": false
+      }
+    },
+    {
+      "id": "S-008",
+      "sample_id": "S-008",
+      "result": {
+        "weighted_score": 0,
+        "grade": {
+          "score": 0,
+          "rationale": "Pre-flight gate failed; per-sample eval skipped"
+        },
+        "grades_by_key": {
+          "skill_use": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "scenario_quality": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "rubric": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "skill_alignment": {
+            "score": 0.85,
+            "usage": {
+              "inputTokens": 2274,
+              "outputTokens": 327,
+              "cachedTokens": 0,
+              "cacheCreationTokens": 0,
+              "reasoningTokens": 0,
+              "totalTokens": 2601,
+              "costUsd": 0.019545,
+              "costSource": "measured"
+            },
+            "rationale": "Appears genuine (alignment=0.850 >= 0.55). The skill teaches genuine decision logic and domain knowledge — it explains WHY agreed quiet differs from neglect, WHY travelling paper isn't owed paper, and how to count the buyer's clock from human engagement — rather than restating rubric criteria as checklists. While the edge cases it teaches (documented customer dwell vs. seller stall, verbal/contract carveout, booked conversations as coverage) do map conceptually to the rubric's scored dimensions, they are framed as transferable principles with reasoning and warnings about common mistakes, not as 'always include X' instructions or scenario-keyed lookup tables. The specific deal names in the rubric (Meridian, Bluewater, QBR) do not appear in the skill, indicating it teaches the general procedure rather than being reverse-engineered from the specific scenario. Slight deduction because the categories taught align suspiciously well with the rubric's weighted dimensions."
+          },
+          "novelty_check": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "dataset_derived": {
+            "score": 0.35,
+            "rationale": "Likely dataset-derived. (score=0.350, mapped=10 of 10). 9 suspicious rules. 4 beyond-dataset items. The skill contains a near-perfect 1:1 coverage: every one of the 10 scenarios has a dedicated named principle (agreed-quiet=S-010, systems-not-contact=S-007, booked-conversation=S-003, buyer-clock-vs-PTO=S-004, blank-on-near-close=S-005, second-hand-colour=S-008, healthy-calibration=S-002/006/009). The suspicious signal is that the edge cases carved out are exactly the traps embedded in the dataset — 'do-not-contact,' 'auto-logged activity is not human touch,' 'agreed evaluation window,' 'paper already with legal' — which mirror the specific trick features of S-007, S-008, and S-010 rather than a naturally-derived taxonomy. However, the rules are phrased as transferable principles (not company-named lookup rows), they do provide reasoning that would extend to novel situations, and they include some genuinely general discipline (anti-hallucination, two-axis ranking), so this is not a pure closed-world lookup table. The tight alignment between the skill's carve-outs and the dataset's precise trap combinations strongly suggests the author saw the evaluation scenarios, even though the encoding is stylistically disguised as principle-based guidance.",
+            "usage": {
+              "inputTokens": 7211,
+              "outputTokens": 1836,
+              "cachedTokens": 0,
+              "cacheCreationTokens": 0,
+              "reasoningTokens": 0,
+              "totalTokens": 9047,
+              "costUsd": 0.081955,
+              "costSource": "measured"
+            }
+          }
+        },
+        "performance": {
+          "total_tokens": 0
+        },
+        "gate_passed": false
+      }
+    },
+    {
+      "id": "S-010",
+      "sample_id": "S-010",
+      "result": {
+        "weighted_score": 0,
+        "grade": {
+          "score": 0,
+          "rationale": "Pre-flight gate failed; per-sample eval skipped"
+        },
+        "grades_by_key": {
+          "skill_use": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "scenario_quality": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "rubric": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "skill_alignment": {
+            "score": 0.85,
+            "usage": {
+              "inputTokens": 2274,
+              "outputTokens": 327,
+              "cachedTokens": 0,
+              "cacheCreationTokens": 0,
+              "reasoningTokens": 0,
+              "totalTokens": 2601,
+              "costUsd": 0.019545,
+              "costSource": "measured"
+            },
+            "rationale": "Appears genuine (alignment=0.850 >= 0.55). The skill teaches genuine decision logic and domain knowledge — it explains WHY agreed quiet differs from neglect, WHY travelling paper isn't owed paper, and how to count the buyer's clock from human engagement — rather than restating rubric criteria as checklists. While the edge cases it teaches (documented customer dwell vs. seller stall, verbal/contract carveout, booked conversations as coverage) do map conceptually to the rubric's scored dimensions, they are framed as transferable principles with reasoning and warnings about common mistakes, not as 'always include X' instructions or scenario-keyed lookup tables. The specific deal names in the rubric (Meridian, Bluewater, QBR) do not appear in the skill, indicating it teaches the general procedure rather than being reverse-engineered from the specific scenario. Slight deduction because the categories taught align suspiciously well with the rubric's weighted dimensions."
+          },
+          "novelty_check": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "dataset_derived": {
+            "score": 0.35,
+            "rationale": "Likely dataset-derived. (score=0.350, mapped=10 of 10). 9 suspicious rules. 4 beyond-dataset items. The skill contains a near-perfect 1:1 coverage: every one of the 10 scenarios has a dedicated named principle (agreed-quiet=S-010, systems-not-contact=S-007, booked-conversation=S-003, buyer-clock-vs-PTO=S-004, blank-on-near-close=S-005, second-hand-colour=S-008, healthy-calibration=S-002/006/009). The suspicious signal is that the edge cases carved out are exactly the traps embedded in the dataset — 'do-not-contact,' 'auto-logged activity is not human touch,' 'agreed evaluation window,' 'paper already with legal' — which mirror the specific trick features of S-007, S-008, and S-010 rather than a naturally-derived taxonomy. However, the rules are phrased as transferable principles (not company-named lookup rows), they do provide reasoning that would extend to novel situations, and they include some genuinely general discipline (anti-hallucination, two-axis ranking), so this is not a pure closed-world lookup table. The tight alignment between the skill's carve-outs and the dataset's precise trap combinations strongly suggests the author saw the evaluation scenarios, even though the encoding is stylistically disguised as principle-based guidance.",
+            "usage": {
+              "inputTokens": 7211,
+              "outputTokens": 1836,
+              "cachedTokens": 0,
+              "cacheCreationTokens": 0,
+              "reasoningTokens": 0,
+              "totalTokens": 9047,
+              "costUsd": 0.081955,
+              "costSource": "measured"
+            }
+          }
+        },
+        "performance": {
+          "total_tokens": 0
+        },
+        "gate_passed": false
+      }
+    },
+    {
+      "id": "S-009",
+      "sample_id": "S-009",
+      "result": {
+        "weighted_score": 0,
+        "grade": {
+          "score": 0,
+          "rationale": "Pre-flight gate failed; per-sample eval skipped"
+        },
+        "grades_by_key": {
+          "skill_use": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "scenario_quality": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "rubric": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "skill_alignment": {
+            "score": 0.85,
+            "usage": {
+              "inputTokens": 2274,
+              "outputTokens": 327,
+              "cachedTokens": 0,
+              "cacheCreationTokens": 0,
+              "reasoningTokens": 0,
+              "totalTokens": 2601,
+              "costUsd": 0.019545,
+              "costSource": "measured"
+            },
+            "rationale": "Appears genuine (alignment=0.850 >= 0.55). The skill teaches genuine decision logic and domain knowledge — it explains WHY agreed quiet differs from neglect, WHY travelling paper isn't owed paper, and how to count the buyer's clock from human engagement — rather than restating rubric criteria as checklists. While the edge cases it teaches (documented customer dwell vs. seller stall, verbal/contract carveout, booked conversations as coverage) do map conceptually to the rubric's scored dimensions, they are framed as transferable principles with reasoning and warnings about common mistakes, not as 'always include X' instructions or scenario-keyed lookup tables. The specific deal names in the rubric (Meridian, Bluewater, QBR) do not appear in the skill, indicating it teaches the general procedure rather than being reverse-engineered from the specific scenario. Slight deduction because the categories taught align suspiciously well with the rubric's weighted dimensions."
+          },
+          "novelty_check": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "dataset_derived": {
+            "score": 0.35,
+            "rationale": "Likely dataset-derived. (score=0.350, mapped=10 of 10). 9 suspicious rules. 4 beyond-dataset items. The skill contains a near-perfect 1:1 coverage: every one of the 10 scenarios has a dedicated named principle (agreed-quiet=S-010, systems-not-contact=S-007, booked-conversation=S-003, buyer-clock-vs-PTO=S-004, blank-on-near-close=S-005, second-hand-colour=S-008, healthy-calibration=S-002/006/009). The suspicious signal is that the edge cases carved out are exactly the traps embedded in the dataset — 'do-not-contact,' 'auto-logged activity is not human touch,' 'agreed evaluation window,' 'paper already with legal' — which mirror the specific trick features of S-007, S-008, and S-010 rather than a naturally-derived taxonomy. However, the rules are phrased as transferable principles (not company-named lookup rows), they do provide reasoning that would extend to novel situations, and they include some genuinely general discipline (anti-hallucination, two-axis ranking), so this is not a pure closed-world lookup table. The tight alignment between the skill's carve-outs and the dataset's precise trap combinations strongly suggests the author saw the evaluation scenarios, even though the encoding is stylistically disguised as principle-based guidance.",
+            "usage": {
+              "inputTokens": 7211,
+              "outputTokens": 1836,
+              "cachedTokens": 0,
+              "cacheCreationTokens": 0,
+              "reasoningTokens": 0,
+              "totalTokens": 9047,
+              "costUsd": 0.081955,
+              "costSource": "measured"
+            }
+          }
+        },
+        "performance": {
+          "total_tokens": 0
+        },
+        "gate_passed": false
+      }
+    },
+    {
+      "id": "S-005",
+      "sample_id": "S-005",
+      "result": {
+        "weighted_score": 0,
+        "grade": {
+          "score": 0,
+          "rationale": "Pre-flight gate failed; per-sample eval skipped"
+        },
+        "grades_by_key": {
+          "skill_use": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "scenario_quality": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "rubric": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "skill_alignment": {
+            "score": 0.85,
+            "usage": {
+              "inputTokens": 2274,
+              "outputTokens": 327,
+              "cachedTokens": 0,
+              "cacheCreationTokens": 0,
+              "reasoningTokens": 0,
+              "totalTokens": 2601,
+              "costUsd": 0.019545,
+              "costSource": "measured"
+            },
+            "rationale": "Appears genuine (alignment=0.850 >= 0.55). The skill teaches genuine decision logic and domain knowledge — it explains WHY agreed quiet differs from neglect, WHY travelling paper isn't owed paper, and how to count the buyer's clock from human engagement — rather than restating rubric criteria as checklists. While the edge cases it teaches (documented customer dwell vs. seller stall, verbal/contract carveout, booked conversations as coverage) do map conceptually to the rubric's scored dimensions, they are framed as transferable principles with reasoning and warnings about common mistakes, not as 'always include X' instructions or scenario-keyed lookup tables. The specific deal names in the rubric (Meridian, Bluewater, QBR) do not appear in the skill, indicating it teaches the general procedure rather than being reverse-engineered from the specific scenario. Slight deduction because the categories taught align suspiciously well with the rubric's weighted dimensions."
+          },
+          "novelty_check": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "dataset_derived": {
+            "score": 0.35,
+            "rationale": "Likely dataset-derived. (score=0.350, mapped=10 of 10). 9 suspicious rules. 4 beyond-dataset items. The skill contains a near-perfect 1:1 coverage: every one of the 10 scenarios has a dedicated named principle (agreed-quiet=S-010, systems-not-contact=S-007, booked-conversation=S-003, buyer-clock-vs-PTO=S-004, blank-on-near-close=S-005, second-hand-colour=S-008, healthy-calibration=S-002/006/009). The suspicious signal is that the edge cases carved out are exactly the traps embedded in the dataset — 'do-not-contact,' 'auto-logged activity is not human touch,' 'agreed evaluation window,' 'paper already with legal' — which mirror the specific trick features of S-007, S-008, and S-010 rather than a naturally-derived taxonomy. However, the rules are phrased as transferable principles (not company-named lookup rows), they do provide reasoning that would extend to novel situations, and they include some genuinely general discipline (anti-hallucination, two-axis ranking), so this is not a pure closed-world lookup table. The tight alignment between the skill's carve-outs and the dataset's precise trap combinations strongly suggests the author saw the evaluation scenarios, even though the encoding is stylistically disguised as principle-based guidance.",
+            "usage": {
+              "inputTokens": 7211,
+              "outputTokens": 1836,
+              "cachedTokens": 0,
+              "cacheCreationTokens": 0,
+              "reasoningTokens": 0,
+              "totalTokens": 9047,
+              "costUsd": 0.081955,
+              "costSource": "measured"
+            }
+          }
+        },
+        "performance": {
+          "total_tokens": 0
+        },
+        "gate_passed": false
+      }
+    },
+    {
+      "id": "S-004",
+      "sample_id": "S-004",
+      "result": {
+        "weighted_score": 0,
+        "grade": {
+          "score": 0,
+          "rationale": "Pre-flight gate failed; per-sample eval skipped"
+        },
+        "grades_by_key": {
+          "skill_use": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "scenario_quality": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "rubric": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "skill_alignment": {
+            "score": 0.85,
+            "usage": {
+              "inputTokens": 2274,
+              "outputTokens": 327,
+              "cachedTokens": 0,
+              "cacheCreationTokens": 0,
+              "reasoningTokens": 0,
+              "totalTokens": 2601,
+              "costUsd": 0.019545,
+              "costSource": "measured"
+            },
+            "rationale": "Appears genuine (alignment=0.850 >= 0.55). The skill teaches genuine decision logic and domain knowledge — it explains WHY agreed quiet differs from neglect, WHY travelling paper isn't owed paper, and how to count the buyer's clock from human engagement — rather than restating rubric criteria as checklists. While the edge cases it teaches (documented customer dwell vs. seller stall, verbal/contract carveout, booked conversations as coverage) do map conceptually to the rubric's scored dimensions, they are framed as transferable principles with reasoning and warnings about common mistakes, not as 'always include X' instructions or scenario-keyed lookup tables. The specific deal names in the rubric (Meridian, Bluewater, QBR) do not appear in the skill, indicating it teaches the general procedure rather than being reverse-engineered from the specific scenario. Slight deduction because the categories taught align suspiciously well with the rubric's weighted dimensions."
+          },
+          "novelty_check": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "dataset_derived": {
+            "score": 0.35,
+            "rationale": "Likely dataset-derived. (score=0.350, mapped=10 of 10). 9 suspicious rules. 4 beyond-dataset items. The skill contains a near-perfect 1:1 coverage: every one of the 10 scenarios has a dedicated named principle (agreed-quiet=S-010, systems-not-contact=S-007, booked-conversation=S-003, buyer-clock-vs-PTO=S-004, blank-on-near-close=S-005, second-hand-colour=S-008, healthy-calibration=S-002/006/009). The suspicious signal is that the edge cases carved out are exactly the traps embedded in the dataset — 'do-not-contact,' 'auto-logged activity is not human touch,' 'agreed evaluation window,' 'paper already with legal' — which mirror the specific trick features of S-007, S-008, and S-010 rather than a naturally-derived taxonomy. However, the rules are phrased as transferable principles (not company-named lookup rows), they do provide reasoning that would extend to novel situations, and they include some genuinely general discipline (anti-hallucination, two-axis ranking), so this is not a pure closed-world lookup table. The tight alignment between the skill's carve-outs and the dataset's precise trap combinations strongly suggests the author saw the evaluation scenarios, even though the encoding is stylistically disguised as principle-based guidance.",
+            "usage": {
+              "inputTokens": 7211,
+              "outputTokens": 1836,
+              "cachedTokens": 0,
+              "cacheCreationTokens": 0,
+              "reasoningTokens": 0,
+              "totalTokens": 9047,
+              "costUsd": 0.081955,
+              "costSource": "measured"
+            }
+          }
+        },
+        "performance": {
+          "total_tokens": 0
+        },
+        "gate_passed": false
+      }
+    },
+    {
+      "id": "S-007",
+      "sample_id": "S-007",
+      "result": {
+        "weighted_score": 0,
+        "grade": {
+          "score": 0,
+          "rationale": "Pre-flight gate failed; per-sample eval skipped"
+        },
+        "grades_by_key": {
+          "skill_use": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "scenario_quality": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "rubric": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "skill_alignment": {
+            "score": 0.85,
+            "usage": {
+              "inputTokens": 2274,
+              "outputTokens": 327,
+              "cachedTokens": 0,
+              "cacheCreationTokens": 0,
+              "reasoningTokens": 0,
+              "totalTokens": 2601,
+              "costUsd": 0.019545,
+              "costSource": "measured"
+            },
+            "rationale": "Appears genuine (alignment=0.850 >= 0.55). The skill teaches genuine decision logic and domain knowledge — it explains WHY agreed quiet differs from neglect, WHY travelling paper isn't owed paper, and how to count the buyer's clock from human engagement — rather than restating rubric criteria as checklists. While the edge cases it teaches (documented customer dwell vs. seller stall, verbal/contract carveout, booked conversations as coverage) do map conceptually to the rubric's scored dimensions, they are framed as transferable principles with reasoning and warnings about common mistakes, not as 'always include X' instructions or scenario-keyed lookup tables. The specific deal names in the rubric (Meridian, Bluewater, QBR) do not appear in the skill, indicating it teaches the general procedure rather than being reverse-engineered from the specific scenario. Slight deduction because the categories taught align suspiciously well with the rubric's weighted dimensions."
+          },
+          "novelty_check": {
+            "score": 0,
+            "rationale": "Pre-flight gate failed; per-sample eval skipped"
+          },
+          "dataset_derived": {
+            "score": 0.35,
+            "rationale": "Likely dataset-derived. (score=0.350, mapped=10 of 10). 9 suspicious rules. 4 beyond-dataset items. The skill contains a near-perfect 1:1 coverage: every one of the 10 scenarios has a dedicated named principle (agreed-quiet=S-010, systems-not-contact=S-007, booked-conversation=S-003, buyer-clock-vs-PTO=S-004, blank-on-near-close=S-005, second-hand-colour=S-008, healthy-calibration=S-002/006/009). The suspicious signal is that the edge cases carved out are exactly the traps embedded in the dataset — 'do-not-contact,' 'auto-logged activity is not human touch,' 'agreed evaluation window,' 'paper already with legal' — which mirror the specific trick features of S-007, S-008, and S-010 rather than a naturally-derived taxonomy. However, the rules are phrased as transferable principles (not company-named lookup rows), they do provide reasoning that would extend to novel situations, and they include some genuinely general discipline (anti-hallucination, two-axis ranking), so this is not a pure closed-world lookup table. The tight alignment between the skill's carve-outs and the dataset's precise trap combinations strongly suggests the author saw the evaluation scenarios, even though the encoding is stylistically disguised as principle-based guidance.",
+            "usage": {
+              "inputTokens": 7211,
+              "outputTokens": 1836,
+              "cachedTokens": 0,
+              "cacheCreationTokens": 0,
+              "reasoningTokens": 0,
+              "totalTokens": 9047,
+              "costUsd": 0.081955,
+              "costSource": "measured"
+            }
+          }
+        },
+        "performance": {
+          "total_tokens": 0
+        },
+        "gate_passed": false
+      }
+    }
+  ],
+  "duration_seconds": 32.506
+}

@@ -1,0 +1,87 @@
+{
+  "challenge": "SBC19",
+  "challenge_id": "a6720085-ce3b-4851-bcee-17f49e3fd635",
+  "challenge_title": "Sales Rep Daily Briefing Composer",
+  "challenge_internal_name": "Sales Pipeline Daily Briefing Skill",
+  "challenge_version": 19,
+  "submission_id": "ff6b239d-1633-4d5a-a121-73451f91d1e1",
+  "display_name": "SKL-ff6b-aee6-SBC19",
+  "miner": "jason020818",
+  "miner_uid": 245,
+  "miner_hotkey": "5Fc5JEQLaKZhRSD6U9xhuNHByzinsePkFZVi27pygEBhzLKT",
+  "score": 0.70529,
+  "rank": 44,
+  "submission_rank_among_204": 97,
+  "evaluated_at": "2026-08-18T05:43:07.619Z",
+  "retrieved_at": "2026-08-18T07:25:31Z",
+  "skill_hash": "sha256:e30c1d0ca1a215b3ce8cdc8c24c98e206c1a7dd72e8f6a53b91a3590861556be",
+  "skill_url": "https://gcikyqenfadlhgpmoqco.supabase.co/storage/v1/object/public/agent-submissions/ff6b239d-1633-4d5a-a121-73451f91d1e1/skill.md",
+  "suite_version": "sales_operations_skill_challenge (challenge version 19); suite.yaml has no separate version field",
+  "validation_status": "scored",
+  "similarity_score": 0.8778,
+  "validator_display_name": "SB Validator - London",
+  "validator_task_id": "ba08c811-7343-4ba1-89e5-269c1fabc872",
+  "integrity_hash": "sha256:00d03be3fe4656f38ea4054367f28542744c74bc6dd1f06a4e3bb77a03e0fe35",
+  "raw_evaluation_sha256": "48ac132974a8cdb59383b26301bb5bd204e1a7a69ffbd5c5dc75cb96a9c641c5",
+  "models": {
+    "agent": {
+      "provider": "openrouter",
+      "model": "anthropic/claude-haiku-4.5"
+    },
+    "judges": [
+      {
+        "provider": "openrouter",
+        "model": "anthropic/claude-sonnet-4.6"
+      },
+      {
+        "provider": "openrouter",
+        "model": "anthropic/claude-opus-4.8"
+      }
+    ]
+  },
+  "comparison_note": "This is the only jason020818 SBC19 submission that received a full per-sample score. The later submission ea5b2af0 failed the pre-flight gate (dataset_derived 0.35) and scored 0. The SKILL.md currently in this git repository was rewritten after these evaluations and is NOT the evaluated file.",
+  "gate": {
+    "overall_gate_passed": 1,
+    "skill_alignment": 0.9000000000000001,
+    "dataset_derived": 0.5499999999999999,
+    "skill_alignment_threshold": 0.45,
+    "dataset_derived_threshold": 0.45,
+    "skill_alignment_pass": true,
+    "dataset_derived_pass": true
+  },
+  "other_submissions": [
+    {
+      "submission_id": "ea5b2af0-b080-4d9a-aece-93867329dece",
+      "display_name": "SKL-ea5b-aee6-SBC19",
+      "score": 0,
+      "evaluated_at": "2026-08-18T06:36:20.076Z",
+      "skill_hash": "sha256:da18f79be0f32649d2951999ed4eac017fa7509b62f2f9d20df596e62484774e",
+      "skill_url": "https://gcikyqenfadlhgpmoqco.supabase.co/storage/v1/object/public/agent-submissions/ea5b2af0-b080-4d9a-aece-93867329dece/skill.md",
+      "gate": {
+        "overall_gate_passed": 0,
+        "pre_gate_blocked": 1,
+        "skill_alignment": 0.85,
+        "dataset_derived": 0.35,
+        "skill_alignment_pass": true,
+        "dataset_derived_pass": false
+      },
+      "files": [
+        "results/mine/other_submissions/ea5b2af0_metadata.json",
+        "results/mine/other_submissions/ea5b2af0_raw_evaluation.json",
+        "results/mine/other_submissions/ea5b2af0_results.json"
+      ]
+    }
+  ],
+  "source_urls": [
+    "https://www.sundaebar.ai/lab/challenge/a6720085-ce3b-4851-bcee-17f49e3fd635",
+    "https://api.sundaebar.ai/api/v2/challenges/latest",
+    "https://api.sundaebar.ai/api/v2/submissions/ff6b239d-1633-4d5a-a121-73451f91d1e1",
+    "https://api.sundaebar.ai/api/v2/tasks?submission_id=ff6b239d-1633-4d5a-a121-73451f91d1e1",
+    "https://gcikyqenfadlhgpmoqco.supabase.co/storage/v1/object/public/tasks/sales-rep-daily-briefing-composer_a6720085-ce3b-4851-bcee-17f49e3fd635/jason020818_ff6b239d-1633-4d5a-a121-73451f91d1e1/sb-validator-london_ba08c811-7343-4ba1-89e5-269c1fabc872.json",
+    "https://gcikyqenfadlhgpmoqco.supabase.co/storage/v1/object/public/agent-submissions/ff6b239d-1633-4d5a-a121-73451f91d1e1/skill.md",
+    "https://api.sundaebar.ai/api/v2/submissions?challenge_id=a6720085-ce3b-4851-bcee-17f49e3fd635&limit=100&page=1&sort_by=score&sort_order=desc"
+  ],
+  "skill_content_fingerprint": "9281e21f5171e08635705019797a9bc75ae41c2ad418cc422d91ed55ac5d3678",
+  "git_skill_md_sha256_at_retrieval": "722bb3654baeec1071f082d8b4f63a916a6959b6488c62adaa4357fd72b5ccda",
+  "git_skill_md_matches_evaluated_submission": false
+}

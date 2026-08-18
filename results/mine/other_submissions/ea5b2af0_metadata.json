@@ -1,0 +1,19 @@
+{
+  "challenge": "SBC19",
+  "challenge_id": "a6720085-ce3b-4851-bcee-17f49e3fd635",
+  "submission_id": "ea5b2af0-b080-4d9a-aece-93867329dece",
+  "miner": "jason020818",
+  "score": 0,
+  "rank": null,
+  "evaluated_at": "2026-08-18T06:36:20.076Z",
+  "retrieved_at": "2026-08-18T07:25:31Z",
+  "skill_hash": "sha256:da18f79be0f32649d2951999ed4eac017fa7509b62f2f9d20df596e62484774e",
+  "skill_url": "https://gcikyqenfadlhgpmoqco.supabase.co/storage/v1/object/public/agent-submissions/ea5b2af0-b080-4d9a-aece-93867329dece/skill.md",
+  "suite_version": "sales_operations_skill_challenge (challenge version 19); suite.yaml has no separate version field",
+  "source_urls": [
+    "https://api.sundaebar.ai/api/v2/submissions/ea5b2af0-b080-4d9a-aece-93867329dece",
+    "https://api.sundaebar.ai/api/v2/tasks?submission_id=ea5b2af0-b080-4d9a-aece-93867329dece",
+    "https://gcikyqenfadlhgpmoqco.supabase.co/storage/v1/object/public/tasks/sales-rep-daily-briefing-composer_a6720085-ce3b-4851-bcee-17f49e3fd635/jason020818_ea5b2af0-b080-4d9a-aece-93867329dece/sb-validator-london_087755e8-3442-43c7-b0f1-14a340458421.json",
+    "https://gcikyqenfadlhgpmoqco.supabase.co/storage/v1/object/public/agent-submissions/ea5b2af0-b080-4d9a-aece-93867329dece/skill.md"
+  ]
+}

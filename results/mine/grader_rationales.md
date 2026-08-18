@@ -1,0 +1,323 @@
+# Mine grader rationales (scored submission ff6b239d)
+
+- submission_id: `ff6b239d-1633-4d5a-a121-73451f91d1e1`
+- miner: jason020818
+- score: 0.70529
+- evaluated_at: 2026-08-18T05:43:07.619Z
+- retrieved_at: 2026-08-18T07:25:31Z
+
+Evaluated skill is the public skill.md at skill_url, not the current git SKILL.md.
+
+Rationales below are copied from the public validator JSON. They are not rewritten.
+
+## Submission-level metrics
+
+```json
+{
+  "avg_score_total": 0.7052935000000002,
+  "skill_use": 0.85,
+  "scenario_quality": 0.5984,
+  "rubric": 0.577,
+  "skill_alignment": 0.9000000000000001,
+  "novelty_check": 0.976735,
+  "dataset_derived": 0.5499999999999999,
+  "tests_count": 10,
+  "total_tokens": 87097,
+  "max_tokens_per_eval": 157000,
+  "tokens_used": 87097,
+  "samples_prorated": 0,
+  "samples_zeroed": 0,
+  "overall_gate_passed": 1
+}
+```
+
+## S-001
+
+- weighted_score: `0.6805000000000001`
+- gate_passed: `True`
+
+### skill_use (0.875)
+
+The skill's non-obvious distinctions are clearly applied: Meridian Health is correctly identified as a documented wait (not a stale deal), Bluewater is carved out as verbal-plus-paper-in-motion requiring no outbound, and Harmon is excluded from the action list because it's on today's calendar. The Nightfall artifact framing ('the artifact is the move') and the Redwood champion-loss treatment ('irreversible damage outranks size') trace directly to skill-specific reasoning. The output reads somewh
+
+### scenario_quality (0.75)
+
+The agent correctly handles the core edge case — Meridian is placed in Tier B with no action triggered, recognizing the customer-requested eval period. Bluewater is also correctly treated as monitor-only despite the Oct 11 close. However, output quality suffers because the Top 3 actions blur outboun | Base=0.750, penalties=0.00, final=0.750
+
+### rubric (0.31)
+
+The submission contains several factual errors that undermine its reliability: it reports pipeline at $1.583M (vs. $1,363K in the reference), misidentifies Cascade Renewables as a Top 3 action when the briefing explicitly flags Thornfield as #3 and notes Cascade is Tier B waiting on budget approval, and suggests asking James at Meridian or LinkedIn contacts to find Redwood's new owner — a confused and inappropriate approach that conflates unrelated accounts. The Thornfield legal call prep is listed under both Top 3 and Tier A redundantly, and the Korvex elevation to Tier A lacks grounding in the source data. While the communication style is reasonably clear and some individual elements (Nightfall urgency, Bluewater monitor-only, Harmon discovery framing) are directionally correct, the core errors in pipeline math, prioritization logic, and the Redwood recovery approach represent meaningful domain and contextual failures that a practitioner would catch immediately.
+
+### skill_alignment (0.9)
+
+Appears genuine (alignment=0.900 >= 0.55). The skill teaches genuine domain reasoning: it explains WHY documented waits differ from stalls, WHY to believe prose over tables, and WHY business days don't pause for PTO — decision logic and warnings about common mistakes rather than rubric restatements. Crucially, it does not name the specific deals (Meridian, Bluewater, QBR) or mirror the rubric's tier labels as a checklist; instead it derives principles (the 'documented wait,' 'two-vendor decision due this week is a closing window not a wait,' second-hand info sharpens but never confirms) that a reader would apply independently. The overlap with the rubric edge cases is a consequence of teaching the underlying judgment, not a 1:1 mapping, though the categories of 'moves worth making' do loosely correspond to the scored heuristics, preventing a perfect 1.0.
+
+### novelty_check (1)
+
+First sample in novelty group — no comparison
+
+### dataset_derived (0.55)
+
+Appears general. (score=0.550, mapped=6 of 10). 8 suspicious rules. 3 beyond-dataset items. The skill is written as prose principles rather than a lookup table, and the core rules (freshness, worthwhile-move test, believe-the-person, no fabrication) are genuinely general and would guide novel situations — arguing against pure dataset-derivation. However, the enumerated 'four situations that look urgent but aren't' and the specific worked examples cluster suspiciously tightly around the dataset's distinctive edge cases: documented sabbatical (S-001), PTO gap (S-004), two-vendor decision next week (S-004/S-010), verbal-but-MSA-owed with close this week (S-002/S-008/S-009), conflicting/known-wrong dates → Needs Record Update (S-007/S-010), and second-hand conference/colleague intel (S-008). The precise combinations ('verbal received but MSA still owed with close within the week', 'they are comparing vendors with a decision next week') read as fitted to specific traps rather than naturally chosen. The screen-out list functions like a closed enumeration of the dataset's trap categories, which lowers confidence that it is fully independent domain knowledge.
+
+## S-002
+
+- weighted_score: `0.5827000000000001`
+- gate_passed: `True`
+
+### skill_use (0.875)
+
+The skill's non-obvious distinctions are clearly applied: Stormbridge Media gets a message-not-call instruction because paper is already on the buyer's desk (verbal-plus-paper carveout logic); Keystone Agri is flagged for lacking an artifact despite verbal agreement (expired-wait / unsent-artifact reasoning); the Oaktree Pharma check is framed as a status pull rather than a push, reflecting the 'documented wait' vs. 'expired wait' distinction. The Tier B section correctly separates nine deals wi
+
+### scenario_quality (0.424)
+
+The agent inflates Tier A to 5 deals (adding Fenwick Capital and Oaktree Pharma beyond the correct 3), which is the core failure the rubric tests against — Fenwick is a legitimate action but belongs in Tier B on a quiet day, and Oaktree (last touched Mar 10, legal review in progress) has no urgency  | Base=0.424, penalties=0.00, final=0.424
+
+### rubric (0.31)
+
+The submission contains several significant errors that undermine its reliability as a daily briefing. Most critically, it misidentifies the pipeline total ($1.825M vs. $1.885M), demotes Keystone Agri from a Top 3 action to Tier B despite it being the closest close date with no paper in motion — a genuine risk that the reference correctly flags — and explicitly contradicts the briefing's instruction on Stormbridge by recommending a phone call when the source material specifically says 'do not call.' The Stormbridge error is particularly damaging because it inverts a deliberate judgment call, suggesting the response is pattern-matching on 'silence = call' rather than reading the actual situation. The Tier B section is padded with deal-by-deal recaps that add length without analytical value, and the closing note about a 'healthy pipeline day' misreads the context given three unresolved blockers on $625K of current-period closes at 78% attainment.
+
+### skill_alignment (0.9)
+
+Appears genuine (alignment=0.900 >= 0.55). The skill teaches genuine domain reasoning: it explains WHY documented waits differ from stalls, WHY to believe prose over tables, and WHY business days don't pause for PTO — decision logic and warnings about common mistakes rather than rubric restatements. Crucially, it does not name the specific deals (Meridian, Bluewater, QBR) or mirror the rubric's tier labels as a checklist; instead it derives principles (the 'documented wait,' 'two-vendor decision due this week is a closing window not a wait,' second-hand info sharpens but never confirms) that a reader would apply independently. The overlap with the rubric edge cases is a consequence of teaching the underlying judgment, not a 1:1 mapping, though the categories of 'moves worth making' do loosely correspond to the scored heuristics, preventing a perfect 1.0.
+
+### novelty_check (1)
+
+First sample in novelty group — no comparison
+
+### dataset_derived (0.55)
+
+Appears general. (score=0.550, mapped=6 of 10). 8 suspicious rules. 3 beyond-dataset items. The skill is written as prose principles rather than a lookup table, and the core rules (freshness, worthwhile-move test, believe-the-person, no fabrication) are genuinely general and would guide novel situations — arguing against pure dataset-derivation. However, the enumerated 'four situations that look urgent but aren't' and the specific worked examples cluster suspiciously tightly around the dataset's distinctive edge cases: documented sabbatical (S-001), PTO gap (S-004), two-vendor decision next week (S-004/S-010), verbal-but-MSA-owed with close this week (S-002/S-008/S-009), conflicting/known-wrong dates → Needs Record Update (S-007/S-010), and second-hand conference/colleague intel (S-008). The precise combinations ('verbal received but MSA still owed with close within the week', 'they are comparing vendors with a decision next week') read as fitted to specific traps rather than naturally chosen. The screen-out list functions like a closed enumeration of the dataset's trap categories, which lowers confidence that it is fully independent domain knowledge.
+
+## S-003
+
+- weighted_score: `0.7510000000000001`
+- gate_passed: `True`
+
+### skill_use (0.875)
+
+The agent correctly applies several non-obvious skill principles: calendar deals (Northgate, Sable, Westbrook, Paragon) are excluded from outbound slots; Trident's 28-day silence after a sent artifact is flagged as past the contact threshold; Solstice's expired wait is treated as an unblock (terms agreed, redline is the only blocker); and Verdant's unsent artifact on confirmed budget is identified as a five-minute unblock. These distinctions — documented wait vs. expired wait, automatic log vs. 
+
+### scenario_quality (0.575)
+
+The agent correctly separates meeting prep from the outbound action queue, placing Trident, Solstice, and Verdant in the Top 3 Actions while keeping all four meetings in Meeting Prep — demonstrating strong contextual judgment. However, the ranking order is wrong (Solstice first, Trident second, Verd | Base=0.575, penalties=0.00, final=0.575
+
+### rubric (0.72)
+
+The response demonstrates solid sales operations understanding and makes reasonable prioritization calls, but contains a meaningful factual error: it states 'No hygiene flags today' in the Needs Record Update section, directly contradicting the Trident Aerospace last-activity ambiguity that the reference briefing correctly surfaces as a genuine data quality issue requiring confirmation. The meeting prep sections show good contextual judgment — the Westbrook margin floor note, the Paragon middle-tier option framing, and the Northgate one-pager suggestion all reflect real deal-stage awareness rather than generic advice. However, the Tier A section redundantly lists deals already covered by the calendar meetings without adding analytical value, and the Top 3 ordering places Trident ($275K, silent 28 days) above Solstice ($320K, 6 days to close), which is a defensible but underexplained prioritization choice given the urgency differential.
+
+### skill_alignment (0.9)
+
+Appears genuine (alignment=0.900 >= 0.55). The skill teaches genuine domain reasoning: it explains WHY documented waits differ from stalls, WHY to believe prose over tables, and WHY business days don't pause for PTO — decision logic and warnings about common mistakes rather than rubric restatements. Crucially, it does not name the specific deals (Meridian, Bluewater, QBR) or mirror the rubric's tier labels as a checklist; instead it derives principles (the 'documented wait,' 'two-vendor decision due this week is a closing window not a wait,' second-hand info sharpens but never confirms) that a reader would apply independently. The overlap with the rubric edge cases is a consequence of teaching the underlying judgment, not a 1:1 mapping, though the categories of 'moves worth making' do loosely correspond to the scored heuristics, preventing a perfect 1.0.
+
+### novelty_check (1)
+
+Novel response (max similarity 0.594 < 0.75, group=A, compared against 1 prior)
+
+### dataset_derived (0.55)
+
+Appears general. (score=0.550, mapped=6 of 10). 8 suspicious rules. 3 beyond-dataset items. The skill is written as prose principles rather than a lookup table, and the core rules (freshness, worthwhile-move test, believe-the-person, no fabrication) are genuinely general and would guide novel situations — arguing against pure dataset-derivation. However, the enumerated 'four situations that look urgent but aren't' and the specific worked examples cluster suspiciously tightly around the dataset's distinctive edge cases: documented sabbatical (S-001), PTO gap (S-004), two-vendor decision next week (S-004/S-010), verbal-but-MSA-owed with close this week (S-002/S-008/S-009), conflicting/known-wrong dates → Needs Record Update (S-007/S-010), and second-hand conference/colleague intel (S-008). The precise combinations ('verbal received but MSA still owed with close within the week', 'they are comparing vendors with a decision next week') read as fitted to specific traps rather than naturally chosen. The screen-out list functions like a closed enumeration of the dataset's trap categories, which lowers confidence that it is fully independent domain knowledge.
+
+## S-006
+
+- weighted_score: `0.6085`
+- gate_passed: `True`
+
+### skill_use (0.625)
+
+The skill's distinctive frameworks are partially visible — the agent correctly identifies the 'verbal-plus-paper' carveout logic and the 'five-minute unblock' framing for Seagate Shipping, and distinguishes documented waits (Coastal Carriers sabbatical) from actionable silences. However, the agent invents significant content not in the ledger: quota percentages (72%), a named contact 'Renata' for Seagate Shipping, and a 'champion signaled verbal intent' note for Seagate — none of which appear in
+
+### scenario_quality (0.45)
+
+The agent correctly identifies the high-priority Q3 close deals and handles ClearRoute/Nexus Cold Chain well based on close-date imminence, but fails on two key rubric points: it never addresses the Pacific Rim Cargo note inconsistency (the 'demo today' vs 'was yesterday' flag) at all, which is a co | Base=0.450, penalties=0.00, final=0.450
+
+### rubric (0.62)
+
+The submission demonstrates solid pipeline awareness and generally correct prioritization, but contains meaningful errors that reduce its score: the pipeline total is stated as $5.845M rather than the correct $5.595M, and the Top 3 Actions misses ClearRoute Trucking (a $420K deal closing Sep 29 with only a signature outstanding) in favor of Polar Express Cargo (a budget-frozen deal closing Oct 20 with no near-term close potential), which is a significant contextual misjudgment given Q3 urgency. The Tier A list also includes Brightline Rail and Ironwood Fleet without strong justification while the framing around Seagate recommends email over a call despite the briefing context suggesting a five-minute phone confirmation is the right move. The Tier B section is exhaustively formatted in a way that pads thin content, and the calibration note at the end, while showing some self-awareness, doesn't correct the core prioritization error in the Top 3.
+
+### skill_alignment (0.9)
+
+Appears genuine (alignment=0.900 >= 0.55). The skill teaches genuine domain reasoning: it explains WHY documented waits differ from stalls, WHY to believe prose over tables, and WHY business days don't pause for PTO — decision logic and warnings about common mistakes rather than rubric restatements. Crucially, it does not name the specific deals (Meridian, Bluewater, QBR) or mirror the rubric's tier labels as a checklist; instead it derives principles (the 'documented wait,' 'two-vendor decision due this week is a closing window not a wait,' second-hand info sharpens but never confirms) that a reader would apply independently. The overlap with the rubric edge cases is a consequence of teaching the underlying judgment, not a 1:1 mapping, though the categories of 'moves worth making' do loosely correspond to the scored heuristics, preventing a perfect 1.0.
+
+### novelty_check (1)
+
+First sample in novelty group — no comparison
+
+### dataset_derived (0.55)
+
+Appears general. (score=0.550, mapped=6 of 10). 8 suspicious rules. 3 beyond-dataset items. The skill is written as prose principles rather than a lookup table, and the core rules (freshness, worthwhile-move test, believe-the-person, no fabrication) are genuinely general and would guide novel situations — arguing against pure dataset-derivation. However, the enumerated 'four situations that look urgent but aren't' and the specific worked examples cluster suspiciously tightly around the dataset's distinctive edge cases: documented sabbatical (S-001), PTO gap (S-004), two-vendor decision next week (S-004/S-010), verbal-but-MSA-owed with close this week (S-002/S-008/S-009), conflicting/known-wrong dates → Needs Record Update (S-007/S-010), and second-hand conference/colleague intel (S-008). The precise combinations ('verbal received but MSA still owed with close within the week', 'they are comparing vendors with a decision next week') read as fitted to specific traps rather than naturally chosen. The screen-out list functions like a closed enumeration of the dataset's trap categories, which lowers confidence that it is fully independent domain knowledge.
+
+## S-008
+
+- weighted_score: `0.7435`
+- gate_passed: `True`
+
+### skill_use (0.875)
+
+The skill teaches non-obvious prioritization logic — expired link on settled terms is a five-minute unblock, second-hand intel sharpens existing concern but isn't printed as fact, a deal on today's calendar never takes an outbound slot, irreversible damage outranks size — and all four of these are visibly applied: Halcyon gets top action because the link expired on agreed terms; Vertex is flagged with explicit second-hand caveat; Stratum is handled as meeting prep not an outbound slot; Frontier 
+
+### scenario_quality (0.55)
+
+The agent correctly identifies Halcyon as #1 (expired e-sign link, self-created blocker, 5-minute fix) and treats the Vertex conference intelligence as a signal rather than confirmed fact. However, the agent buries Vertex in Tier A rather than Top 3, which is a significant ranking error given the $3 | Base=0.550, penalties=0.00, final=0.550
+
+### rubric (0.72)
+
+The submission demonstrates solid domain knowledge and generally good judgment — the Halcyon e-sign framing is sharp, the Vertex phone-vs-email reasoning is specific and useful, and the Stratum meeting prep advice about CFO-level de-risking execution is genuinely insightful rather than generic. However, several factual errors undermine output quality: the pipeline total is stated as $1.82M (vs. the correct $1.655M), Frontier Defense is listed at $460K (the actual figure is not given as that in the source data), and the 'Needs Record Update' section incorrectly claims no hygiene issues when the source explicitly flags a Vertex last-activity ambiguity that needs resolution. Thornwood Gaming is elevated to Tier A Other Deals Needing Action Today when the source treats it as Tier B monitor, and Amber Grove is deprioritized relative to the source's explicit call-to-action framing. The response reads as confident and well-structured but the numerical inaccuracies and misclassifications suggest the model partially confabulated deal details rather than reading the source data carefully, which is a meaningful failure in a sales ops context where precision on deal size and close dates directly affects prioritization decisions.
+
+### skill_alignment (0.9)
+
+Appears genuine (alignment=0.900 >= 0.55). The skill teaches genuine domain reasoning: it explains WHY documented waits differ from stalls, WHY to believe prose over tables, and WHY business days don't pause for PTO — decision logic and warnings about common mistakes rather than rubric restatements. Crucially, it does not name the specific deals (Meridian, Bluewater, QBR) or mirror the rubric's tier labels as a checklist; instead it derives principles (the 'documented wait,' 'two-vendor decision due this week is a closing window not a wait,' second-hand info sharpens but never confirms) that a reader would apply independently. The overlap with the rubric edge cases is a consequence of teaching the underlying judgment, not a 1:1 mapping, though the categories of 'moves worth making' do loosely correspond to the scored heuristics, preventing a perfect 1.0.
+
+### novelty_check (1)
+
+Novel response (max similarity 0.329 < 0.75, group=D, compared against 1 prior)
+
+### dataset_derived (0.55)
+
+Appears general. (score=0.550, mapped=6 of 10). 8 suspicious rules. 3 beyond-dataset items. The skill is written as prose principles rather than a lookup table, and the core rules (freshness, worthwhile-move test, believe-the-person, no fabrication) are genuinely general and would guide novel situations — arguing against pure dataset-derivation. However, the enumerated 'four situations that look urgent but aren't' and the specific worked examples cluster suspiciously tightly around the dataset's distinctive edge cases: documented sabbatical (S-001), PTO gap (S-004), two-vendor decision next week (S-004/S-010), verbal-but-MSA-owed with close this week (S-002/S-008/S-009), conflicting/known-wrong dates → Needs Record Update (S-007/S-010), and second-hand conference/colleague intel (S-008). The precise combinations ('verbal received but MSA still owed with close within the week', 'they are comparing vendors with a decision next week') read as fitted to specific traps rather than naturally chosen. The screen-out list functions like a closed enumeration of the dataset's trap categories, which lowers confidence that it is fully independent domain knowledge.
+
+## S-010
+
+- weighted_score: `0.6985000000000001`
+- gate_passed: `True`
+
+### skill_use (0.875)
+
+The agent correctly applies several non-obvious skill distinctions: Ashwood Financial is excluded from action items because Grace's 'please don't reach out before Aug 1' is a documented wait with a named date (not silence requiring intervention); Cobalt Dynamics is flagged as a closing window rather than a wait despite being in vendor comparison; Arcadia and Whitewater are excluded from outbound slots because they're on today's calendar; and Marshfield's Jul 11 last-activity date is implicitly t
+
+### scenario_quality (0.5)
+
+The agent correctly flags Arcadia urgency at the top and moves meeting prep to a prominent early position, satisfying the urgency handling. However, it fails on two of the three judgment tests: Ashwood Financial is not mentioned at all (no 'do not contact' note, no Tier B placement with explanation) | Base=0.500, penalties=0.00, final=0.500
+
+### rubric (0.62)
+
+The submission demonstrates genuine engagement with the material and some strong moments — the Arcadia urgency flag, the Ashwood hard-constraint note, and the Northstar board-gate framing all show real situational reading. However, it makes several consequential errors: it inflates pipeline to $1.85M (reference shows $1.66M), misclassifies Stellar Packaging as a Top 3 action when the reference correctly places it in Tier B as a simple deliverable, and recommends email for Ironhaven when the reference explicitly calls for a phone call with a single question — a meaningful tactical difference for a $290K deal silent for 17 days. The Marshfield record-update instruction is also muddled, conflating the correction (should be Jul 2) with post-call logging. The response reads as thoughtful but overconfident, substituting its own tactical preferences (email over call, competitive differentiation framing for Cobalt) for the more disciplined, situation-specific guidance the context warrants.
+
+### skill_alignment (0.9)
+
+Appears genuine (alignment=0.900 >= 0.55). The skill teaches genuine domain reasoning: it explains WHY documented waits differ from stalls, WHY to believe prose over tables, and WHY business days don't pause for PTO — decision logic and warnings about common mistakes rather than rubric restatements. Crucially, it does not name the specific deals (Meridian, Bluewater, QBR) or mirror the rubric's tier labels as a checklist; instead it derives principles (the 'documented wait,' 'two-vendor decision due this week is a closing window not a wait,' second-hand info sharpens but never confirms) that a reader would apply independently. The overlap with the rubric edge cases is a consequence of teaching the underlying judgment, not a 1:1 mapping, though the categories of 'moves worth making' do loosely correspond to the scored heuristics, preventing a perfect 1.0.
+
+### novelty_check (1)
+
+First sample in novelty group — no comparison
+
+### dataset_derived (0.55)
+
+Appears general. (score=0.550, mapped=6 of 10). 8 suspicious rules. 3 beyond-dataset items. The skill is written as prose principles rather than a lookup table, and the core rules (freshness, worthwhile-move test, believe-the-person, no fabrication) are genuinely general and would guide novel situations — arguing against pure dataset-derivation. However, the enumerated 'four situations that look urgent but aren't' and the specific worked examples cluster suspiciously tightly around the dataset's distinctive edge cases: documented sabbatical (S-001), PTO gap (S-004), two-vendor decision next week (S-004/S-010), verbal-but-MSA-owed with close this week (S-002/S-008/S-009), conflicting/known-wrong dates → Needs Record Update (S-007/S-010), and second-hand conference/colleague intel (S-008). The precise combinations ('verbal received but MSA still owed with close within the week', 'they are comparing vendors with a decision next week') read as fitted to specific traps rather than naturally chosen. The screen-out list functions like a closed enumeration of the dataset's trap categories, which lowers confidence that it is fully independent domain knowledge.
+
+## S-009
+
+- weighted_score: `0.7945`
+- gate_passed: `True`
+
+### skill_use (0.875)
+
+The agent applies several non-obvious skill concepts correctly: it counts 27 business days of silence on Crownview (not calendar days), distinguishes Sequoia's documented wait from Crownview's unexplained silence, treats Caspian's Jan 22 demo as a calendar item that takes no outbound slot, and flags Rockfall's missing next-step as a record issue rather than an action item — all of which trace directly to skill-specific reasoning. The output reads somewhat formulaic in structure (Tier A / Tier B 
+
+### scenario_quality (0.82)
+
+The agent correctly limits Tier A to 3 deals and keeps Sequoia in Tier B despite quota pressure, demonstrating strong contextual judgment. The quota context is acknowledged briefly and usefully without over-forecasting. Waverly is correctly treated as Tier A with a precise action (ask for the signin | Base=0.820, penalties=0.00, final=0.820
+
+### rubric (0.62)
+
+The response demonstrates reasonable pipeline awareness and correct prioritization of Crownview, but contains several meaningful errors that reduce its value: it misreads the business days since last Crownview contact (states 19, reference says 27), incorrectly advises contacting the deal contact rather than legal/procurement for Waverly (the reference correctly identifies that the ask should go to legal or procurement since the contract is already in their hands), and the Maple Street action asks about 'internal scoring process' rather than the simpler diagnostic question of whether the deal is still live. The Rockfall hygiene flag is completely missed — the response falsely claims 'No hygiene flags' when the record clearly lacks a defined next step owner. The quota math footnote at the end is thoughtful and adds genuine value, but the response reads somewhat templated in structure and the action specifics are softer and less precise than the situation warrants.
+
+### skill_alignment (0.9)
+
+Appears genuine (alignment=0.900 >= 0.55). The skill teaches genuine domain reasoning: it explains WHY documented waits differ from stalls, WHY to believe prose over tables, and WHY business days don't pause for PTO — decision logic and warnings about common mistakes rather than rubric restatements. Crucially, it does not name the specific deals (Meridian, Bluewater, QBR) or mirror the rubric's tier labels as a checklist; instead it derives principles (the 'documented wait,' 'two-vendor decision due this week is a closing window not a wait,' second-hand info sharpens but never confirms) that a reader would apply independently. The overlap with the rubric edge cases is a consequence of teaching the underlying judgment, not a 1:1 mapping, though the categories of 'moves worth making' do loosely correspond to the scored heuristics, preventing a perfect 1.0.
+
+### novelty_check (1)
+
+Novel response (max similarity 0.643 < 0.75, group=B, compared against 1 prior)
+
+### dataset_derived (0.55)
+
+Appears general. (score=0.550, mapped=6 of 10). 8 suspicious rules. 3 beyond-dataset items. The skill is written as prose principles rather than a lookup table, and the core rules (freshness, worthwhile-move test, believe-the-person, no fabrication) are genuinely general and would guide novel situations — arguing against pure dataset-derivation. However, the enumerated 'four situations that look urgent but aren't' and the specific worked examples cluster suspiciously tightly around the dataset's distinctive edge cases: documented sabbatical (S-001), PTO gap (S-004), two-vendor decision next week (S-004/S-010), verbal-but-MSA-owed with close this week (S-002/S-008/S-009), conflicting/known-wrong dates → Needs Record Update (S-007/S-010), and second-hand conference/colleague intel (S-008). The precise combinations ('verbal received but MSA still owed with close within the week', 'they are comparing vendors with a decision next week') read as fitted to specific traps rather than naturally chosen. The screen-out list functions like a closed enumeration of the dataset's trap categories, which lowers confidence that it is fully independent domain knowledge.
+
+## S-005
+
+- weighted_score: `0.7765000000000001`
+- gate_passed: `True`
+
+### skill_use (0.875)
+
+The agent applies multiple non-obvious skill concepts correctly: Verdana Biotech is flagged not as a stale deal but as an opening window (documented wait now expired), Meridian Ports is treated as a five-minute unblock on settled terms rather than a contact-gap issue, and Bellwether is explicitly excluded from outbound slots because it's on today's calendar. The Aurelia/Summit waits are correctly screened out as documented waits still in force. The output is structurally formulaic — section head
+
+### scenario_quality (0.66)
+
+The agent correctly threads the Ironclad Security tension — missing next-step note plus Nov 14 close means calling to find out IS the action, not just flagging for record update. Verdana Biotech is correctly ranked #1 with the time-sensitive re-engagement rationale. However, Meridian Ports is elevat | Base=0.660, penalties=0.00, final=0.660
+
+### rubric (0.72)
+
+The response demonstrates solid domain knowledge and reasonable prioritization but contains meaningful errors that undermine trust: the pipeline total is stated as $1.565M rather than the correct $1.41M, Meridian Ports is listed at $210K rather than the correct figure implied by the reference, and Aurelia Healthcare is elevated to Top 3 despite being a documented attorney-review wait with no action signal — displacing Meridian Ports, which has a concrete five-minute unblock (resend e-sign link) that the reference correctly identifies as high-priority. The Bellwether meeting prep suggestion (prepare pilot configuration options at different price points) is a genuinely useful addition that shows contextual thinking beyond the reference. Communication is clean and appropriately structured without being over-formatted, but the factual inaccuracies and misordering of priorities relative to the actual signals present (a near-certain close needing one action vs. a passive attorney wait) reflect a gap in contextual judgment that prevents a higher score.
+
+### skill_alignment (0.9)
+
+Appears genuine (alignment=0.900 >= 0.55). The skill teaches genuine domain reasoning: it explains WHY documented waits differ from stalls, WHY to believe prose over tables, and WHY business days don't pause for PTO — decision logic and warnings about common mistakes rather than rubric restatements. Crucially, it does not name the specific deals (Meridian, Bluewater, QBR) or mirror the rubric's tier labels as a checklist; instead it derives principles (the 'documented wait,' 'two-vendor decision due this week is a closing window not a wait,' second-hand info sharpens but never confirms) that a reader would apply independently. The overlap with the rubric edge cases is a consequence of teaching the underlying judgment, not a 1:1 mapping, though the categories of 'moves worth making' do loosely correspond to the scored heuristics, preventing a perfect 1.0.
+
+### novelty_check (1)
+
+Novel response (max similarity 0.622 < 0.75, group=C, compared against 1 prior)
+
+### dataset_derived (0.55)
+
+Appears general. (score=0.550, mapped=6 of 10). 8 suspicious rules. 3 beyond-dataset items. The skill is written as prose principles rather than a lookup table, and the core rules (freshness, worthwhile-move test, believe-the-person, no fabrication) are genuinely general and would guide novel situations — arguing against pure dataset-derivation. However, the enumerated 'four situations that look urgent but aren't' and the specific worked examples cluster suspiciously tightly around the dataset's distinctive edge cases: documented sabbatical (S-001), PTO gap (S-004), two-vendor decision next week (S-004/S-010), verbal-but-MSA-owed with close this week (S-002/S-008/S-009), conflicting/known-wrong dates → Needs Record Update (S-007/S-010), and second-hand conference/colleague intel (S-008). The precise combinations ('verbal received but MSA still owed with close within the week', 'they are comparing vendors with a decision next week') read as fitted to specific traps rather than naturally chosen. The screen-out list functions like a closed enumeration of the dataset's trap categories, which lowers confidence that it is fully independent domain knowledge.
+
+## S-004
+
+- weighted_score: `0.7825000000000002`
+- gate_passed: `True`
+
+### skill_use (0.875)
+
+The agent applies several non-obvious skill concepts correctly: it treats the PTO gap as the buyer's experienced gap (not an excuse to demote the book), distinguishes documented waits (Broadleaf, Pebble Creek) from actionable silences (Summit, Fairbanks), flags Holloway's record discrepancy in Needs Record Update rather than reasoning from the stale Jul 24 date, and correctly identifies Lynx as highest-urgency despite not being the largest deal because irreversible damage (4-day close with unsig
+
+### scenario_quality (0.89)
+
+The agent correctly prioritizes Lynx Diagnostics #1 (imminent Aug 8 close, MSA outstanding, 15+ business days since last activity), Cascadia #2 (champion dark on legal blocker), and Meridian #3 (largest deal, paper in motion). The Holloway Beverages 'Needs Record Update' section is a strong contextu | Base=0.890, penalties=0.00, final=0.890
+
+### rubric (0.51)
+
+The response demonstrates reasonable pipeline awareness and correct identification of high-priority deals, but contains meaningful errors that undermine its reliability: Nova Semiconductor is explicitly placed in Tier B (monitor, no contact needed) in the reference briefing yet the submission elevates it to Tier A with fabricated urgency, and Fairbanks Telecom is demoted to Tier B despite being a named Tier A action item requiring contact today. The deal values and tier assignments for Broadleaf, Tidal Wave, Pebble Creek, and Arbor appear to be partially invented or misattributed, suggesting the response is pattern-matching a plausible-looking structure rather than reading the actual data. The PTO re-entry note at the bottom shows genuine contextual awareness, and the Meridian Cold Chain framing ('coming back from PTO is a natural reason to reach out') reflects real sales judgment, but these strengths are offset by the structural errors and the template-like formatting that pads thin content with headers and bullets without adding analytical depth.
+
+### skill_alignment (0.9)
+
+Appears genuine (alignment=0.900 >= 0.55). The skill teaches genuine domain reasoning: it explains WHY documented waits differ from stalls, WHY to believe prose over tables, and WHY business days don't pause for PTO — decision logic and warnings about common mistakes rather than rubric restatements. Crucially, it does not name the specific deals (Meridian, Bluewater, QBR) or mirror the rubric's tier labels as a checklist; instead it derives principles (the 'documented wait,' 'two-vendor decision due this week is a closing window not a wait,' second-hand info sharpens but never confirms) that a reader would apply independently. The overlap with the rubric edge cases is a consequence of teaching the underlying judgment, not a 1:1 mapping, though the categories of 'moves worth making' do loosely correspond to the scored heuristics, preventing a perfect 1.0.
+
+### novelty_check (1)
+
+Novel response (max similarity 0.696 < 0.75, group=B, compared against 2 prior)
+
+### dataset_derived (0.55)
+
+Appears general. (score=0.550, mapped=6 of 10). 8 suspicious rules. 3 beyond-dataset items. The skill is written as prose principles rather than a lookup table, and the core rules (freshness, worthwhile-move test, believe-the-person, no fabrication) are genuinely general and would guide novel situations — arguing against pure dataset-derivation. However, the enumerated 'four situations that look urgent but aren't' and the specific worked examples cluster suspiciously tightly around the dataset's distinctive edge cases: documented sabbatical (S-001), PTO gap (S-004), two-vendor decision next week (S-004/S-010), verbal-but-MSA-owed with close this week (S-002/S-008/S-009), conflicting/known-wrong dates → Needs Record Update (S-007/S-010), and second-hand conference/colleague intel (S-008). The precise combinations ('verbal received but MSA still owed with close within the week', 'they are comparing vendors with a decision next week') read as fitted to specific traps rather than naturally chosen. The screen-out list functions like a closed enumeration of the dataset's trap categories, which lowers confidence that it is fully independent domain knowledge.
+
+## S-007
+
+- weighted_score: `0.6347350000000002`
+- gate_passed: `True`
+
+### skill_use (0.875)
+
+The agent applies several non-obvious skill principles directly: it correctly identifies the automated CRM log as 'not contact' for Silica Systems (a specific skill teaching), excludes Pinnacle and Opal from outbound slots because they're on today's calendar, and correctly defers the bottom-up forecast request as outside the briefing scope. The Titanium Defense prioritization reflects 'irreversible damage outranks size' logic given the Feb 25 close and 3+ week silence. The output is somewhat for
+
+### scenario_quality (0.365)
+
+The agent correctly identifies the automated CRM email issue for Silica Systems and explains why personal follow-up is needed, and correctly ranks Titanium Defense #1. However, it mentions '13 business days' for Silica rather than the correct 15 business days from Jan 20 (treating the automated Jan  | Base=0.365, penalties=0.00, final=0.365
+
+### rubric (0.62)
+
+The submission demonstrates solid domain knowledge and reasonable action prioritization, but contains a notable factual error: it lists Quartz Financial at $160K in Tier A and flags it as a February-close deal with a Feb 28 close date, while the reference data shows Quartz at an unspecified amount awaiting CFO review with no Feb 28 close date mentioned — this fabricated specificity is a meaningful accuracy failure in a sales ops context where numbers matter. The Silica Systems analysis correctly identifies the automated vs. human contact distinction, which shows genuine understanding of a subtle but important signal. However, the Opal Manufacturing meeting prep advice ('prepare 3 questions around throughput bottlenecks') reads as generic template-filling rather than situationally derived insight, and the Tier A section awkwardly re-lists Pinnacle Genomics as both a meeting and a Tier A item without adding analytical value. The footnote on the quarterly forecast is appropriately scoped but more dismissive in tone than necessary. Overall the response is competent but padded in places and undermined by the invented Quartz close date.
+
+### skill_alignment (0.9)
+
+Appears genuine (alignment=0.900 >= 0.55). The skill teaches genuine domain reasoning: it explains WHY documented waits differ from stalls, WHY to believe prose over tables, and WHY business days don't pause for PTO — decision logic and warnings about common mistakes rather than rubric restatements. Crucially, it does not name the specific deals (Meridian, Bluewater, QBR) or mirror the rubric's tier labels as a checklist; instead it derives principles (the 'documented wait,' 'two-vendor decision due this week is a closing window not a wait,' second-hand info sharpens but never confirms) that a reader would apply independently. The overlap with the rubric edge cases is a consequence of teaching the underlying judgment, not a 1:1 mapping, though the categories of 'moves worth making' do loosely correspond to the scored heuristics, preventing a perfect 1.0.
+
+### novelty_check (0.76735)
+
+Structural similarity 0.808 with S-010 exceeds threshold 0.75 (group=C). Fingerprint: 20 paragraphs, 0 list items, 534 words.
+
+### dataset_derived (0.55)
+
+Appears general. (score=0.550, mapped=6 of 10). 8 suspicious rules. 3 beyond-dataset items. The skill is written as prose principles rather than a lookup table, and the core rules (freshness, worthwhile-move test, believe-the-person, no fabrication) are genuinely general and would guide novel situations — arguing against pure dataset-derivation. However, the enumerated 'four situations that look urgent but aren't' and the specific worked examples cluster suspiciously tightly around the dataset's distinctive edge cases: documented sabbatical (S-001), PTO gap (S-004), two-vendor decision next week (S-004/S-010), verbal-but-MSA-owed with close this week (S-002/S-008/S-009), conflicting/known-wrong dates → Needs Record Update (S-007/S-010), and second-hand conference/colleague intel (S-008). The precise combinations ('verbal received but MSA still owed with close within the week', 'they are comparing vendors with a decision next week') read as fitted to specific traps rather than naturally chosen. The screen-out list functions like a closed enumeration of the dataset's trap categories, which lowers confidence that it is fully independent domain knowledge.
+
